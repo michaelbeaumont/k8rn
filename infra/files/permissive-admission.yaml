@@ -1,0 +1,21 @@
+# This needs to be a JSON patch otherwise the entry is just appended
+# which breaks the API server
+- op: replace
+  path: /cluster/apiServer/admissionControl
+  value:
+    - name: PodSecurity
+      configuration:
+        apiVersion: pod-security.admission.config.k8s.io/v1alpha1
+        defaults:
+          audit: restricted
+          audit-version: latest
+          enforce: privileged
+          enforce-version: latest
+          warn: restricted
+          warn-version: latest
+        exemptions:
+          namespaces:
+            - kube-system
+          runtimeClasses: []
+          usernames: []
+        kind: PodSecurityConfiguration

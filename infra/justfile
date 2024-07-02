@@ -1,0 +1,5 @@
+write-talosconfig:
+    terraform output -raw talosconfig > talosconfig
+
+write-kubeconfig:
+    terraform output -json kubeconfig | jq -r .kubeconfig_raw > kubeconfig

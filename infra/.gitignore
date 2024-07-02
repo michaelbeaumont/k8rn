@@ -1,0 +1,7 @@
+/terraform.tfstate*
+/*.tfvars
+/.terraform*
+/kubeconfig
+/talosconfig
+id
+id.pub

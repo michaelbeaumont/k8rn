@@ -1,0 +1,26 @@
+machine:
+  certSANs:
+    - ${dns_loadbalancer_hostname}
+    - ${hostname}
+  install:
+    disk: ${install_disk}
+    image: ${installer_uri}
+  network:
+    hostname: ${hostname}
+    nameservers:
+      - 8.8.8.8
+      - 1.1.1.1
+cluster:
+  controlPlane:
+    endpoint: https://${dns_loadbalancer_hostname}:6443
+    localAPIServerPort: 6443
+  apiServer: {} # placeholder for JSON patch
+  network:
+    cni:
+      name: none
+  inlineManifests:
+    - name: cilium
+      contents: |
+        %{for manifest in manifests}
+        ${indent(8, manifest)}
+        %{endfor}
