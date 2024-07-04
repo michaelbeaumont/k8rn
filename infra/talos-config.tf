@@ -31,7 +31,7 @@ data "talos_machine_configuration" "this" {
   machine_type     = "controlplane"
   machine_secrets  = talos_machine_secrets.this.machine_secrets
   talos_version    = var.talos_version
-  config_patches = [
+  config_patches = compact([
     templatefile("${path.module}/templates/install-disk-and-hostname.yaml.tmpl", {
       talos_version             = var.talos_version
       installer_uri             = local.talos_installer_uri
@@ -45,9 +45,11 @@ data "talos_machine_configuration" "this" {
       ]
     }),
     file("${path.module}/files/permissive-admission.yaml"),
+    file("${path.module}/files/openebs.patch.yaml"),
+    contains(var.mayastor_io_engine_nodes, each.value) ? file("${path.module}/files/mayastor.patch.yaml") : "",
     file("${path.module}/files/cp-scheduling.yaml"),
     templatefile("${path.module}/templates/tailscale.yaml.tmpl", {
       tailscale_key = tailscale_tailnet_key.unsigned-cp[each.value].key
     }),
-  ]
+  ])
 }

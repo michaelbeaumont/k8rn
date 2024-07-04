@@ -74,6 +74,10 @@ variable "cloudflare_token" {
   type        = string
 }
 
+variable "mayastor_io_engine_nodes" {
+  description = "The local IPs of nodes that should be marked for mayastor io-engine"
+  type        = list(string)
+}
 
 // port must match localAPIServerPort
 locals {
