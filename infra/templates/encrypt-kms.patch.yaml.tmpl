@@ -1,0 +1,12 @@
+machine:
+  systemDiskEncryption:
+    ephemeral:
+      keys:
+        - kms:
+            endpoint: ${kms_endpoint}
+          slot: 0
+    state:
+      keys:
+        - kms:
+            endpoint: ${kms_endpoint}
+          slot: 0

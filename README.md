@@ -16,6 +16,7 @@ This configuration depends on:
 - SSH key for flux
   - Must be a deploy key for this repo
 - Age key for SOPS-encrypted data with flux
+- A KMS service for talos, I'm using [talos-unlockr](https://github.com/michaelbeaumont/talos-unlockr) to easily unlock things on demand.
 
 The cluster nodes have to be assigned IPs reachable from your machine.
 

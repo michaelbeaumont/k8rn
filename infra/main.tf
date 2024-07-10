@@ -56,6 +56,11 @@ variable "dns_loadbalancer_domain" {
   type        = string
 }
 
+variable "kms_endpoint" {
+  description = "Endpoint for the Talos KMS service"
+  type        = string
+}
+
 variable "tailnet_oauth_client_id" {
   description = "OAuth client ID for creating tailnet key"
   type        = string

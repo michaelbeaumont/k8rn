@@ -48,6 +48,9 @@ data "talos_machine_configuration" "this" {
     file("${path.module}/files/openebs.patch.yaml"),
     contains(var.mayastor_io_engine_nodes, each.value) ? file("${path.module}/files/mayastor.patch.yaml") : "",
     file("${path.module}/files/cp-scheduling.yaml"),
+    templatefile("${path.module}/templates/encrypt-kms.patch.yaml.tmpl", {
+      kms_endpoint = var.kms_endpoint
+    }),
     templatefile("${path.module}/templates/tailscale.yaml.tmpl", {
       tailscale_key = tailscale_tailnet_key.unsigned-cp[each.value].key
     }),
