@@ -75,3 +75,22 @@ so it has Intel Quick Sync Video support for hardware acceleration with Jellyfin
 This repo uses
 [Intel's GPU plugin](https://github.com/intel/intel-device-plugins-for-kubernetes/blob/main/cmd/gpu_plugin/README.md)
 to [make everything available to the Jellyfin `Pods`](./k8s/base/gpu).
+
+### Envoy gateway
+
+k8rn is running Envoy gateway with a relatively complicated architecture.
+
+Ideally we'd use the Tailscale operator to expose the gateway as a `LoadBalancer` `Service`
+and the `Gateway` would get its own Tailscale machine.
+However due to tailscale/tailscale#12393 this is currently infeasible.
+
+Instead we rely on the nodes being Tailscale machines:
+
+- Set `net.ipv4.ip_unprivileged_port_start=0` on the nodes so we can listen on `443` without root
+- The Envoy gateway `Pods` run with `hostNetwork: true`
+- Set `useListenerPortAsContainerPort: true` so the container really listens on `443`
+- An `EnvoyPatchPolicy` modifies the listener to bind only to `tailscale0` with `SO_BINDTODEVICE`
+- The Service is configured as `NodePort` so that `external-dns` creates A/AAAA records pointing to each of the node IPs.
+  - Note this depends on clients failing over between DNS records because only one of the nodes will
+    have Envoy gateway running. But this seems to work from my testing
+  - Otherwise Envoy can be deployed as a `DaemonSet`

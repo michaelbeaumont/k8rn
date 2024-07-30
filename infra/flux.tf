@@ -1,3 +1,8 @@
+variable "services_hostname_suffix" {
+  description = "Domain suffix common to all services gateway routes"
+  type        = string
+}
+
 provider "kubernetes" {
   host                   = talos_cluster_kubeconfig.this.kubernetes_client_configuration.host
   client_certificate     = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate)
@@ -117,6 +122,9 @@ resource "helm_release" "flux-sync-base-services" {
           provider: sops
           secretRef:
             name: sops
+        postBuild:
+          substitute:
+            services_hostname_suffix: "${var.services_hostname_suffix}"
     EOT
   ]
 }

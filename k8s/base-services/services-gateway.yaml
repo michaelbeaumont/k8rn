@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: infra
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: tailscale-services
+  namespace: envoy-gateway-system
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: NodePort
+      useListenerPortAsContainerPort: true
+      envoyDeployment:
+        patch:
+          value:
+            spec:
+              template:
+                spec:
+                  hostNetwork: true
+                  dnsPolicy: ClusterFirstWithHostNet
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyPatchPolicy
+metadata:
+  name: only-listen-tailscale0
+  namespace: infra
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: Gateway
+    name: services
+  type: JSONPatch
+  jsonPatches:
+    - type: "type.googleapis.com/envoy.config.listener.v3.Listener"
+      name: infra/services/main
+      operation:
+        op: add
+        path: "/socket_options"
+        value:
+          - description: SO_BINDTODEVICE
+            name: 25 # SO_BINDTODEVICE linux/include/asm-generic/socket.h
+            level: 1 # SOL_SOCKET
+            buf_value: dGFpbHNjYWxlMA== # echo -n tailscale0 | base64
+            state: STATE_PREBIND
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: tailscale-services
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  parametersRef:
+    group: gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: tailscale-services
+    namespace: envoy-gateway-system
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: services
+  namespace: infra
+  annotations:
+    cert-manager.io/cluster-issuer: lets-encrypt-prod
+spec:
+  gatewayClassName: tailscale-services
+  listeners:
+    - name: main
+      hostname: "*.${services_hostname_suffix}"
+      protocol: HTTPS
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              gateway.infra.services/allow-routes: "true"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: services-tls-gateway
