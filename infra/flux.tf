@@ -88,3 +88,35 @@ resource "helm_release" "flux-sync-base" {
     EOT
   ]
 }
+
+resource "helm_release" "flux-sync-base-services" {
+  repository = "https://fluxcd-community.github.io/helm-charts"
+  chart      = "flux2-sync"
+  name       = "flux-sync-base-services"
+  namespace  = helm_release.flux.namespace
+
+  values = [
+    <<-EOT
+    gitRepository:
+      spec:
+        interval: 10m0s
+        ref:
+          branch: main
+        secretRef:
+          name: deploy-key
+        url: ssh://git@github.com/${var.github_repo}
+    kustomization:
+      spec:
+        interval: 10m0s
+        path: ./k8s/base-services
+        prune: true
+        wait: true
+        dependsOn:
+          - name: ${helm_release.flux-sync-base-config.name}
+        decryption:
+          provider: sops
+          secretRef:
+            name: sops
+    EOT
+  ]
+}
