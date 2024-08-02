@@ -1,3 +1,8 @@
+variable "lets_encrypt_email" {
+  description = "Email to use for Lets Encrypt certs"
+  type        = string
+}
+
 variable "services_hostname_suffix" {
   description = "Domain suffix common to all services gateway routes"
   type        = string
@@ -90,6 +95,41 @@ resource "helm_release" "flux-sync-base" {
           provider: sops
           secretRef:
             name: sops
+    EOT
+  ]
+}
+
+resource "helm_release" "flux-sync-base-config" {
+  repository = "https://fluxcd-community.github.io/helm-charts"
+  chart      = "flux2-sync"
+  name       = "flux-sync-base-config"
+  namespace  = helm_release.flux.namespace
+
+  values = [
+    <<-EOT
+    gitRepository:
+      spec:
+        interval: 10m0s
+        ref:
+          branch: main
+        secretRef:
+          name: deploy-key
+        url: ssh://git@github.com/${var.github_repo}
+    kustomization:
+      spec:
+        interval: 10m0s
+        path: ./k8s/base-config
+        prune: true
+        wait: true
+        dependsOn:
+          - name: ${helm_release.flux-sync-base.name}
+        decryption:
+          provider: sops
+          secretRef:
+            name: sops
+        postBuild:
+          substitute:
+            lets_encrypt_email: "${var.lets_encrypt_email}"
     EOT
   ]
 }
