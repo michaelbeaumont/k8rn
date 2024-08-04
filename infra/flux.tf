@@ -67,6 +67,17 @@ resource "helm_release" "flux" {
   chart      = "flux2"
   name       = "flux"
   namespace  = kubernetes_namespace.flux-system.metadata[0].name
+
+  values = [
+    <<-EOT
+    notificationController:
+      create: false
+    imageReflectionController:
+      create: false
+    imageAutomationController:
+      create: false
+    EOT
+  ]
 }
 
 resource "helm_release" "flux-sync-base" {
