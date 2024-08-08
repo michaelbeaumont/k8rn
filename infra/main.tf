@@ -51,6 +51,17 @@ variable "control_plane_nodes" {
   type        = list(object({ local_ip = string, tailscale_ip = string }))
 }
 
+variable "node_ip_kind" {
+  description = "Whether to use local or tailscale to contact nodes"
+  type        = string
+  default     = "local_ip"
+
+  validation {
+    condition     = contains(["local_ip", "tailscale_ip"], var.node_ip_kind)
+    error_message = "You must select either local_ip or tailscale_ip"
+  }
+}
+
 variable "dns_loadbalancer_domain" {
   description = "Domain used for DNS load balancing the nodes"
   type        = string
@@ -89,7 +100,7 @@ locals {
   hostnames = merge({
     for num, node in var.control_plane_nodes :
     node.local_ip => "k8rn-cp-${num}"
-  }, {
+    }, {
     for num, node in var.control_plane_nodes :
     node.tailscale_ip => "k8rn-cp-${num}"
   })

@@ -14,7 +14,7 @@ resource "talos_machine_configuration_apply" "this" {
   for_each                    = toset([for node in var.control_plane_nodes : node.local_ip])
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.this[each.value].machine_configuration
-  node                        = each.value
+  node                        = lookup(local.ips[local.hostnames[each.value]], var.node_ip_kind)
 }
 
 data "talos_cluster_health" "this" {
