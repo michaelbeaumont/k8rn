@@ -1,0 +1,74 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: openebs
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: openebs
+  namespace: openebs
+spec:
+  interval: 10m0s
+  url: https://openebs.github.io/openebs
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: openebs
+  namespace: openebs
+spec:
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  interval: 10m0s
+  targetNamespace: openebs
+  chart:
+    spec:
+      chart: openebs
+      sourceRef:
+        kind: HelmRepository
+        name: openebs
+  values:
+    engines:
+      local:
+        lvm:
+          enabled: false
+        zfs:
+          enabled: false
+      replicated:
+        mayastor:
+          enabled: true
+    mayastor:
+      csi:
+        node:
+          # currently necessary because the init container checks for nvmeof module but Talos compiles it in
+          initContainers:
+            enabled: false
+      etcd:
+        replicaCount: 3
+      io_engine:
+        # unfortunately this doesn't work with va even with hugepages
+        envcontext: "iova-mode=pa"
+      obs:
+        callhome:
+          enabled: false
+      storageClass:
+        # don't really like defaults like this
+        default: false
+        parameters:
+          fsType: xfs
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-single-thin-retain-replica
+parameters:
+  protocol: nvmf
+  repl: "1"
+  thin: "true"
+allowVolumeExpansion: true
+provisioner: io.openebs.csi-mayastor
+reclaimPolicy: Retain
