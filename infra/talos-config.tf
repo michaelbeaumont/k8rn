@@ -54,5 +54,6 @@ data "talos_machine_configuration" "this" {
     templatefile("${path.module}/templates/tailscale.yaml.tmpl", {
       tailscale_key = tailscale_tailnet_key.unsigned-cp[each.value].key
     }),
+    file("${path.module}/files/watchdog.yaml"),
   ])
 }
