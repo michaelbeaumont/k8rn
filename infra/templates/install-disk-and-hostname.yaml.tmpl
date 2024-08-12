@@ -1,4 +1,8 @@
 machine:
+  sysctls:
+    # note don't just delete this, it creates the `sysctls` key which lets
+    # other patches modify it. it has omitempty so `sysctls: {}` doesn't work
+    net.ipv4.ip_unprivileged_port_start: "0"
   certSANs:
     - ${dns_loadbalancer_hostname}
     - ${hostname}
