@@ -94,3 +94,8 @@ Instead we rely on the nodes being Tailscale machines:
   - Note this depends on clients failing over between DNS records because only one of the nodes will
     have Envoy gateway running. But this seems to work from my testing
   - Otherwise Envoy can be deployed as a `DaemonSet`
+
+### External services
+
+Some services are running on a different server in the tailnet and a `Service`
+with a manually managed `EndpointSlice` handles forwarding the traffic.
