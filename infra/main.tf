@@ -72,6 +72,11 @@ variable "kms_endpoint" {
   type        = string
 }
 
+variable "external_server_hostname" {
+  description = "Tailscale hostname for external server where some services still run"
+  type        = string
+}
+
 variable "tailnet_oauth_client_id" {
   description = "OAuth client ID for creating tailnet key"
   type        = string

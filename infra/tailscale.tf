@@ -22,3 +22,8 @@ data "tailscale_device" "cp" {
   hostname = local.hostnames[talos_machine_configuration_apply.this[each.value].node]
   wait_for = "10m"
 }
+
+data "tailscale_device" "external_server" {
+  hostname = var.external_server_hostname
+  wait_for = "30s"
+}
