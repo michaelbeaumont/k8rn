@@ -1,5 +1,8 @@
-write-talosconfig:
-    terraform output -raw talosconfig > talosconfig
+write-talosconfig outfile:
+    terraform output -raw talosconfig > {{ outfile }}
 
-write-kubeconfig:
-    terraform output -json kubeconfig | jq -r .kubeconfig_raw > kubeconfig
+write-kubeconfig outfile:
+    terraform output -raw kubeconfig > {{ outfile }}
+
+write-secrets-yaml outfile:
+    terraform output -json machine_secrets | yq --input-format json --output-format yaml . > {{ outfile }}

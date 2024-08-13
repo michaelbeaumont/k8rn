@@ -4,12 +4,12 @@ output "talosconfig" {
 }
 
 output "machine_secrets" {
-  value     = talos_machine_secrets.this
+  value     = talos_machine_secrets.this.machine_secrets
   sensitive = true
 }
 
 output "kubeconfig" {
-  value     = talos_cluster_kubeconfig.this
+  value     = talos_cluster_kubeconfig.this.kubeconfig_raw
   sensitive = true
 }
 
