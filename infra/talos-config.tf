@@ -55,5 +55,9 @@ data "talos_machine_configuration" "this" {
       tailscale_key = tailscale_tailnet_key.unsigned-cp[each.value].key
     }),
     file("${path.module}/files/watchdog.yaml"),
+    templatefile("${path.module}/templates/cp-network-rules.yaml.tmpl", {
+      control_plane_node_ips = [for node in var.control_plane_nodes : node.tailscale_ip],
+      node_ips = [for node in local.node_ips : node.tailscale_ip],
+    }),
   ])
 }
