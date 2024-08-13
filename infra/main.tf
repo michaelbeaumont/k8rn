@@ -48,7 +48,17 @@ variable "cluster_name" {
 
 variable "control_plane_nodes" {
   description = "The local IPs and tailscale IPs of the control plane nodes"
-  type        = list(object({ local_ip = string, tailscale_ip = string }))
+  type        = map(object({local_ip = string, tailscale_ip = string }))
+}
+
+variable "bootstrap_node" {
+  description = "The node to bootstrap from"
+  type        = string
+}
+
+variable "worker_nodes" {
+  description = "The local IPs and tailscale IPs of worker-only nodes"
+  type        = map(object({local_ip = string, tailscale_ip = string }))
 }
 
 variable "node_ip_kind" {
@@ -102,17 +112,17 @@ variable "mayastor_io_engine_nodes" {
 
 // port must match localAPIServerPort
 locals {
+  node_ips                  = merge(var.control_plane_nodes, var.worker_nodes)
   hostnames = merge({
-    for num, node in var.control_plane_nodes :
-    node.local_ip => "k8rn-cp-${num}"
+    for id, node in local.node_ips :
+    node.local_ip => "${id}"
     }, {
-    for num, node in var.control_plane_nodes :
-    node.tailscale_ip => "k8rn-cp-${num}"
+    for id, node in local.node_ips :
+    node.tailscale_ip => "${id}"
+    }, {
+    for id, node in local.node_ips :
+    id => id
   })
-  ips = {
-    for num, node in var.control_plane_nodes :
-    local.hostnames[node.local_ip] => node
-  }
   dns_loadbalancer_hostname = "${var.cluster_name}.${var.dns_loadbalancer_domain}"
   cluster_endpoint          = "https://${local.dns_loadbalancer_hostname}:6443"
 }

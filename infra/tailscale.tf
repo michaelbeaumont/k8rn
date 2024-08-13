@@ -4,7 +4,7 @@ provider "tailscale" {
 }
 
 resource "tailscale_tailnet_key" "unsigned-cp" {
-  for_each      = toset([for node in var.control_plane_nodes : node.local_ip])
+  for_each      = toset(keys(var.control_plane_nodes))
   reusable      = false
   ephemeral     = false
   preauthorized = true
@@ -12,14 +12,30 @@ resource "tailscale_tailnet_key" "unsigned-cp" {
   tags = [
     "tag:infra",
     "tag:cname-k8rn",
+    "tag:k8rn-node",
     "tag:k8rn-cp",
-    "tag:${local.hostnames[each.value]}",
+    "tag:${local.hostnames[each.key]}",
   ]
 }
 
+resource "tailscale_tailnet_key" "unsigned-worker" {
+  for_each      = toset(keys(var.worker_nodes))
+  reusable      = false
+  ephemeral     = false
+  preauthorized = true
+  expiry        = 3600
+  tags = [
+    "tag:infra",
+    "tag:k8rn-node",
+    "tag:k8rn-worker",
+    "tag:${local.hostnames[each.key]}",
+  ]
+}
+
+
 data "tailscale_device" "cp" {
-  for_each = toset([for node in var.control_plane_nodes : node.local_ip])
-  hostname = local.hostnames[talos_machine_configuration_apply.this[each.value].node]
+  for_each = toset(keys(var.control_plane_nodes))
+  hostname = local.hostnames[talos_machine_configuration_apply.control_plane[each.key].node]
   wait_for = "10m"
 }
 

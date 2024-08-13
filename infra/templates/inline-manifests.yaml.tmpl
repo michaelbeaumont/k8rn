@@ -1,0 +1,7 @@
+cluster:
+  inlineManifests:
+    %{for name, manifest in manifests}
+    - name: ${name}
+      contents: |
+        ${indent(8, manifest)}
+    %{endfor}

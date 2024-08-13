@@ -26,16 +26,6 @@ cluster:
   apiServer: {} # placeholder for JSON patch
   discovery:
     enabled: false
-  etcd:
-    advertisedSubnets:
-      - 100.64.0.0/10
-      - fd7a:115c:a1e0::/64
   network:
     cni:
       name: none
-  inlineManifests:
-    - name: cilium
-      contents: |
-        %{for manifest in manifests}
-        ${indent(8, manifest)}
-        %{endfor}

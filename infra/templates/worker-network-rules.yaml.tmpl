@@ -22,41 +22,7 @@ portSelector:
     - 50000
   protocol: tcp
 ingress:
-  - subnet: 100.64.0.0/10
-  - subnet: fd7a:115c:a1e0::/48
----
-apiVersion: v1alpha1
-kind: NetworkRuleConfig
-name: trustd-ingress
-portSelector:
-  ports:
-    - 50001
-  protocol: tcp
-ingress:
 %{ for ip in node_ips }
-  - subnet: "${ip}/32"
-%{ endfor }
----
-apiVersion: v1alpha1
-kind: NetworkRuleConfig
-name: kubernetes-api-ingress
-portSelector:
-  ports:
-    - 6443
-  protocol: tcp
-ingress:
-  - subnet: 100.64.0.0/10
-  - subnet: fd7a:115c:a1e0::/48
----
-apiVersion: v1alpha1
-kind: NetworkRuleConfig
-name: etcd-ingress
-portSelector:
-  ports:
-    - 2379-2380
-  protocol: tcp
-ingress:
-%{ for ip in control_plane_node_ips }
   - subnet: "${ip}/32"
 %{ endfor }
 ---
