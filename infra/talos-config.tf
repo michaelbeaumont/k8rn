@@ -17,7 +17,7 @@ data "external" "factory_image" {
 }
 
 resource "talos_machine_secrets" "this" {
-  talos_version = var.talos_version
+  talos_version = "v1.7.5"
 }
 
 locals {
