@@ -106,6 +106,9 @@ resource "helm_release" "flux-sync-base" {
           provider: sops
           secretRef:
             name: sops
+        postBuild:
+          substitute:
+            core_tailscale_ip: "${data.tailscale_device.external_server.addresses[0]}"
     EOT
   ]
 }

@@ -1,0 +1,61 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-prometheus
+  namespace: observability
+spec:
+  endpointSelector:
+    matchLabels:
+      {}
+  egress:
+  - toCIDR:
+      - "${core_tailscale_ip}/32"
+    toPorts:
+      - ports:
+         - port: "9090"
+           protocol: ANY
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: kube-prometheus
+  namespace: observability
+spec:
+  interval: 10m0s
+  url: https://prometheus-community.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kube-prometheus
+  namespace: observability
+spec:
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  interval: 10m0s
+  targetNamespace: observability
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      sourceRef:
+        kind: HelmRepository
+        name: kube-prometheus
+  values:
+    alertmanager:
+      enabled: false
+    grafana:
+      enabled: false
+    prometheus:
+      enabled: true
+      agentMode: true
+      prometheusSpec:
+        remoteWrite:
+          - url: http://${core_tailscale_ip}:9090/api/v1/write
