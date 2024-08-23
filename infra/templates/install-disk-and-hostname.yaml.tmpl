@@ -14,11 +14,22 @@ machine:
     nameservers:
       - 8.8.8.8
       - 1.1.1.1
+  kubelet:
+    nodeIP:
+      validSubnets:
+        - fd7a:115c:a1e0::/64
+        - 100.64.0.0/10
 cluster:
   controlPlane:
     endpoint: https://${dns_loadbalancer_hostname}:6443
     localAPIServerPort: 6443
   apiServer: {} # placeholder for JSON patch
+  discovery:
+    enabled: false
+  etcd:
+    advertisedSubnets:
+      - 100.64.0.0/10
+      - fd7a:115c:a1e0::/64
   network:
     cni:
       name: none
