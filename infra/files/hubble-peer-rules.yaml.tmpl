@@ -1,0 +1,15 @@
+---
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: hubble
+portSelector:
+  ports:
+    - 4244
+  protocol: tcp
+ingress:
+%{ for ip in node_ips }
+  - subnet: "${ip}/32"
+%{ endfor }
+%{ for subnet in pod_subnets }
+  - subnet: "${subnet}"
+%{ endfor }

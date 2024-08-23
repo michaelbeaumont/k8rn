@@ -43,7 +43,7 @@ data "talos_machine_configuration" "control_plane_nodes" {
     file("${path.module}/files/cp-config.yaml"),
     templatefile("${path.module}/files/inline-manifests.yaml.tmpl", {
       manifests = {
-        "cilium"          = file("${path.module}/files/cilium.yaml"),
+        "install-cilium"  = file("${path.module}/files/cilium-install-job-manifests.yaml"),
         "block-tailscale" = file("${path.module}/files/block-tailscale.yaml"),
       }
     }),
@@ -62,6 +62,10 @@ data "talos_machine_configuration" "control_plane_nodes" {
       control_plane_node_ips = [for node in var.control_plane_nodes : node.tailscale_ip],
       node_ips               = [for node in local.node_ips : node.tailscale_ip],
       vxlan_port             = "8472 # cilium-specific"
+    }),
+    templatefile("${path.module}/files/hubble-peer-rules.yaml.tmpl", {
+      pod_subnets = var.pod_subnets,
+      node_ips    = [for node in local.node_ips : node.tailscale_ip],
     }),
   ])
 }
@@ -94,6 +98,10 @@ data "talos_machine_configuration" "worker_nodes" {
     templatefile("${path.module}/files/worker-network-rules.yaml.tmpl", {
       node_ips   = [for node in local.node_ips : node.tailscale_ip],
       vxlan_port = "8472 # cilium-specific"
+    }),
+    templatefile("${path.module}/files/hubble-peer-rules.yaml.tmpl", {
+      pod_subnets = var.pod_subnets,
+      node_ips    = [for node in local.node_ips : node.tailscale_ip],
     }),
   ])
 }
