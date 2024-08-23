@@ -1,0 +1,11 @@
+---
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: services-ingress
+portSelector:
+  ports:
+    - 443
+  protocol: tcp
+ingress:
+  - subnet: 100.64.0.0/10
+  - subnet: fd7a:115c:a1e0::/48
