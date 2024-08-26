@@ -13,7 +13,7 @@ output "kubeconfig" {
   sensitive = true
 }
 
-output "talos_installer_uri" {
-  value     = local.talos_installer_uri
+output "talos_image" {
+  value     = local.image_uri
   sensitive = false
 }

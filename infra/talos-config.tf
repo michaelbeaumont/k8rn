@@ -1,27 +1,28 @@
-locals {
-  factory_schematic = <<-EOF
-    customization:
-        systemExtensions:
-            officialExtensions:
-                - siderolabs/i915-ucode
-                - siderolabs/intel-ucode
-                - siderolabs/tailscale
-  EOF
-}
-
-data "external" "factory_image" {
-  program = [
-    "bash", "-c",
-  "curl --silent -X POST https://factory.talos.dev/schematics --data-binary @- << EOF\n${local.factory_schematic}EOF"]
-  query = {}
-}
-
 resource "talos_machine_secrets" "this" {
   talos_version = "v1.7.5"
 }
 
+resource "talos_image_factory_schematic" "this" {
+  schematic = yamlencode(
+    {
+      customization = {
+        extraKernelArgs = [
+          "sysctl.net.ipv6.conf.default.stable_secret=${var.stable_secret}",
+        ]
+        systemExtensions = {
+          officialExtensions = [
+            "siderolabs/i915-ucode",
+            "siderolabs/intel-ucode",
+            "siderolabs/tailscale",
+          ]
+        }
+      }
+    }
+  )
+}
+
 locals {
-  talos_installer_uri = "factory.talos.dev/installer-secureboot/${data.external.factory_image.result.id}:${var.talos_version}"
+  image_uri = "factory.talos.dev/installer-secureboot/${talos_image_factory_schematic.this.id}:${var.talos_version}"
 }
 
 data "talos_machine_configuration" "control_plane_nodes" {
@@ -33,9 +34,8 @@ data "talos_machine_configuration" "control_plane_nodes" {
   talos_version    = var.talos_version
   config_patches = compact([
     templatefile("${path.module}/files/install-disk-and-hostname.yaml.tmpl", {
-      talos_version             = var.talos_version
-      installer_uri             = local.talos_installer_uri
       hostname                  = local.hostnames[each.key]
+      image_uri                 = local.image_uri
       dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
       install_disk              = "/dev/nvme0n1"
       cluster_endpoint_host     = local.dns_loadbalancer_hostname
@@ -91,9 +91,8 @@ data "talos_machine_configuration" "worker_nodes" {
   talos_version    = var.talos_version
   config_patches = compact([
     templatefile("${path.module}/files/install-disk-and-hostname.yaml.tmpl", {
-      talos_version             = var.talos_version
-      installer_uri             = local.talos_installer_uri
       hostname                  = local.hostnames[each.key]
+      image_uri                 = local.image_uri
       dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
       install_disk              = "/dev/nvme0n1"
       cluster_endpoint_host     = local.dns_loadbalancer_hostname

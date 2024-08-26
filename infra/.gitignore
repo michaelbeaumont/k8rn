@@ -5,3 +5,5 @@
 /talosconfig
 id
 id.pub
+stable-secret.just
+/metal-amd64-secureboot.iso

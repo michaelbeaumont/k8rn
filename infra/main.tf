@@ -61,6 +61,11 @@ variable "worker_nodes" {
   type        = map(object({local_ip = string}))
 }
 
+variable "stable_secret" {
+  description = "IPv6 stable secret for RFC7217"
+  type        = string
+}
+
 variable "pod_subnets" {
   description = "Subnets for Pods"
   type        = list(string)
