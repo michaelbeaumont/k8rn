@@ -48,7 +48,7 @@ variable "cluster_name" {
 
 variable "control_plane_nodes" {
   description = "The local IPs and tailscale IPs of the control plane nodes"
-  type        = map(object({local_ip = string, tailscale_ip = string }))
+  type        = map(object({local_ip = string}))
 }
 
 variable "bootstrap_node" {
@@ -58,18 +58,17 @@ variable "bootstrap_node" {
 
 variable "worker_nodes" {
   description = "The local IPs and tailscale IPs of worker-only nodes"
-  type        = map(object({local_ip = string, tailscale_ip = string }))
+  type        = map(object({local_ip = string}))
 }
 
-variable "node_ip_kind" {
-  description = "Whether to use local or tailscale to contact nodes"
-  type        = string
-  default     = "local_ip"
+variable "pod_subnets" {
+  description = "Subnets for Pods"
+  type        = list(string)
+}
 
-  validation {
-    condition     = contains(["local_ip", "tailscale_ip"], var.node_ip_kind)
-    error_message = "You must select either local_ip or tailscale_ip"
-  }
+variable "service_subnets" {
+  description = "Subnets for Services (IPv6 mask must be >= 108"
+  type        = list(string)
 }
 
 variable "dns_loadbalancer_domain" {
@@ -116,9 +115,6 @@ locals {
   hostnames = merge({
     for id, node in local.node_ips :
     node.local_ip => "${id}"
-    }, {
-    for id, node in local.node_ips :
-    node.tailscale_ip => "${id}"
     }, {
     for id, node in local.node_ips :
     id => id

@@ -75,6 +75,7 @@ spec:
             - --version
             - v1.16.1
             - --set=ipam.mode=kubernetes
+            - --set=ipv6.enabled=true
             - --set=kubeProxyReplacement=false
             - --set=envoy.baseID=4244 # random number, needed to avoid conflicts with other Envoy instances
             # don't actually enable hubble for now

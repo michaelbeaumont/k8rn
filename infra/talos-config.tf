@@ -39,6 +39,8 @@ data "talos_machine_configuration" "control_plane_nodes" {
       dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
       install_disk              = "/dev/nvme0n1"
       cluster_endpoint_host     = local.dns_loadbalancer_hostname
+      pod_subnets               = var.pod_subnets
+      service_subnets           = var.service_subnets
     }),
     file("${path.module}/files/cp-config.yaml"),
     templatefile("${path.module}/files/inline-manifests.yaml.tmpl", {
@@ -48,8 +50,6 @@ data "talos_machine_configuration" "control_plane_nodes" {
       }
     }),
     file("${path.module}/files/permissive-admission.yaml"),
-    file("${path.module}/files/openebs.patch.yaml"),
-    contains(var.mayastor_io_engine_nodes, each.key) ? file("${path.module}/files/mayastor.patch.yaml") : "",
     file("${path.module}/files/cp-scheduling.yaml"),
     templatefile("${path.module}/files/encrypt-kms.patch.yaml.tmpl", {
       kms_endpoint = var.kms_endpoint
@@ -59,13 +59,23 @@ data "talos_machine_configuration" "control_plane_nodes" {
     }),
     file("${path.module}/files/watchdog.yaml"),
     templatefile("${path.module}/files/cp-network-rules.yaml.tmpl", {
-      control_plane_node_ips = [for node in var.control_plane_nodes : node.tailscale_ip],
-      node_ips               = [for node in local.node_ips : node.tailscale_ip],
-      vxlan_port             = "8472 # cilium-specific"
+      pod_subnets = var.pod_subnets
+      control_plane_node_ips = [
+        "100.64.0.0/10",
+        "fd7a:115c:a1e0::/64",
+      ],
+      node_ips = [
+        "100.64.0.0/10",
+        "fd7a:115c:a1e0::/64",
+      ],
+      vxlan_port = "8472 # cilium-specific"
     }),
     templatefile("${path.module}/files/hubble-peer-rules.yaml.tmpl", {
       pod_subnets = var.pod_subnets,
-      node_ips    = [for node in local.node_ips : node.tailscale_ip],
+      node_ips = [
+        "100.64.0.0/10",
+        "fd7a:115c:a1e0::/64",
+      ],
     }),
   ])
 }
@@ -85,6 +95,8 @@ data "talos_machine_configuration" "worker_nodes" {
       dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
       install_disk              = "/dev/nvme0n1"
       cluster_endpoint_host     = local.dns_loadbalancer_hostname
+      pod_subnets               = var.pod_subnets
+      service_subnets           = var.service_subnets
     }),
     file("${path.module}/files/openebs.patch.yaml"),
     contains(var.mayastor_io_engine_nodes, each.key) ? file("${path.module}/files/mayastor.patch.yaml") : "",
@@ -96,12 +108,18 @@ data "talos_machine_configuration" "worker_nodes" {
     }),
     file("${path.module}/files/watchdog.yaml"),
     templatefile("${path.module}/files/worker-network-rules.yaml.tmpl", {
-      node_ips   = [for node in local.node_ips : node.tailscale_ip],
+      node_ips = [
+        "100.64.0.0/10",
+        "fd7a:115c:a1e0::/64",
+      ],
       vxlan_port = "8472 # cilium-specific"
     }),
     templatefile("${path.module}/files/hubble-peer-rules.yaml.tmpl", {
       pod_subnets = var.pod_subnets,
-      node_ips    = [for node in local.node_ips : node.tailscale_ip],
+      node_ips = [
+        "100.64.0.0/10",
+        "fd7a:115c:a1e0::/64",
+      ],
     }),
   ])
 }

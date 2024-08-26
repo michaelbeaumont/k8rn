@@ -12,13 +12,17 @@ machine:
   network:
     hostname: ${hostname}
     nameservers:
-      - 8.8.8.8
+      - fd7a:115c:a1e0::53 # tailscale dns
+      - 2606:4700:4700::1111 # cloudflare 1111
       - 1.1.1.1
   kubelet:
     nodeIP:
       validSubnets:
         - fd7a:115c:a1e0::/64
         - 100.64.0.0/10
+  time:
+    servers:
+      - time.cloudflare.com
 cluster:
   controlPlane:
     endpoint: https://${dns_loadbalancer_hostname}:6443
@@ -27,5 +31,13 @@ cluster:
   discovery:
     enabled: false
   network:
+    podSubnets:
+%{ for subnet in pod_subnets }
+      - "${subnet}"
+%{ endfor }
+    serviceSubnets:
+%{ for subnet in service_subnets }
+      - "${subnet}"
+%{ endfor }
     cni:
       name: none

@@ -26,7 +26,7 @@ resource "talos_machine_configuration_apply" "workers" {
   for_each                    = var.worker_nodes
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.worker_nodes[each.key].machine_configuration
-  node                        = lookup(each.value, var.node_ip_kind)
+  node                        = each.value.local_ip
   endpoint                    = local.dns_loadbalancer_hostname
 }
 

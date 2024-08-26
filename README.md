@@ -13,10 +13,10 @@ This configuration depends on:
     [the tailscale Terraform](./infra/tailscale.tf)
 - Cloudflare
   - A DNS zone to assign a subdomain in
+- A KMS service for talos, I'm using [talos-unlockr](https://github.com/michaelbeaumont/talos-unlockr) to easily unlock things on demand.
 - SSH key for flux
   - Must be a deploy key for this repo
 - Age key for SOPS-encrypted data with flux
-- A KMS service for talos, I'm using [talos-unlockr](https://github.com/michaelbeaumont/talos-unlockr) to easily unlock things on demand.
 
 The cluster nodes have to be assigned IPs reachable from your machine.
 
@@ -37,10 +37,14 @@ This has two problems:
 
 ### Tailscale
 
-This Terraform assumes Tailscale IPs known in advance.
-Otherwise there's a large delay between when the nodes start querying the API
-endpoint/we try to contact the API endpoint and when the DNS records are propagated.
+This terraform can use IPv6 addresses, which Tailscale provisions dynamically.
 
+Depending on which DNS you're using, note that there might be a
+large delay between when the nodes start querying the API endpoint
+/we try to contact the API endpoint and when the DNS records are propagated.
+
+Somewhat out of scope but for ease of use I also assign IPv4 Tailscale addresses
+statically.
 Assuming `cluster_name = "k8rn"`, this can be achieved via ACLs:
 
 ```json
@@ -62,8 +66,6 @@ Assuming `cluster_name = "k8rn"`, this can be achieved via ACLs:
 
 Each node is assigned `tag:<node hostname>` which Tailscale then uses to assign an IP pool,
 in this case a pool of size one.
-
-We set the Terraform variable `tailscale_node_ips = ["100.64.1.10", "100.64.1.11", "100.64.1.12"]`.
 
 ## Kubernetes
 
