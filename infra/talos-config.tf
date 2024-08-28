@@ -22,7 +22,54 @@ resource "talos_image_factory_schematic" "this" {
 }
 
 locals {
-  image_uri = "factory.talos.dev/installer-secureboot/${talos_image_factory_schematic.this.id}:${var.talos_version}"
+  image_uri         = "factory.talos.dev/installer-secureboot/${talos_image_factory_schematic.this.id}:${var.talos_version}"
+  cilium_vxlan_port = "8472"
+}
+
+locals {
+  // shared between both but we can't get rid of the each references
+  base_template_variables = {
+    image_uri                 = local.image_uri
+    dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
+    install_disk              = "/dev/nvme0n1"
+    cluster_endpoint_host     = local.dns_loadbalancer_hostname
+    pod_subnets               = var.pod_subnets
+    service_subnets           = var.service_subnets
+  }
+  common_patches_by_node = {
+    for node in keys(merge(var.control_plane_nodes, var.worker_nodes))
+    : node => [
+      templatefile(
+        "${path.module}/files/base.yaml.tmpl",
+        {
+          image_uri                 = local.image_uri
+          dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
+          install_disk              = "/dev/nvme0n1"
+          cluster_endpoint_host     = local.dns_loadbalancer_hostname
+          pod_subnets               = var.pod_subnets
+          service_subnets           = var.service_subnets
+          hostname                  = local.hostnames[node]
+        }
+      ),
+      templatefile("${path.module}/files/tailscale.yaml.tmpl", {
+        tailscale_key = contains(keys(var.control_plane_nodes), node) ? tailscale_tailnet_key.unsigned-cp[node].key : tailscale_tailnet_key.unsigned-worker[node].key
+      }),
+      templatefile("${path.module}/files/encrypt-kms.patch.yaml.tmpl", {
+        kms_endpoint = var.kms_endpoint
+      }),
+      file("${path.module}/files/openebs.patch.yaml"),
+      templatefile("${path.module}/files/hubble-peer-rules.yaml.tmpl", {
+        pod_subnets = var.pod_subnets,
+        node_ips = [
+          "100.64.0.0/10",
+          "fd7a:115c:a1e0::/64",
+        ],
+      }),
+      file("${path.module}/files/services-ingress.yaml"),
+      file("${path.module}/files/watchdog.yaml"),
+      contains(var.mayastor_io_engine_nodes, node) ? [file("${path.module}/files/mayastor.patch.yaml")] : [],
+    ]
+  }
 }
 
 data "talos_machine_configuration" "control_plane_nodes" {
@@ -32,16 +79,8 @@ data "talos_machine_configuration" "control_plane_nodes" {
   machine_type     = "controlplane"
   machine_secrets  = talos_machine_secrets.this.machine_secrets
   talos_version    = var.talos_version
-  config_patches = compact([
-    templatefile("${path.module}/files/install-disk-and-hostname.yaml.tmpl", {
-      hostname                  = local.hostnames[each.key]
-      image_uri                 = local.image_uri
-      dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
-      install_disk              = "/dev/nvme0n1"
-      cluster_endpoint_host     = local.dns_loadbalancer_hostname
-      pod_subnets               = var.pod_subnets
-      service_subnets           = var.service_subnets
-    }),
+  config_patches = flatten([
+    local.common_patches_by_node[each.key],
     file("${path.module}/files/cp-config.yaml"),
     templatefile("${path.module}/files/inline-manifests.yaml.tmpl", {
       manifests = {
@@ -51,13 +90,6 @@ data "talos_machine_configuration" "control_plane_nodes" {
     }),
     file("${path.module}/files/permissive-admission.yaml"),
     file("${path.module}/files/cp-scheduling.yaml"),
-    templatefile("${path.module}/files/encrypt-kms.patch.yaml.tmpl", {
-      kms_endpoint = var.kms_endpoint
-    }),
-    templatefile("${path.module}/files/tailscale.yaml.tmpl", {
-      tailscale_key = tailscale_tailnet_key.unsigned-cp[each.key].key
-    }),
-    file("${path.module}/files/watchdog.yaml"),
     templatefile("${path.module}/files/cp-network-rules.yaml.tmpl", {
       pod_subnets = var.pod_subnets
       control_plane_node_ips = [
@@ -68,17 +100,8 @@ data "talos_machine_configuration" "control_plane_nodes" {
         "100.64.0.0/10",
         "fd7a:115c:a1e0::/64",
       ],
-      vxlan_port = "8472 # cilium-specific"
+      vxlan_port = local.cilium_vxlan_port
     }),
-    templatefile("${path.module}/files/hubble-peer-rules.yaml.tmpl", {
-      pod_subnets = var.pod_subnets,
-      node_ips = [
-        "100.64.0.0/10",
-        "fd7a:115c:a1e0::/64",
-      ],
-    }),
-    file("${path.module}/files/openebs.patch.yaml"),
-    contains(var.mayastor_io_engine_nodes, each.key) ? file("${path.module}/files/mayastor.patch.yaml") : "",
   ])
 }
 
@@ -89,40 +112,14 @@ data "talos_machine_configuration" "worker_nodes" {
   machine_type     = "worker"
   machine_secrets  = talos_machine_secrets.this.machine_secrets
   talos_version    = var.talos_version
-  config_patches = compact([
-    templatefile("${path.module}/files/install-disk-and-hostname.yaml.tmpl", {
-      hostname                  = local.hostnames[each.key]
-      image_uri                 = local.image_uri
-      dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
-      install_disk              = "/dev/nvme0n1"
-      cluster_endpoint_host     = local.dns_loadbalancer_hostname
-      pod_subnets               = var.pod_subnets
-      service_subnets           = var.service_subnets
-    }),
-    file("${path.module}/files/openebs.patch.yaml"),
-    contains(var.mayastor_io_engine_nodes, each.key) ? file("${path.module}/files/mayastor.patch.yaml") : "",
-    templatefile("${path.module}/files/encrypt-kms.patch.yaml.tmpl", {
-      kms_endpoint = var.kms_endpoint
-    }),
-    templatefile("${path.module}/files/tailscale.yaml.tmpl", {
-      tailscale_key = tailscale_tailnet_key.unsigned-worker[each.key].key
-    }),
-    file("${path.module}/files/watchdog.yaml"),
+  config_patches = flatten([
+    local.common_patches_by_node[each.key],
     templatefile("${path.module}/files/worker-network-rules.yaml.tmpl", {
       node_ips = [
         "100.64.0.0/10",
         "fd7a:115c:a1e0::/64",
       ],
-      vxlan_port = "8472 # cilium-specific"
+      vxlan_port = local.cilium_vxlan_port
     }),
-    templatefile("${path.module}/files/hubble-peer-rules.yaml.tmpl", {
-      pod_subnets = var.pod_subnets,
-      node_ips = [
-        "100.64.0.0/10",
-        "fd7a:115c:a1e0::/64",
-      ],
-    }),
-    file("${path.module}/files/openebs.patch.yaml"),
-    contains(var.mayastor_io_engine_nodes, each.key) ? file("${path.module}/files/mayastor.patch.yaml") : "",
   ])
 }
