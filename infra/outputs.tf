@@ -9,11 +9,16 @@ output "machine_secrets" {
 }
 
 output "kubeconfig" {
-  value     = talos_cluster_kubeconfig.this.kubeconfig_raw
+  value     = talos_cluster_kubeconfig.this
   sensitive = true
 }
 
 output "talos_image" {
   value     = local.image_uri
+  sensitive = false
+}
+
+output "talos_url" {
+  value     = data.talos_image_factory_urls.this.urls.iso_secureboot
   sensitive = false
 }

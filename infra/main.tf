@@ -6,11 +6,11 @@ terraform {
     }
     tailscale = {
       source  = "tailscale/tailscale"
-      version = "0.16.1"
+      version = ">=0.16.1"
     }
     external = {
       source  = "external"
-      version = "2.3.1"
+      version = ">=2.3.1"
     }
     helm = {
       source  = "hashicorp/helm"
@@ -36,11 +36,6 @@ variable "talos_version" {
   type        = string
 }
 
-variable "github_repo" {
-  description = "The github organization/repo where this repository is reachable"
-  type        = string
-}
-
 variable "cluster_name" {
   description = "A name to provide for the Talos cluster"
   type        = string
@@ -48,7 +43,7 @@ variable "cluster_name" {
 
 variable "control_plane_nodes" {
   description = "The local IPs and tailscale IPs of the control plane nodes"
-  type        = map(object({local_ip = string}))
+  type        = map(object({ local_ip = string }))
 }
 
 variable "bootstrap_node" {
@@ -58,7 +53,7 @@ variable "bootstrap_node" {
 
 variable "worker_nodes" {
   description = "The local IPs and tailscale IPs of worker-only nodes"
-  type        = map(object({local_ip = string}))
+  type        = map(object({ local_ip = string }))
 }
 
 variable "stable_secret" {
@@ -86,26 +81,8 @@ variable "kms_endpoint" {
   type        = string
 }
 
-variable "external_server_hostname" {
-  description = "Tailscale hostname for external server where some services still run"
-  type        = string
-}
-
-variable "tailnet_oauth_client_id" {
-  description = "OAuth client ID for creating tailnet key"
-  type        = string
-}
-variable "tailnet_oauth_client_secret" {
-  description = "OAuth client secret for creating tailnet key"
-  type        = string
-}
-
-variable "cloudflare_zone_id" {
-  description = "Cloudflare zone ID for the domain"
-  type        = string
-}
-variable "cloudflare_token" {
-  description = "Token for Cloudflare API"
+variable "cloudflare_zone" {
+  description = "Cloudflare zone name"
   type        = string
 }
 
@@ -116,7 +93,7 @@ variable "mayastor_io_engine_nodes" {
 
 // port must match localAPIServerPort
 locals {
-  node_ips                  = merge(var.control_plane_nodes, var.worker_nodes)
+  node_ips = merge(var.control_plane_nodes, var.worker_nodes)
   hostnames = merge({
     for id, node in local.node_ips :
     node.local_ip => "${id}"
@@ -126,12 +103,4 @@ locals {
   })
   dns_loadbalancer_hostname = "${var.cluster_name}.${var.dns_loadbalancer_domain}"
   cluster_endpoint          = "https://${local.dns_loadbalancer_hostname}:6443"
-}
-
-variable "flux_ssh_private_key" {
-  type = string
-}
-
-variable "flux_sops_age_key" {
-  type = string
 }

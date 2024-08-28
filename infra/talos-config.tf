@@ -21,6 +21,12 @@ resource "talos_image_factory_schematic" "this" {
   )
 }
 
+data "talos_image_factory_urls" "this" {
+  talos_version = var.talos_version
+  schematic_id  = talos_image_factory_schematic.this.id
+  platform      = "metal"
+}
+
 locals {
   image_uri         = "factory.talos.dev/installer-secureboot/${talos_image_factory_schematic.this.id}:${var.talos_version}"
   cilium_vxlan_port = "8472"

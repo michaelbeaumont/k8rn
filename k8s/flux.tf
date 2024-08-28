@@ -1,3 +1,8 @@
+variable "github_repo" {
+  description = "The github organization/repo where this repository is reachable"
+  type        = string
+}
+
 variable "lets_encrypt_email" {
   description = "Email to use for Lets Encrypt certs"
   type        = string
@@ -6,22 +11,6 @@ variable "lets_encrypt_email" {
 variable "services_hostname_suffix" {
   description = "Domain suffix common to all services gateway routes"
   type        = string
-}
-
-provider "kubernetes" {
-  host                   = talos_cluster_kubeconfig.this.kubernetes_client_configuration.host
-  client_certificate     = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate)
-  client_key             = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key)
-  cluster_ca_certificate = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.ca_certificate)
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = talos_cluster_kubeconfig.this.kubernetes_client_configuration.host
-    client_certificate     = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate)
-    client_key             = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key)
-    cluster_ca_certificate = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.ca_certificate)
-  }
 }
 
 resource "kubernetes_namespace" "flux-system" {
@@ -99,7 +88,7 @@ resource "helm_release" "flux-sync-base" {
     kustomization:
       spec:
         interval: 10m0s
-        path: ./k8s/base
+        path: ./k8s/manifests/base
         prune: true
         wait: true
         decryption:
@@ -132,7 +121,7 @@ resource "helm_release" "flux-sync-base-config" {
     kustomization:
       spec:
         interval: 10m0s
-        path: ./k8s/base-config
+        path: ./k8s/manifests/base-config
         prune: true
         wait: true
         dependsOn:
@@ -167,7 +156,7 @@ resource "helm_release" "flux-sync-base-services" {
     kustomization:
       spec:
         interval: 10m0s
-        path: ./k8s/base-services
+        path: ./k8s/manifests/base-services
         prune: true
         wait: true
         dependsOn:
@@ -202,7 +191,7 @@ resource "helm_release" "flux-sync-apps" {
     kustomization:
       spec:
         interval: 10m0s
-        path: ./k8s/apps
+        path: ./k8s/manifests/apps
         prune: true
         wait: true
         dependsOn:
