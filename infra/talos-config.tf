@@ -77,6 +77,8 @@ data "talos_machine_configuration" "control_plane_nodes" {
         "fd7a:115c:a1e0::/64",
       ],
     }),
+    file("${path.module}/files/openebs.patch.yaml"),
+    contains(var.mayastor_io_engine_nodes, each.key) ? file("${path.module}/files/mayastor.patch.yaml") : "",
   ])
 }
 
@@ -121,5 +123,7 @@ data "talos_machine_configuration" "worker_nodes" {
         "fd7a:115c:a1e0::/64",
       ],
     }),
+    file("${path.module}/files/openebs.patch.yaml"),
+    contains(var.mayastor_io_engine_nodes, each.key) ? file("${path.module}/files/mayastor.patch.yaml") : "",
   ])
 }

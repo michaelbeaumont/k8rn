@@ -39,6 +39,12 @@ data "tailscale_device" "cp" {
   wait_for = "10m"
 }
 
+data "tailscale_device" "worker" {
+  for_each = toset(keys(var.worker_nodes))
+  hostname = local.hostnames[talos_machine_configuration_apply.workers_init[each.key].node]
+  wait_for = "10m"
+}
+
 data "tailscale_device" "external_server" {
   hostname = var.external_server_hostname
   wait_for = "30s"
