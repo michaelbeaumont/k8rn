@@ -98,6 +98,7 @@ resource "helm_release" "flux-sync-base" {
         postBuild:
           substitute:
             core_tailscale_ip: "${data.tailscale_device.external_server.addresses[0]}"
+            openebs_etcd_replicaCount: "${var.openebs_etcd_replicaCount}"
     EOT
   ]
 }

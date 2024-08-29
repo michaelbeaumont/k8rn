@@ -31,3 +31,8 @@ variable "external_server_hostname" {
   description = "Tailscale hostname for external server where some services still run"
   type        = string
 }
+
+variable "openebs_etcd_replicaCount" {
+  description = "How many replicas OpenEBS's etcd storage should use"
+  type        = number
+}

@@ -96,6 +96,7 @@ module "k8s" {
   flux_ssh_private_key      = var.flux_ssh_private_key
   flux_sops_age_key         = var.flux_sops_age_key
   external_server_hostname  = var.external_server_hostname
+  openebs_etcd_replicaCount = length(var.control_plane_nodes) + length(var.worker_nodes) >= 3 ? 3 : 1
 }
 
 output "talosconfig" {

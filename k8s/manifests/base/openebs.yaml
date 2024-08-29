@@ -48,7 +48,7 @@ spec:
           initContainers:
             enabled: false
       etcd:
-        replicaCount: 3
+        replicaCount: ${openebs_etcd_replicaCount}
       io_engine:
         # unfortunately this doesn't work with va even with hugepages
         envcontext: "iova-mode=pa"
