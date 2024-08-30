@@ -37,6 +37,7 @@ module "infra" {
   control_plane_nodes      = var.control_plane_nodes
   bootstrap_node           = var.bootstrap_node
   worker_nodes             = var.worker_nodes
+  tailnet_name             = var.tailnet_name
   mayastor_io_engine_nodes = var.mayastor_io_engine_nodes
   stable_secret            = var.stable_secret
   pod_subnets = [

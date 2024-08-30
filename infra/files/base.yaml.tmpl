@@ -6,6 +6,7 @@ machine:
   certSANs:
     - ${dns_loadbalancer_hostname}
     - ${hostname}
+    - ${tailscale_fqdn}
   install:
     disk: ${install_disk}
     image: ${image_uri}

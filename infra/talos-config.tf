@@ -34,14 +34,6 @@ locals {
 
 locals {
   // shared between both but we can't get rid of the each references
-  base_template_variables = {
-    image_uri                 = local.image_uri
-    dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
-    install_disk              = "/dev/nvme0n1"
-    cluster_endpoint_host     = local.dns_loadbalancer_hostname
-    pod_subnets               = var.pod_subnets
-    service_subnets           = var.service_subnets
-  }
   common_patches_by_node = {
     for node in keys(merge(var.control_plane_nodes, var.worker_nodes))
     : node => [
@@ -50,11 +42,12 @@ locals {
         {
           image_uri                 = local.image_uri
           dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
+          hostname                  = local.hostnames[node]
+          tailscale_fqdn            = "${local.hostnames[node]}.${var.tailnet_name}"
           install_disk              = "/dev/nvme0n1"
           cluster_endpoint_host     = local.dns_loadbalancer_hostname
           pod_subnets               = var.pod_subnets
           service_subnets           = var.service_subnets
-          hostname                  = local.hostnames[node]
         }
       ),
       templatefile("${path.module}/files/tailscale.yaml.tmpl", {

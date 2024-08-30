@@ -86,6 +86,11 @@ variable "cloudflare_zone" {
   type        = string
 }
 
+variable "tailnet_name" {
+  description = "Name of the tailnet"
+  type        = string
+}
+
 variable "mayastor_io_engine_nodes" {
   description = "The local IPs of nodes that should be marked for mayastor io-engine"
   type        = list(string)

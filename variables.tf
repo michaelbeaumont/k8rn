@@ -67,6 +67,11 @@ variable "cloudflare_token" {
   type        = string
 }
 
+variable "tailnet_name" {
+  description = "Name of the tailnet"
+  type        = string
+}
+
 variable "flux_ssh_private_key" {
   type = string
 }
