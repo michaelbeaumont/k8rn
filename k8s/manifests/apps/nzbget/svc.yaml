@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nzbget
+  namespace: nzbget
+  labels:
+    app.kubernetes.io/name: nzbget
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: nzbget
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: nzbget
+  namespace: nzbget
+  labels:
+    external-dns: "true"
+spec:
+  parentRefs:
+    - name: services
+      namespace: infra
+      sectionName: main
+  hostnames:
+    - nzbget.${services_hostname_suffix}
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: nzbget
+          port: 80

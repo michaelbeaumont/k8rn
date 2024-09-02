@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nzbget
+  namespace: nzbget
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nzbget
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nzbget
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 2001 # nzbget user on NFS
+        runAsGroup: 2001 # nzbget-users
+        fsGroup: 2001 # nzbget-users
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+        runAsNonRoot: true
+      containers:
+        - name: nzbget
+          command:
+            - /app/nzbget/nzbget
+          args:
+            - -s
+            - -o
+            - Server1.Name=$(SERVER1_NAME)
+            - -o
+            - Server1.Host=$(SERVER1_HOST)
+            - -o
+            - Server1.Username=$(SERVER1_USERNAME)
+            - -o
+            - Server1.Password=$(SERVER1_PASSWORD)
+            - -o
+            - Server2.Name=$(SERVER2_NAME)
+            - -o
+            - Server2.Host=$(SERVER2_HOST)
+            - -o
+            - Server2.Username=$(SERVER2_USERNAME)
+            - -o
+            - Server2.Password=$(SERVER2_PASSWORD)
+            - -o
+            - ControlIP=$(POD_IP)
+            - -o
+            - Feed1.URL=$(FEED1_URL)
+            - -o
+            - Feed1.Name=$(FEED1_NAME)
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - secretRef:
+                name: server-credentials
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          image: nzbgetcom/nzbget:v24.3
+          ports:
+            - name: http
+              containerPort: 6789
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - mountPath: /config/persistence/inter
+              name: inter-downloads-and-history
+              subPath: inter
+            - mountPath: /config/persistence/nzb
+              name: inter-downloads-and-history
+              subPath: nzb
+            - mountPath: /config/persistence/queue
+              name: inter-downloads-and-history
+              subPath: queue
+            - name: tmp
+              mountPath: /tmp
+            - name: config
+              mountPath: /etc/nzbget.conf
+              subPath: nzbget.conf
+              readOnly: true
+            - name: downloads
+              mountPath: /downloads
+          resources: {}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: config
+        - name: inter-downloads-and-history
+          persistentVolumeClaim:
+            claimName: inter-downloads-and-history
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: downloads

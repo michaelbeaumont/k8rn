@@ -1,0 +1,337 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: nzbget
+data:
+  nzbget.conf: |
+    MainDir=/config
+    DestDir=/downloads
+    InterDir=/config/persistence/inter
+    NzbDir=/config/persistence/nzb
+    QueueDir=/config/persistence/queue
+    TempDir=/tmp
+
+    # Should be group writeable
+    UMask=0002
+
+    # Directory with web-interface files.
+    WebDir=/app/nzbget/webui
+    # Directory with post-processing and other scripts.
+    ScriptDir=$${MainDir}/scripts
+    LogFile=/dev/stdout
+
+    ConfigTemplate=/app/nzbget/share/nzbget/nzbget.conf
+
+    Server1.Active=yes
+    # from secret
+    #Server1.Name=
+    #Server1.Host=
+    #Server1.Username=
+    #Server1.Password=
+    Server1.Level=0
+    Server1.Optional=no
+    Server1.Group=0
+
+    Server1.Port=5563
+    Server1.IpVersion=auto
+    Server1.Connections=10
+
+    Server1.Encryption=yes
+    Server1.Cipher=
+
+    Server1.JoinGroup=no
+
+    # Server retention time (days).
+    #
+    # How long the articles are stored on the news server. The articles
+    # whose age exceed the defined server retention time are not tried on
+    # this news server, the articles are instead considered failed on this
+    # news server.
+    #
+    # Value "0" disables retention check.
+    Server1.Retention=0
+
+    Server2.Active=yes
+    Server2.Level=1
+    # from secret
+    #Server2.Name=
+    #Server2.Host=
+    #Server2.Username=
+    #Server2.Password=
+
+    Server2.Port=5563
+    Server2.IpVersion=auto
+    Server2.Connections=10
+
+    Server2.Encryption=yes
+    Server2.Cipher=
+
+    Server2.JoinGroup=no
+
+    ### SECURITY
+
+    # IP on which NZBGet server listen and which clients use to contact NZBGet.
+    # ControlIP=0.0.0.0 # from args
+
+    ControlPort=6789
+
+    ControlUsername=nzbget
+
+    ControlPassword=
+
+    # Authenticate using web-form (yes, no).
+    FormAuth=no
+
+    # Secure control of NZBGet server (yes, no).
+    #
+    # Activate the option if you want to access NZBGet built-in web-server
+    # via HTTPS (web-interface and RPC). You should also provide certificate
+    # and key files, see option <SecureCert> and option <SecureKey>.
+    SecureControl=no
+
+    # Port which NZBGet server and remote client use for encrypted
+    # communication (1-65535).
+    SecurePort=6791
+
+    # TLS certificate verification (yes, no).
+    #
+    # When connecting to a news server (for downloading) or a web server
+    # (for fetching of rss feeds and nzb-files) the authenticity of the server
+    # should be validated using server security certificate. If the check
+    # fails that means the connection cannot be trusted and must be closed
+    # with an error message explaining the security issue.
+    #
+    # Sometimes servers are improperly configured and the certificate verification
+    # fails even if there is no hacker attack in place. In that case you should
+    # inform the server owner about the issue. If you still need to connect to
+    # servers with invalid certificates you can disable the certificate verification
+    # but you should know that your connection is insecure and you might be
+    # connecting to attacker's server without your awareness.
+    #
+    # NOTE: Certificate verification requires a list of trusted root certificates,
+    # which must be configured using option <CertStore>.
+    #
+    # NOTE: For more details visit http://nzbget.net/certificate-verification.
+    CertCheck=no
+
+    # Automatically check for new releases (none, stable, testing).
+    UpdateCheck=stable
+
+    ##############################################################################
+    ### CATEGORIES                                                             ###
+
+    # Category name is passed to post-processing script and can be used by it
+    # to perform category specific processing.
+    Category1.Name=Movies
+
+    # List of aliases.
+    # Example: TV - HD, TV - SD, TV*
+    Category1.Aliases=
+
+    Category2.Name=Series
+    Category3.Name=Music
+    Category4.Name=Software
+
+    # Feed1 from args
+    Feed1.Interval=15
+    # Treat all items on first fetch as backlog (yes, no).
+    Feed1.Backlog=no
+
+    DupeCheck=yes
+
+    FlushQueue=yes
+
+    ContinuePartial=yes
+
+    # Memory limit for article cache (megabytes).
+    ArticleCache=300
+
+    # Write decoded articles directly into destination output file (yes, no).
+    #
+    # When option <DirectWrite> is enabled the program at first creates the
+    # output destination file with required size (total size of all articles),
+    # then writes the articles directly to this file without creating of any
+    # temporary files. If article cache (option <ArticleCache>) is active
+    # the downloaded articles are saved into cache first and are written
+    # into the destination file when the cache flushes. This happen when
+    # all articles of the file are downloaded or when the cache becomes
+    # full to 90%.
+    #
+    # The direct write usually improves performance by reducing the amount
+    # of disk operations but may produce more fragmented files when used
+    # without article cache.
+    DirectWrite=yes
+
+    # Memory limit for per connection write buffer (kilobytes).
+    # Recommended value for computers with enough memory: 1024.
+    # NOTE: Also see option <ArticleCache>.
+    WriteBuffer=1024
+
+    # How to name downloaded files (auto, article, nzb).
+    FileNaming=auto
+
+    # Reorder files within nzbs for optimal download order (yes, no).
+    ReorderFiles=yes
+
+    # Post-processing strategy (sequential, balanced, aggressive, rocket).
+    PostStrategy=balanced
+
+    # Pause if disk space gets below this value (megabytes).
+    DiskSpace=250
+
+    NzbCleanupDisk=yes
+
+    KeepHistory=30
+
+    FeedHistory=7
+
+    # How many retries should be attempted if a download error occurs (0-99).
+    ArticleRetries=3
+
+    # Article retry interval (seconds).
+    #
+    # If download of article fails because of interrupted connection
+    # the server is temporary blocked until the retry interval expires.
+    ArticleInterval=10
+
+    # Connection timeout for article downloading (seconds).
+    ArticleTimeout=60
+
+    # Number of download attempts for URL fetching (0-99).
+    UrlRetries=3
+
+    # If fetching of nzb-file via URL or fetching of RSS feed fails another
+    # attempt is made after the retry interval.
+    UrlInterval=10
+
+    # Connection timeout when fetching nzb-files via URLs and fetching RSS feeds.
+    UrlTimeout=60
+
+    # Set timeout for connections from clients (web-browsers and API clients).
+    RemoteTimeout=90
+
+    # Set the maximum download rate on program start (kilobytes/sec).
+    DownloadRate=0
+
+    # Maximum number of simultaneous connections for nzb URL downloads (0-999).
+    UrlConnections=4
+
+    # Force URL-downloads even if download queue is paused (yes, no).
+    UrlForce=yes
+
+    MonthlyQuota=0
+    DailyQuota=0
+
+    WriteLog=append
+
+    # How error messages must be printed (screen, log, both, none).
+    ErrorTarget=both
+    WarningTarget=both
+    InfoTarget=both
+    DetailTarget=log
+
+    # Number of messages stored in screen buffer (messages).
+    LogBuffer=1000
+
+    NzbLog=yes
+
+    CrashTrace=yes
+
+    CrashDump=no
+
+    ### DISPLAY (TERMINAL)
+
+    # Set screen-outputmode (loggable, colored, curses).
+    OutputMode=loggable
+
+    # Update interval for Frontend-output in console mode or remote client
+    # mode (milliseconds).
+    UpdateInterval=200
+
+    ### CHECK AND REPAIR
+
+    # Check CRC of downloaded and decoded articles (yes, no).
+    CrcCheck=yes
+
+    # Whether and how par-verification must be performed (auto, always, force, manual).
+    ParCheck=auto
+
+    # Automatic par-repair after par-verification (yes, no).
+    ParRepair=yes
+
+    # What files should be scanned during par-verification (limited, extended,
+    # full, dupe).
+    #
+    #  Limited  - scan only files belonging to par-set;
+    #  Extended - scan files belonging to par-set first, scan other files until
+    #             all missing files are found;
+    #  Full     - scan all files in destination directory. Can be very time
+    #             consuming but may sometimes repair where Limited and Extended fail;
+    #  Dupe     - scan files belonging to par-set first, scan other files until
+    #             repair is possible. Even files from other duplicate-downloads
+    #             are scanned. Can be very time consuming but brings best results.
+    ParScan=extended
+
+    # Quick file verification during par-check (yes, no).
+    ParQuick=yes
+
+    # Memory limit for par-repair buffer (megabytes).
+    #
+    # If you have a lot of RAM set the option to few hundreds (MB) for the
+    # best repair performance.
+    ParBuffer=300
+
+    # Number of threads to use during par-repair (0-99).
+    ParThreads=0
+
+    # Files to ignore during par-check.
+    ParIgnoreExt=.sfv, .nzb, .nfo
+
+    # Check for renamed and missing files using par-files (yes, no).
+    ParRename=yes
+
+    # Check for renamed rar-files (yes, no).
+    #
+    # Rar-rename restores original file names using information stored
+    # in rar-files. When enabled the rar-rename is performed as one of the
+    # first steps of post-processing for every nzb-file.
+    #
+    # Rar-rename is useful for downloads not having par2-files or for
+    # downloads those files were renamed before creating par2-files. In
+    # both cases par-rename (option <ParRename>) can't rename files
+    # and the rar-rename makes it possible to unpack downloads which
+    # would fail otherwise.
+    RarRename=yes
+
+    DirectRename=no
+
+    # What to do if download health drops below critical health (delete, park,
+    # pause, none).
+    HealthCheck=park
+
+    # Unpack downloaded nzb-files (yes, no).
+    Unpack=yes
+
+    # Directly unpack files during downloading (yes, no).
+    #
+    # When active the files are unpacked during downloading instead of post-processing
+    # stage. This works only for healthy downloads. Damaged downloads are unpacked
+    # as usual during post-processing stage after par-repair.
+    #
+    # NOTE: This option requires unpack to be enabled in general via option <Unpack>.
+    # NOTE: For best results also activate option <DirectRename> and option <ReorderFiles>.
+    DirectUnpack=no
+
+    UnpackPauseQueue=no
+
+    UnpackCleanupDisk=yes
+
+    UnrarCmd=unrar
+    SevenZipCmd=7z
+
+    ExtCleanupDisk=.par2, .sfv
+
+    # Files to ignore during unpack.
+    UnpackIgnoreExt=.cbr

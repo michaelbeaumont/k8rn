@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: inter-downloads-and-history
+  namespace: nzbget
+  labels:
+    app.kubernetes.io/name: nzbget
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  volumeMode: Filesystem
+  storageClassName: openebs-single-replica
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nzbget-downloads
+spec:
+  claimRef:
+    name: downloads
+    namespace: nzbget
+  capacity:
+    storage: 30Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  nfs:
+    server: "${core_tailscale_ip}"
+    path: /data/media/nzbget/dst
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: downloads
+  namespace: nzbget
+spec:
+  volumeName: nzbget-downloads
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 30Gi
