@@ -67,7 +67,15 @@ locals {
       }),
       file("${path.module}/files/services-ingress.yaml"),
       file("${path.module}/files/watchdog.yaml"),
-      contains(var.mayastor_io_engine_nodes, node) ? [file("${path.module}/files/mayastor.patch.yaml")] : [],
+      templatefile("${path.module}/files/mayastor-rules.yaml.tmpl", {
+        node_ips = local.tailscale_cidrs,
+      }),
+      contains(var.mayastor_io_engine_nodes, node) ? [
+        file("${path.module}/files/mayastor.patch.yaml"),
+        templatefile("${path.module}/files/mayastor-io-engine-rules.yaml.tmpl", {
+          node_ips = local.tailscale_cidrs,
+        }),
+      ] : [],
     ]
   }
 }

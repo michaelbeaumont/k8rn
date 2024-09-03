@@ -1,0 +1,13 @@
+---
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: mayastor-grpc-ha-node
+portSelector:
+  ports:
+    - 10199
+    - 50053
+  protocol: tcp
+ingress:
+%{ for ip in node_ips }
+  - subnet: "${ip}"
+%{ endfor }
