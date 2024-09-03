@@ -30,6 +30,10 @@ data "talos_image_factory_urls" "this" {
 locals {
   image_uri         = "factory.talos.dev/installer-secureboot/${talos_image_factory_schematic.this.id}:${var.talos_version}"
   cilium_vxlan_port = "8472"
+  tailscale_cidrs = [
+    "100.64.0.0/10",
+    "fd7a:115c:a1e0::/64",
+  ]
 }
 
 locals {
@@ -59,10 +63,7 @@ locals {
       file("${path.module}/files/openebs.patch.yaml"),
       templatefile("${path.module}/files/hubble-peer-rules.yaml.tmpl", {
         pod_subnets = var.pod_subnets,
-        node_ips = [
-          "100.64.0.0/10",
-          "fd7a:115c:a1e0::/64",
-        ],
+        node_ips    = local.tailscale_cidrs,
       }),
       file("${path.module}/files/services-ingress.yaml"),
       file("${path.module}/files/watchdog.yaml"),
@@ -90,16 +91,10 @@ data "talos_machine_configuration" "control_plane_nodes" {
     file("${path.module}/files/permissive-admission.yaml"),
     file("${path.module}/files/cp-scheduling.yaml"),
     templatefile("${path.module}/files/cp-network-rules.yaml.tmpl", {
-      pod_subnets = var.pod_subnets
-      control_plane_node_ips = [
-        "100.64.0.0/10",
-        "fd7a:115c:a1e0::/64",
-      ],
-      node_ips = [
-        "100.64.0.0/10",
-        "fd7a:115c:a1e0::/64",
-      ],
-      vxlan_port = local.cilium_vxlan_port
+      pod_subnets            = var.pod_subnets,
+      control_plane_node_ips = local.tailscale_cidrs,
+      node_ips               = local.tailscale_cidrs,
+      vxlan_port             = local.cilium_vxlan_port
     }),
   ])
 }
@@ -114,10 +109,7 @@ data "talos_machine_configuration" "worker_nodes" {
   config_patches = flatten([
     local.common_patches_by_node[each.key],
     templatefile("${path.module}/files/worker-network-rules.yaml.tmpl", {
-      node_ips = [
-        "100.64.0.0/10",
-        "fd7a:115c:a1e0::/64",
-      ],
+      node_ips   = local.tailscale_cidrs,
       vxlan_port = local.cilium_vxlan_port
     }),
   ])
