@@ -76,6 +76,9 @@ locals {
           node_ips = local.tailscale_cidrs,
         }),
       ] : [],
+      templatefile("${path.module}/files/metallb-rules.yaml.tmpl", {
+        node_ips = local.tailscale_cidrs,
+      }),
     ]
   }
 }
