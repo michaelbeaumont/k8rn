@@ -67,11 +67,11 @@ data "talos_cluster_health" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
   control_plane_nodes = flatten([
     for name, apply in talos_machine_configuration_apply.control_plane_post_init
-    : [apply.node] // [data.tailscale_device.cp[name].addresses[0], apply.node]
+    : [data.tailscale_device.cp[name].addresses[0]] // , data.tailscale_device.cp[name].addresses[1]]
   ])
   worker_nodes = flatten([
     for name, apply in talos_machine_configuration_apply.workers_post_init
-    : [apply.node] // [data.tailscale_device.worker[name].addresses[0], apply.node]
+    : [data.tailscale_device.worker[name].addresses[0]] // , data.tailscale_device.worker[name].addresses[1]]
   ])
   skip_kubernetes_checks = true
   endpoints              = [local.dns_loadbalancer_hostname]
