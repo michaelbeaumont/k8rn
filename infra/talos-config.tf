@@ -109,10 +109,7 @@ data "talos_machine_configuration" "control_plane_nodes" {
     local.common_patches_by_node[each.key],
     file("${path.module}/files/cp-config.yaml"),
     templatefile("${path.module}/files/inline-manifests.yaml.tmpl", {
-      manifests = {
-        "install-cilium"  = file("${path.module}/files/cilium-install-job-manifests.yaml"),
-        "block-tailscale" = file("${path.module}/files/block-tailscale.yaml"),
-      }
+      manifests = {}
     }),
     file("${path.module}/files/permissive-admission.yaml"),
     file("${path.module}/files/cp-scheduling.yaml"),
