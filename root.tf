@@ -34,6 +34,7 @@ module "infra" {
   talos_version = var.talos_version
   cluster_name  = "k8rn"
 
+  nodes                    = var.nodes
   control_plane_nodes      = var.control_plane_nodes
   bootstrap_node           = var.bootstrap_node
   worker_nodes             = var.worker_nodes

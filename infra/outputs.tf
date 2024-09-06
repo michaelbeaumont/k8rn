@@ -19,6 +19,6 @@ output "talos_image" {
 }
 
 output "talos_url" {
-  value     = data.talos_image_factory_urls.this.urls.iso_secureboot
+  value     = { for node, urls in data.talos_image_factory_urls.this : node => urls.urls.iso_secureboot }
   sensitive = false
 }

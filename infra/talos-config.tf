@@ -2,10 +2,21 @@ resource "talos_machine_secrets" "this" {
   talos_version = "v1.7.5"
 }
 
+resource "random_uuid" "nodes" {
+  for_each = toset(var.nodes)
+}
+
 resource "talos_image_factory_schematic" "this" {
+  for_each = random_uuid.nodes
   schematic = yamlencode(
     {
       customization = {
+        meta = [
+          {
+            key : 15, // 0x0f
+            value : each.value.id,
+          }
+        ]
         extraKernelArgs = [
           "sysctl.net.ipv6.conf.default.stable_secret=${var.stable_secret}",
         ]
@@ -22,13 +33,17 @@ resource "talos_image_factory_schematic" "this" {
 }
 
 data "talos_image_factory_urls" "this" {
+  for_each      = talos_image_factory_schematic.this
   talos_version = var.talos_version
-  schematic_id  = talos_image_factory_schematic.this.id
+  schematic_id  = each.value.id
   platform      = "metal"
 }
 
 locals {
-  image_uri         = "factory.talos.dev/installer-secureboot/${talos_image_factory_schematic.this.id}:${var.talos_version}"
+  image_uri = {
+    for node, schematic in talos_image_factory_schematic.this
+    : node => "factory.talos.dev/installer-secureboot/${schematic.id}:${var.talos_version}"
+  }
   cilium_vxlan_port = "8472"
   tailscale_cidrs = [
     "100.64.0.0/10",
@@ -44,7 +59,7 @@ locals {
       templatefile(
         "${path.module}/files/base.yaml.tmpl",
         {
-          image_uri                 = local.image_uri
+          image_uri                 = local.image_uri[node]
           dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
           hostname                  = local.hostnames[node]
           tailscale_fqdn            = "${local.hostnames[node]}.${var.tailnet_name}"

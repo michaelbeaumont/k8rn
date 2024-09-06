@@ -8,6 +8,11 @@ variable "talos_version" {
   type        = string
 }
 
+variable "nodes" {
+  description = "A list of all nodes, used to generate initial images"
+  type        = list(string)
+}
+
 variable "control_plane_nodes" {
   description = "The local IPs and tailscale IPs of the control plane nodes"
   type        = map(object({ local_ip = string }))

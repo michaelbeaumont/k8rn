@@ -7,5 +7,5 @@ write-kubeconfig outfile:
 write-secrets-yaml outfile:
     terraform output -raw machine_secrets > {{ outfile }}
 
-get-secureboot-iso:
-    wget `terraform output -raw talos_url`
+get-secureboot-iso node:
+    wget -O {{ node }}-talos.iso `terraform output -json talos_url | jq -r '.["{{ node }}"]'`
