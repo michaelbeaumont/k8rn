@@ -1,0 +1,31 @@
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: "block-tailscale"
+spec:
+  endpointSelector:
+    matchLabels:
+      {}
+  egress:
+  - toEntities:
+    - cluster
+  - toCIDRSet:
+    - cidr: 0.0.0.0/0
+      except:
+      - 100.64.0.0/10
+    - cidr: ::/0
+      except:
+      - fd7a:115c:a1e0::/64
+  - toEndpoints:
+    - matchLabels:
+       "k8s:io.kubernetes.pod.namespace": kube-system
+       "k8s:k8s-app": kube-dns
+    toPorts:
+    - ports:
+      - port: "53"
+        protocol: ANY
+      rules:
+        dns:
+        - matchPattern: '*'
+

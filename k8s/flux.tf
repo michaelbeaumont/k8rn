@@ -70,6 +70,39 @@ resource "helm_release" "flux" {
   ]
 }
 
+resource "helm_release" "flux-sync-prebase" {
+  repository = "https://fluxcd-community.github.io/helm-charts"
+  chart      = "flux2-sync"
+  name       = "flux-sync-prebase"
+  namespace  = helm_release.flux.namespace
+
+  values = [
+    <<-EOT
+    gitRepository:
+      spec:
+        interval: 10m0s
+        ref:
+          branch: main
+        secretRef:
+          name: deploy-key
+        url: ssh://git@github.com/${var.github_repo}
+    kustomization:
+      spec:
+        interval: 10m0s
+        path: ./k8s/manifests/prebase
+        prune: true
+        wait: true
+        decryption:
+          provider: sops
+          secretRef:
+            name: sops
+        postBuild:
+          substitute:
+            core_tailscale_ip: "${data.tailscale_device.external_server.addresses[0]}"
+    EOT
+  ]
+}
+
 resource "helm_release" "flux-sync-base" {
   repository = "https://fluxcd-community.github.io/helm-charts"
   chart      = "flux2-sync"
@@ -92,6 +125,8 @@ resource "helm_release" "flux-sync-base" {
         path: ./k8s/manifests/base
         prune: true
         wait: true
+        dependsOn:
+          - name: ${helm_release.flux-sync-prebase.name}
         decryption:
           provider: sops
           secretRef:
