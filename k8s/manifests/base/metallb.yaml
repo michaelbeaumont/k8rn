@@ -34,3 +34,5 @@ spec:
       version: v0.14.8
   values:
     loadBalancerClass: metallb
+    speaker:
+      ignoreExcludeLB: true
