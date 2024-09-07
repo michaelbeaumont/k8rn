@@ -1,0 +1,176 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    gateway.infra.services/allow-routes: "true"
+  name: jellyfin
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jellyfin-media
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 1Ti # kind of arbitrary that doesn't matter since we're readOnly
+  claimRef:
+    name: media
+    namespace: jellyfin
+  accessModes:
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: "${core_tailscale_ip}"
+    path: /data/media
+    readOnly: true
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media
+  namespace: jellyfin
+spec:
+  volumeName: jellyfin-media
+  storageClassName: ""
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 50Gi # TODO this can't matter for read only data, right?
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jellyfin
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jellyfin
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jellyfin
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+        runAsNonRoot: true
+      containers:
+        - env:
+            #- name: JELLYFIN_PublishedServerUrl # DLNA
+            #  value: xxx.xxx.xxx.xxx
+            - name: TZ
+              value: Europe/Berlin
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          # Note: this image in particular has the OpenCL runtime
+          image: jellyfin/jellyfin
+          imagePullPolicy: Always
+          name: jellyfin
+          ports:
+            - containerPort: 8096
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+          resources:
+            limits:
+              gpu.intel.com/i915: 1
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /media
+              name: media
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: config
+        - name: media
+          readOnly: true
+          persistentVolumeClaim:
+            claimName: media
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  selector:
+    app.kubernetes.io/name: jellyfin
+  ports:
+    - port: 80
+      targetPort: http
+      name: http
+      appProtocol: http
+      protocol: TCP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: media
+  namespace: jellyfin
+  labels:
+    external-dns: "true"
+spec:
+  parentRefs:
+    - name: services
+      namespace: infra
+      sectionName: main
+  hostnames:
+    - media.${services_hostname_suffix}
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: jellyfin
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: media-local
+  namespace: jellyfin
+  labels:
+    external-dns: "true"
+spec:
+  parentRefs:
+    - name: local-services
+      namespace: infra
+      sectionName: main
+  hostnames:
+    - media.local.${services_hostname_suffix}
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: jellyfin
+          port: 80
