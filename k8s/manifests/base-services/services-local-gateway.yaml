@@ -1,0 +1,70 @@
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: local-services
+  namespace: envoy-gateway-system
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: LoadBalancer
+        loadBalancerClass: metallb
+        allocateLoadBalancerNodePorts: false
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: local-services-ingress
+  namespace: envoy-gateway-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: proxy
+      app.kubernetes.io/managed-by: envoy-gateway
+      app.kubernetes.io/name: envoy
+      gateway.envoyproxy.io/owning-gateway-name: local-services
+      gateway.envoyproxy.io/owning-gateway-namespace: infra
+  ingress:
+    - fromCIDR:
+        - "${local_cidr_ipv4}"
+        - "${local_cidr_ipv6}"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: local-services
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  parametersRef:
+    group: gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: local-services
+    namespace: envoy-gateway-system
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: local-services
+  namespace: infra
+  annotations:
+    cert-manager.io/cluster-issuer: lets-encrypt-prod
+spec:
+  gatewayClassName: local-services
+  listeners:
+    - name: main
+      hostname: "*.local.${services_hostname_suffix}"
+      protocol: HTTPS
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              gateway.infra.services/allow-routes: "true"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: local-services-tls-gateway
+

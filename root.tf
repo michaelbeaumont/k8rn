@@ -98,6 +98,10 @@ module "k8s" {
   flux_sops_age_key         = var.flux_sops_age_key
   external_server_hostname  = var.external_server_hostname
   openebs_etcd_replicaCount = length(var.control_plane_nodes) + length(var.worker_nodes) >= 3 ? 3 : 1
+  local_cidr = {
+    ipv4 = "192.168.0.1/23"
+    ipv6 = "fd4a:f9c7:76ae:1::/64"
+  }
 }
 
 output "talosconfig" {

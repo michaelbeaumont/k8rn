@@ -36,3 +36,8 @@ variable "openebs_etcd_replicaCount" {
   description = "How many replicas OpenEBS's etcd storage should use"
   type        = number
 }
+
+variable "local_cidr" {
+  description = "Local subnets"
+  type        = object({ ipv4 = string, ipv6 = string })
+}

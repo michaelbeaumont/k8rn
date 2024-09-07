@@ -204,6 +204,8 @@ resource "helm_release" "flux-sync-base-services" {
             name: sops
         postBuild:
           substitute:
+            local_cidr_ipv4: "${var.local_cidr.ipv4}"
+            local_cidr_ipv6: "${var.local_cidr.ipv6}"
             services_hostname_suffix: "${var.services_hostname_suffix}"
     EOT
   ]
