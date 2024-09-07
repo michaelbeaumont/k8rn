@@ -1,0 +1,26 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-single-replica
+parameters:
+  protocol: nvmf
+  repl: "1"
+  thin: "true"
+  fsType: xfs
+allowVolumeExpansion: true
+provisioner: io.openebs.csi-mayastor
+reclaimPolicy: Retain
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-single-replica-delete
+parameters:
+  protocol: nvmf
+  repl: "1"
+  thin: "true"
+  fsType: xfs
+allowVolumeExpansion: true
+provisioner: io.openebs.csi-mayastor
+reclaimPolicy: Delete

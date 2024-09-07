@@ -56,19 +56,5 @@ spec:
         callhome:
           enabled: false
       storageClass:
-        # don't really like defaults like this
-        default: false
-        parameters:
-          fsType: xfs
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: openebs-single-thin-retain-replica
-parameters:
-  protocol: nvmf
-  repl: "1"
-  thin: "true"
-allowVolumeExpansion: true
-provisioner: io.openebs.csi-mayastor
-reclaimPolicy: Retain
+        # we can't override reclaimPolicy so just make the classes explicit in base-config
+        enabled: false
