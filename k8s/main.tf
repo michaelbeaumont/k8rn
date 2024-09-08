@@ -37,6 +37,12 @@ variable "openebs_etcd_replicaCount" {
   type        = number
 }
 
+variable "restic_remote_password" {
+  description = "Password for remote restic repo"
+  type        = string
+  sensitive   = true
+}
+
 variable "local_cidr" {
   description = "Local subnets"
   type        = object({ ipv4 = string, ipv6 = string })

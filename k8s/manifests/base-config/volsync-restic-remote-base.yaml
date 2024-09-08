@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: restic-remote-base
+    namespace: flux-system
+type: Opaque
+stringData:
+    RESTIC_REPOSITORY_BASE: ENC[AES256_GCM,data:SAys6cENGq6YPtmTT65H/heROp4jjy+59mPoXX3bvIZT5qMaq+a0DdtfPw==,iv:7YuJ+1RGYaIExKU3CmS7dg1HM1REyfB/d8s12HUPDNM=,tag:1Mg278ZowYhlyCN3r2wNgw==,type:str]
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:CaJ7xyIORYB6mCxoTBWg+ut62hhHyc8ALg==,iv:Uzo3s7Mj6HHRxGWzd8COZQHlGhbJYLapF+VrrTrxxI4=,tag:GouBysms5CdPeRbyNbKilQ==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:Yk8P2r/ATeUvstgRfyA8lVTqFdGhUc6j/eWV0oUyGw==,iv:1vuLjk0xupg0Hqnn2lQyfJV0PoCrv5GxJOPYFo3JKko=,tag:69vSFGI4i7P5HI7PH7xZig==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBCSE9GZURtN1lYdjJHK2NF
+            Rk1mOEdtN0pnU2lSZTc1UVZiazRVRXdJdEJnCklvZEV1ajVIRTlTUnVDSjlhYXYx
+            YjdXbFlRNFh2Tjgyc3BTdFB5TXlZNlEKLS0tIFhrbUczWVc3ak1sQ09jTG1JTmtD
+            amozRlhad2NwQzZHa0NuMW1pZG4zTUkKC3vr2iTfGs9UXFSkMOcnrMJgXH90MbOL
+            Pcg/hFn4Qbz93MnDgNp2nzkVpMpQxlwAhh4gPAqHzOjAIzj01ac+SA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-09-19T18:36:14Z"
+    mac: ENC[AES256_GCM,data:4bQSG6nj2p0Z8o9WMGqgXfMkxoZccure2xfBiAPTZ4K1lSBCix/PBNIF1rfFORQInF1Njyw03cm1VcczbQ7+nMgNmm27WrrhtZTtVK7gS4CXpDuL5zk+mUnV0EJ91+xTen3DF/mEONogcJhRtQldOVNn/MPEGaJJ4PnMqCmkEOw=,iv:KdcdVgjqUZyOPBtJcJZfGp7XjNZwCZNHmS0hKOLoHSM=,tag:AhR0bRc7o3YEltlUTRbq4Q==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.0

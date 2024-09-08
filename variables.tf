@@ -85,6 +85,12 @@ variable "flux_sops_age_key" {
   type = string
 }
 
+variable "restic_remote_password" {
+  description = "Password for remote restic repo"
+  type        = string
+  sensitive   = true
+}
+
 variable "lets_encrypt_email" {
   description = "Email to use for Lets Encrypt certs"
   type        = string

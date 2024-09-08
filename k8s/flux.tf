@@ -170,6 +170,7 @@ resource "helm_release" "flux-sync-base-config" {
         postBuild:
           substitute:
             lets_encrypt_email: "${var.lets_encrypt_email}"
+            restic_remote_password: "${var.restic_remote_password}"
     EOT
   ]
 }
@@ -240,6 +241,11 @@ resource "helm_release" "flux-sync-apps" {
           secretRef:
             name: sops
         postBuild:
+          substituteFrom:
+            - kind: Secret
+              name: restic-remote-base
+            - kind: Secret
+              name: restic-remote-password
           substitute:
             services_hostname_suffix: "${var.services_hostname_suffix}"
             core_tailscale_ip: "${data.tailscale_device.external_server.addresses[0]}"
