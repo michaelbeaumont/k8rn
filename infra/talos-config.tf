@@ -90,6 +90,7 @@ locals {
         templatefile("${path.module}/files/mayastor-io-engine-rules.yaml.tmpl", {
           node_ips = local.tailscale_cidrs,
         }),
+        file("${path.module}/files/mayastor-io-node-ephemeral-config.yaml"),
       ] : [],
       templatefile("${path.module}/files/metallb-rules.yaml.tmpl", {
         node_ips = local.tailscale_cidrs,

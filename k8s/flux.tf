@@ -14,7 +14,7 @@ variable "services_hostname_suffix" {
 }
 
 resource "kubernetes_namespace" "flux-system" {
-  depends_on = [helm_release.cilium]
+  depends_on = [helm_release.cilium, kubernetes_job_v1.add_data_partition]
   metadata {
     name = "flux-system"
   }

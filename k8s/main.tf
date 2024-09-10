@@ -43,6 +43,11 @@ variable "restic_remote_password" {
   sensitive   = true
 }
 
+variable "add_data_partition_nodes" {
+  description = "Nodes to run add partition job on"
+  type        = set(string)
+}
+
 variable "local_cidr" {
   description = "Local subnets"
   type        = object({ ipv4 = string, ipv6 = string })
