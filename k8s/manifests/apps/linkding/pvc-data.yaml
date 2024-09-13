@@ -1,0 +1,71 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data
+  namespace: linkding
+  labels:
+    app.kubernetes.io/name: linkding
+spec:
+  storageClassName: openebs-single-replica
+  accessModes:
+    - ReadWriteOnce
+  dataSourceRef:
+    kind: ReplicationDestination
+    apiGroup: volsync.backube
+    name: data-restore
+  resources:
+    requests:
+      storage: 10Gi
+  volumeMode: Filesystem
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: data-restore
+  namespace: linkding
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      runAsNonRoot: true
+    repository: restic-config-data
+    capacity: 10Gi
+    accessModes:
+      - ReadWriteOnce
+    copyMethod: Snapshot
+    storageClassName: openebs-single-replica-delete
+    cacheStorageClassName: openebs-single-replica-delete
+    volumeSnapshotClassName: openebs-delete
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: data-backup
+  namespace: linkding
+spec:
+  sourcePVC: data
+  trigger:
+    schedule: "0 */1 * * *"
+  restic:
+    pruneIntervalDays: 14
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      runAsNonRoot: true
+    repository: restic-config-data
+    retain:
+      hourly: 6
+      daily: 5
+      weekly: 4
+      monthly: 2
+      yearly: 1
+    copyMethod: Snapshot # Clone would be the best
+    storageClassName: openebs-single-replica-delete
+    cacheStorageClassName: openebs-single-replica-delete
+    volumeSnapshotClassName: openebs-delete
