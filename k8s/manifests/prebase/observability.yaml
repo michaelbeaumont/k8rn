@@ -3,6 +3,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: observability
+  labels:
+    prometheus.io/scrape: "true"
 ---
 apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy
@@ -57,5 +59,9 @@ spec:
       enabled: true
       agentMode: true
       prometheusSpec:
+        serviceMonitorSelectorNilUsesHelmValues: false
+        serviceMonitorNamespaceSelector:
+          matchLabels:
+            prometheus.io/scrape: "true"
         remoteWrite:
           - url: http://${core_tailscale_ip}:9090/api/v1/write
