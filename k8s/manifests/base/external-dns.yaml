@@ -52,7 +52,7 @@ sops:
     encrypted_regex: ^(data|stringData)$
     version: 3.9.0
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
     name: external-dns
