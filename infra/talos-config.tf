@@ -83,12 +83,14 @@ locals {
       file("${path.module}/files/services-ingress.yaml"),
       file("${path.module}/files/watchdog.yaml"),
       templatefile("${path.module}/files/mayastor-rules.yaml.tmpl", {
-        node_ips = local.tailscale_cidrs,
+        node_ips    = local.tailscale_cidrs,
+        pod_subnets = var.pod_subnets,
       }),
       contains(var.mayastor_io_engine_nodes, node) ? [
         file("${path.module}/files/mayastor.patch.yaml"),
         templatefile("${path.module}/files/mayastor-io-engine-rules.yaml.tmpl", {
-          node_ips = local.tailscale_cidrs,
+          node_ips    = local.tailscale_cidrs,
+          pod_subnets = var.pod_subnets,
         }),
         file("${path.module}/files/mayastor-io-node-ephemeral-config.yaml"),
       ] : [],
