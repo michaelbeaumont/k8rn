@@ -9,3 +9,6 @@ write-secrets-yaml outfile:
 
 get-secureboot-iso node:
     wget -O {{ node }}-talos.iso `terraform output -json talos_url | jq -r '.["{{ node }}"]'`
+
+get-upgrade-image node:
+    terraform output -json talos_image | jq -r '.["{{ node }}"]'
