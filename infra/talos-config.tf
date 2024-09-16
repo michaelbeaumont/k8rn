@@ -95,6 +95,10 @@ locals {
       templatefile("${path.module}/files/metallb-rules.yaml.tmpl", {
         node_ips = local.tailscale_cidrs,
       }),
+      templatefile("${path.module}/files/metrics-network-rules.yaml.tmpl", {
+        node_ips    = local.tailscale_cidrs,
+        pod_subnets = var.pod_subnets,
+      }),
     ]
   }
 }

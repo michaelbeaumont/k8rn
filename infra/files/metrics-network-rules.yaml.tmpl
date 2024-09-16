@@ -1,0 +1,27 @@
+---
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: kubelet-pod-ingress
+portSelector:
+  ports:
+    - 10250
+  protocol: tcp
+ingress:
+%{ for subnet in pod_subnets }
+  - subnet: "${subnet}"
+%{ endfor }
+---
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: node-exporter-ingress
+portSelector:
+  ports:
+    - 9100
+  protocol: tcp
+ingress:
+%{ for ip in node_ips }
+  - subnet: "${ip}"
+%{ endfor }
+%{ for subnet in pod_subnets }
+  - subnet: "${subnet}"
+%{ endfor }
