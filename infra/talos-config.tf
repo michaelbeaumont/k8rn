@@ -80,6 +80,9 @@ locals {
         pod_subnets = var.pod_subnets,
         node_ips    = local.tailscale_cidrs,
       }),
+      templatefile("${path.module}/files/cilium-health.yaml.tmpl", {
+        node_ips = local.tailscale_cidrs,
+      }),
       file("${path.module}/files/services-ingress.yaml"),
       file("${path.module}/files/watchdog.yaml"),
       templatefile("${path.module}/files/mayastor-rules.yaml.tmpl", {
