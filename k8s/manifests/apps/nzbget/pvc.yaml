@@ -3,9 +3,6 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: inter-downloads-and-history
-  namespace: nzbget
-  labels:
-    app.kubernetes.io/name: nzbget
 spec:
   accessModes:
     - ReadWriteOnce
@@ -22,7 +19,6 @@ metadata:
 spec:
   claimRef:
     name: downloads
-    namespace: nzbget
   capacity:
     storage: 30Gi
   volumeMode: Filesystem
@@ -30,14 +26,12 @@ spec:
     - ReadWriteOnce
   storageClassName: ""
   nfs:
-    server: "${core_tailscale_ip}"
     path: /data/media/nzbget/dst
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: downloads
-  namespace: nzbget
 spec:
   volumeName: nzbget-downloads
   storageClassName: ""

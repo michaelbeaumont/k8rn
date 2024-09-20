@@ -1,0 +1,45 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: nzbget
+labels:
+  - includeTemplates: true
+    includeSelectors: true
+    pairs:
+      app.kubernetes.io/name: nzbget
+replacements:
+  - source:
+      kind: PersistentVolumeClaim
+      name: downloads
+      fieldPath: metadata.namespace
+    targets:
+      - select:
+          kind: PersistentVolume
+          name: nzbget-downloads
+        fieldPaths:
+          - spec.claimRef.namespace
+        options:
+          create: true
+patches:
+  - patch: |-
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: nzbget-downloads
+      spec:
+        nfs:
+          server: "${core_tailscale_ip}"
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1beta1
+      kind: HTTPRoute
+      metadata:
+        name: nzbget
+      spec:
+        hostnames:
+          - nzbget.${services_hostname_suffix}
+resources:
+  - config.yaml
+  - deployment.yaml
+  - namespace.yaml
+  - pvc.yaml
+  - secret.yaml
+  - svc.yaml
