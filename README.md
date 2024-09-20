@@ -20,6 +20,22 @@ This configuration depends on:
 
 The cluster nodes have to be assigned IPs reachable from your machine.
 
+### Install
+
+#### Talos images
+
+Each image:
+
+- gets a UUID in the META partition because the mini PCs I have don't have proper UUIDs generated
+- has `stable_secret` set as a kernel param
+
+Creating the image factory config and fetching each image is handled in
+Terraform and exposed as outputs. The `justfile` makes it easy to grab the
+update image and the ISOs.
+
+Each node is added to the Terraform variable `nodes` before it's added to either
+`control_plane_nodes` or `worker_nodes`.
+
 ### DNS
 
 This Terraform uses Cloudflare to assign a public DNS name to load balance
