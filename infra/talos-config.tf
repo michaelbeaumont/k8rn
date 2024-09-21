@@ -44,7 +44,6 @@ locals {
     for node, schematic in talos_image_factory_schematic.this
     : node => "factory.talos.dev/installer-secureboot/${schematic.id}:${var.talos_version}"
   }
-  cilium_vxlan_port = "8472"
   tailscale_cidrs = [
     "100.64.0.0/10",
     "fd7a:115c:a1e0::/64",
@@ -127,7 +126,6 @@ data "talos_machine_configuration" "control_plane_nodes" {
       pod_subnets            = var.pod_subnets,
       control_plane_node_ips = local.tailscale_cidrs,
       node_ips               = local.tailscale_cidrs,
-      vxlan_port             = local.cilium_vxlan_port
     }),
   ])
 }
@@ -142,8 +140,7 @@ data "talos_machine_configuration" "worker_nodes" {
   config_patches = flatten([
     local.common_patches_by_node[each.key],
     templatefile("${path.module}/files/worker-network-rules.yaml.tmpl", {
-      node_ips   = local.tailscale_cidrs,
-      vxlan_port = local.cilium_vxlan_port
+      node_ips = local.tailscale_cidrs,
     }),
   ])
 }

@@ -62,15 +62,3 @@ ingress:
 %{ for ip in control_plane_node_ips }
   - subnet: "${ip}"
 %{ endfor }
----
-apiVersion: v1alpha1
-kind: NetworkRuleConfig
-name: cni-vxlan
-portSelector:
-  ports:
-    - ${vxlan_port}
-  protocol: udp
-ingress:
-%{ for ip in node_ips }
-  - subnet: "${ip}"
-%{ endfor }
