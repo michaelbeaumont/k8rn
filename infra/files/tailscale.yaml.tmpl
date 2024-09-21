@@ -6,3 +6,5 @@ environment:
   - TS_AUTHKEY=${tailscale_key}
   - TS_ACCEPT_DNS=false
   - TS_DISABLE_PORTMAPPER=1
+  - TS_AUTH_ONCE=true
+  - TS_EXTRA_ARGS=--accept-routes --snat-subnet-routes=false

@@ -28,6 +28,13 @@ provider "cloudflare" {
   api_token = var.cloudflare_token
 }
 
+locals {
+  pod_subnets = {
+    ipv6 = "fdd2:14fe:fb0::/52", // randomly generated
+    ipv4 = "10.244.0.0/16",
+  }
+}
+
 module "infra" {
   source = "./infra"
 
@@ -42,8 +49,8 @@ module "infra" {
   mayastor_io_engine_nodes = var.mayastor_io_engine_nodes
   stable_secret            = var.stable_secret
   pod_subnets = [
-    // "fdd2:14fe:fb0::/52", // randomly generated, TODO: ipv6 mayastor
-    "10.244.0.0/16",
+    // local.pod_subnets.ipv6, // TODO: ipv6 mayastor
+    local.pod_subnets.ipv4,
   ]
   service_subnets = [
     // "fdd2:14fe:fb0:1000::/108", // randomly generated, TODO: ipv6 mayastor
@@ -104,6 +111,11 @@ module "k8s" {
     ipv4 = "192.168.0.1/23"
     ipv6 = "fd4a:f9c7:76ae:1::/64"
   }
+  pod_cidr = {
+    ipv4 = local.pod_subnets.ipv4
+    ipv6 = local.pod_subnets.ipv6
+  }
+  nodes = concat(keys(var.control_plane_nodes), keys(var.worker_nodes))
 }
 
 output "talosconfig" {

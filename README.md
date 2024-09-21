@@ -64,26 +64,69 @@ statically.
 Assuming `cluster_name = "k8rn"`, this can be achieved via ACLs:
 
 ```json
-	"nodeAttrs": [
-		{
-			"target": ["tag:k8rn-cp-0"],
-			"ipPool": ["100.64.1.10/32"],
-		},
-		{
-			"target": ["tag:k8rn-cp-1"],
-			"ipPool": ["100.64.1.11/32"],
-		},
-		{
-			"target": ["tag:k8rn-cp-2"],
-			"ipPool": ["100.64.1.12/32"],
-		},
-	],
+    "nodeAttrs": [
+        {
+            "target": ["tag:k8rn-cp-0"],
+            "ipPool": ["100.64.1.10/32"],
+        },
+        {
+            "target": ["tag:k8rn-cp-1"],
+            "ipPool": ["100.64.1.11/32"],
+        },
+        {
+            "target": ["tag:k8rn-cp-2"],
+            "ipPool": ["100.64.1.12/32"],
+        },
+    ],
 ```
 
 Each node is assigned `tag:<node hostname>` which Tailscale then uses to assign an IP pool,
 in this case a pool of size one.
 
 ## Kubernetes
+
+### Cilium
+
+Cilium is set up with native routing. This is a bit tricky with Tailscale
+because each node needs to advertise routes for its `podCIDR` but we can't
+directly put this in the `ExtensionServiceConfig` since it isn't known when
+we initialize the extension. A `Job` runs on each node and calls `tailscale set
+--advertise-routes` with that nodes `podCIDR`. The Tailscale extension is
+configured with `--accept-routes` and with `--snat-subnet-routes=false`,
+since we don't want or need to SNAT between Pods on different nodes.
+
+Ideally this functionality would be upstreamed but for now, this just works.
+
+This requires some ACLs set up in Tailscale:
+
+```json
+{
+    "ipsets": {
+        "ipset:k8rn-pods": [
+            "add 10.244.0.0/16",
+        ],
+    },
+    "autoApprovers": {
+        "routes": {
+            "10.244.0.0/16": [ // can't use ipset here
+                "tag:k8rn-node",
+            ],
+        },
+    },
+    "acls": {
+        ...
+        // k8rn: nodes and pods can reach each other
+        {
+            "action": "accept",
+            "src":    ["tag:k8rn-node", "ipset:k8rn-pods"],
+            "dst": [
+                "tag:k8rn-node:*",
+                "ipset:k8rn-pods:*",
+            ],
+        },
+    },
+}
+```
 
 ### Intel GPU plugin
 

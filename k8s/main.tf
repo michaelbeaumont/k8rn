@@ -48,7 +48,17 @@ variable "add_data_partition_nodes" {
   type        = set(string)
 }
 
+variable "nodes" {
+  description = "Nodes"
+  type        = set(string)
+}
+
 variable "local_cidr" {
   description = "Local subnets"
+  type        = object({ ipv4 = string, ipv6 = string })
+}
+
+variable "pod_cidr" {
+  description = "Pod subnets"
   type        = object({ ipv4 = string, ipv6 = string })
 }
