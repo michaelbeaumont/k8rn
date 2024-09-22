@@ -13,15 +13,14 @@ metadata:
   namespace: observability
 spec:
   endpointSelector:
-    matchLabels:
-      {}
+    matchLabels: {}
   egress:
-  - toCIDR:
-      - "${core_tailscale_ip}/32"
-    toPorts:
-      - ports:
-         - port: "9090"
-           protocol: ANY
+    - toCIDR:
+        - "${prometheus_remote_write}/32"
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: ANY
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
@@ -64,4 +63,4 @@ spec:
           matchLabels:
             prometheus.io/scrape: "true"
         remoteWrite:
-          - url: http://${core_tailscale_ip}:9090/api/v1/write
+          - url: http://${prometheus_remote_write}:9090/api/v1/write

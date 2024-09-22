@@ -98,7 +98,7 @@ resource "helm_release" "flux-sync-prebase" {
             name: sops
         postBuild:
           substitute:
-            core_tailscale_ip: "${data.tailscale_device.external_server.addresses[0]}"
+            prometheus_remote_write: "${var.prometheus_remote_write}"
     EOT
   ]
 }

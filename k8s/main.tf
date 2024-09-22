@@ -1,9 +1,5 @@
 terraform {
   required_providers {
-    tailscale = {
-      source  = "tailscale/tailscale"
-      version = ">=0.16.1"
-    }
     sops = {
       source  = "carlpett/sops"
       version = ">=1.0.0"
@@ -27,8 +23,8 @@ variable "flux_sops_age_key" {
   type = string
 }
 
-variable "external_server_hostname" {
-  description = "Tailscale hostname for external server where some services still run"
+variable "prometheus_remote_write" {
+  description = "Remote write endpoint for Prometheus"
   type        = string
 }
 
