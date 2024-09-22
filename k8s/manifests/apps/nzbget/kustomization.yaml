@@ -27,7 +27,7 @@ patches:
         name: nzbget-downloads
       spec:
         nfs:
-          server: "${core_tailscale_ip}"
+          server: ${nfs_server}
   - patch: |-
       apiVersion: gateway.networking.k8s.io/v1beta1
       kind: HTTPRoute

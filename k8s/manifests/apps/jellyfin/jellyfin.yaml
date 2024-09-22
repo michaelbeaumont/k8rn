@@ -21,7 +21,7 @@ spec:
     - ReadOnlyMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: "${core_tailscale_ip}"
+    server: ${nfs_server}
     path: /data/media
     readOnly: true
 ---

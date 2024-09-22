@@ -32,6 +32,11 @@ variable "external_server_hostname" {
   type        = string
 }
 
+variable "nfs_server" {
+  description = "NFS server endpoint"
+  type        = string
+}
+
 variable "openebs_etcd_replicaCount" {
   description = "How many replicas OpenEBS's etcd storage should use"
   type        = number

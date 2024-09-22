@@ -35,6 +35,11 @@ locals {
   }
 }
 
+data "tailscale_device" "external_server" {
+  hostname = var.external_server_hostname
+  wait_for = "30s"
+}
+
 module "infra" {
   source = "./infra"
 
@@ -98,12 +103,13 @@ module "k8s" {
 
   count = length(module.infra.kubeconfig) > 0 ? 1 : 0
 
-  github_repo               = var.github_repo
-  lets_encrypt_email        = var.lets_encrypt_email
-  services_hostname_suffix  = var.services_hostname_suffix
-  flux_ssh_private_key      = var.flux_ssh_private_key
-  flux_sops_age_key         = var.flux_sops_age_key
-  external_server_hostname  = var.external_server_hostname
+  github_repo              = var.github_repo
+  lets_encrypt_email       = var.lets_encrypt_email
+  services_hostname_suffix = var.services_hostname_suffix
+  flux_ssh_private_key     = var.flux_ssh_private_key
+  flux_sops_age_key        = var.flux_sops_age_key
+  // TODO Tailscale MagicDNS doesn't return ipv6 yet
+  nfs_server                = data.tailscale_device.external_server.addresses[0]
   openebs_etcd_replicaCount = length(var.control_plane_nodes) + length(var.worker_nodes) >= 3 ? 3 : 1
   restic_remote_password    = var.restic_remote_password
   add_data_partition_nodes  = var.mayastor_io_engine_nodes

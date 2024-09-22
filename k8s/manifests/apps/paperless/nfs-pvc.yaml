@@ -14,7 +14,7 @@ spec:
     - ReadWriteOnce
   storageClassName: ""
   nfs:
-    server: ${core_tailscale_ip}
+    server: ${nfs_server}
     path: /data/docs
 ---
 apiVersion: v1

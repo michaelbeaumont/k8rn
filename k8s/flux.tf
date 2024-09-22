@@ -133,7 +133,6 @@ resource "helm_release" "flux-sync-base" {
             name: sops
         postBuild:
           substitute:
-            core_tailscale_ip: "${data.tailscale_device.external_server.addresses[0]}"
             openebs_etcd_replicaCount: "${var.openebs_etcd_replicaCount}"
     EOT
   ]
@@ -247,8 +246,8 @@ resource "helm_release" "flux-sync-apps" {
             - kind: Secret
               name: restic-remote-password
           substitute:
+            nfs_server: "${var.nfs_server}"
             services_hostname_suffix: "${var.services_hostname_suffix}"
-            core_tailscale_ip: "${data.tailscale_device.external_server.addresses[0]}"
     EOT
   ]
 }
