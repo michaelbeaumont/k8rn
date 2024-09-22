@@ -38,6 +38,31 @@ resource "talos_machine_configuration_apply" "control_plane_post_init" {
   endpoint                    = local.dns_loadbalancer_hostname
 }
 
+locals {
+  extra_hosts_patch = templatefile(
+    "${path.module}/files/extra-hosts.yaml.tmpl",
+    {
+      extra_hosts = [
+        for dev in merge(data.tailscale_device.cp, data.tailscale_device.worker)
+        : { ip = dev.addresses[1], aliases = [dev.hostname] }
+      ],
+    }
+  )
+}
+
+// This has to be separate from post_init because this depends on workers_init
+// which depends on control_plane_post_init.
+resource "talos_machine_configuration_apply" "control_plane_extra_hosts" {
+  for_each                    = talos_machine_configuration_apply.control_plane_post_init
+  client_configuration        = each.value.client_configuration
+  machine_configuration_input = each.value.machine_configuration
+  node                        = each.value.node
+  endpoint                    = each.value.endpoint
+  config_patches = [
+    local.extra_hosts_patch,
+  ]
+}
+
 resource "talos_machine_configuration_apply" "workers_init" {
   for_each = var.worker_nodes
   client_configuration = [
@@ -60,6 +85,9 @@ resource "talos_machine_configuration_apply" "workers_post_init" {
   machine_configuration_input = data.talos_machine_configuration.worker_nodes[each.key].machine_configuration
   node                        = data.tailscale_device.worker[each.key].addresses[1]
   endpoint                    = local.dns_loadbalancer_hostname
+  config_patches = [
+    local.extra_hosts_patch,
+  ]
 }
 
 data "talos_cluster_health" "this" {

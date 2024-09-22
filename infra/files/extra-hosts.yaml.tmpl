@@ -1,0 +1,11 @@
+machine:
+  network:
+    extraHostEntries:
+%{ for host in extra_hosts }
+      - ip: "${host.ip}"
+        aliases:
+%{ for alias in host.aliases }
+          - "${alias}"
+%{ endfor }
+%{ endfor }
+
