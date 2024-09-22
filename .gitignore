@@ -5,6 +5,6 @@
 /talosconfig
 id
 id.pub
-/*-talos.iso
+/disk-images
 stable-secret.just
 /metal-amd64-secureboot.iso
