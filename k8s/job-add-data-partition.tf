@@ -10,7 +10,7 @@ resource "kubernetes_job_v1" "add_data_partition" {
   }
   metadata {
     name      = "add-data-partition-${each.value}"
-    namespace = "kube-system"
+    namespace = helm_release.cilium.namespace
   }
   spec {
     template {
