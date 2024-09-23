@@ -3,9 +3,6 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: data
-  namespace: linkding
-  labels:
-    app.kubernetes.io/name: linkding
 spec:
   storageClassName: openebs-single-replica
   accessModes:
@@ -23,7 +20,6 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
 metadata:
   name: data-restore
-  namespace: linkding
 spec:
   trigger:
     manual: restore-once
@@ -46,7 +42,6 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: data-backup
-  namespace: linkding
 spec:
   sourcePVC: data
   trigger:
