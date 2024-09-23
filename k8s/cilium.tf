@@ -77,8 +77,50 @@ resource "helm_release" "cilium" {
       hostRoot: /sys/fs/cgroup
     k8sServiceHost: localhost
     k8sServicePort: 7445
+    extraInitContainers:
+      - name: get-node-pod-cidr
+        image: bitnami/kubectl:latest
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: [ALL]
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        command: [sh, -c]
+        args: ["kubectl get nodes $(NODE_NAME) -o json | jq -r '.spec.podCIDRs | join(\",\")' > /mnt/share-pod-cidr/out"]
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+        volumeMounts:
+          - mountPath: /mnt/share-pod-cidr
+            name: share-pod-cidr
+      - name: set-tailscale-advertise-routes
+        image: tailscale/tailscale:latest
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: [ALL]
+          runAsNonRoot: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        command: [sh, -c]
+        args: ["tailscale set --advertise-routes $(cat /mnt/share-pod-cidr/out)"]
+        volumeMounts:
+          - mountPath: /var/run/tailscale/tailscaled.sock
+            name: tailscaled-socket
+          - mountPath: /mnt/share-pod-cidr
+            name: share-pod-cidr
+    extraVolumes:
+      - name: tailscaled-socket
+        hostPath:
+          path: /var/run/tailscale/tailscaled.sock
+      - name: share-pod-cidr
+        emptyDir: {}
     EOT
   ]
 }
-
-

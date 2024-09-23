@@ -88,11 +88,15 @@ in this case a pool of size one.
 ### Cilium
 
 Cilium is set up with native routing. This is a bit tricky with Tailscale
-because each node needs to advertise routes for its `podCIDR` but we can't
+because each node needs to advertise routes for its `podCIDRs` but we can't
 directly put this in the `ExtensionServiceConfig` since it isn't known when
-we initialize the extension. A `Job` runs on each node and calls `tailscale set
---advertise-routes` with that nodes `podCIDR`. The Tailscale extension is
-configured with `--accept-routes` and with `--snat-subnet-routes=false`,
+we initialize the extension.
+
+Instead, two extra init containers run with the cilium agent.
+The first retrieves the node's `podCIDRs` and the second calls
+`tailscale set --advertise-routes` with those `podCIDRs`.
+The Tailscale extension is configured with `--accept-routes`
+and `--snat-subnet-routes=false`,
 since we don't want or need to SNAT between Pods on different nodes.
 
 Ideally this functionality would be upstreamed but for now, this just works.
