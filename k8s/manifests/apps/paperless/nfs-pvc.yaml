@@ -6,7 +6,6 @@ metadata:
 spec:
   claimRef:
     name: media
-    namespace: paperless
   capacity:
     storage: 30Gi
   volumeMode: Filesystem
@@ -14,14 +13,12 @@ spec:
     - ReadWriteOnce
   storageClassName: ""
   nfs:
-    server: ${nfs_server}
     path: /data/docs
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: media
-  namespace: paperless
 spec:
   volumeName: paperless-media
   storageClassName: ""
