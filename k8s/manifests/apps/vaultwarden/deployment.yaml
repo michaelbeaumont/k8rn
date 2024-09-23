@@ -7,7 +7,7 @@ metadata:
 data:
   ROCKET_PORT: "8080"
   DOMAIN: "https://passwords.${services_hostname_suffix}"
-  SIGNUPS_ALLOWED: "false"
+  IP_HEADER: "X-Forwarded-For"
 ---
 apiVersion: apps/v1
 kind: Deployment
