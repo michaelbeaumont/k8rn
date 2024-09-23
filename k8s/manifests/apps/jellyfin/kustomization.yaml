@@ -1,0 +1,50 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: jellyfin
+labels:
+  - includeTemplates: true
+    includeSelectors: true
+    pairs:
+      app.kubernetes.io/name: jellyfin
+replacements:
+  - source:
+      kind: PersistentVolumeClaim
+      name: media
+      fieldPath: metadata.namespace
+    targets:
+      - select:
+          kind: PersistentVolume
+          name: jellyfin-media
+        fieldPaths:
+          - spec.claimRef.namespace
+        options:
+          create: true
+patches:
+  - patch: |-
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: jellyfin-media
+      spec:
+        nfs:
+          server: ${nfs_server}
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        name: media
+      spec:
+        hostnames:
+          - media.${services_hostname_suffix}
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        name: media-local
+      spec:
+        hostnames:
+          - media.local.${services_hostname_suffix}
+resources:
+  - jellyfin.yaml
+  - pvc-config.yaml
+  - restic-secret.yaml
