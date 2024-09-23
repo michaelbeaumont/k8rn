@@ -1,0 +1,23 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: nzbget
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-sync-apps
+    namespace: flux-system
+  path: ./k8s/manifests/apps/nzbget
+  prune: true
+  timeout: 10m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops
+  postBuild:
+    substitute:
+      nfs_server: "${nfs_server}"
+      services_hostname_suffix: "${services_hostname_suffix}"

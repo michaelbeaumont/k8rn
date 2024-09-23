@@ -1,0 +1,27 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: vaultwarden
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-sync-apps
+    namespace: flux-system
+  path: ./k8s/manifests/apps/vaultwarden
+  prune: true
+  timeout: 10m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: restic-remote-base
+      - kind: Secret
+        name: restic-remote-password
+    substitute:
+      services_hostname_suffix: "${services_hostname_suffix}"
