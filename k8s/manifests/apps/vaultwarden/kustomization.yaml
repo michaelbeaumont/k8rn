@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: vaultwarden
+labels:
+  - includeTemplates: true
+    includeSelectors: true
+    pairs:
+      app.kubernetes.io/name: vaultwarden
+patches:
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        name: passwords
+      spec:
+        hostnames:
+          - passwords.${services_hostname_suffix}
+  - patch: |-
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: config
+      data:
+        DOMAIN: "https://passwords.${services_hostname_suffix}"
+resources:
+  - admin-token.yaml
+  - deployment.yaml
+  - namespace.yaml
+  - pvc.yaml
+  - restic-secret.yaml
+  - svc.yaml

@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Secret
 metadata:
     name: admin-token
-    namespace: vaultwarden
 stringData:
     #ENC[AES256_GCM,data:dHzXV2zupuYs/06CgPHvsX6++msqY7i+VQo8tAENoBxJ7rD2jcQeWg==,iv:hwZuicz5K8zWhIQmKlK7BzEGZiYgAzaMHgSwCw1ikk0=,tag:ZR6FrJeALTezCgLUNK3WYA==,type:comment]
     ADMIN_TOKEN: ENC[AES256_GCM,data:DwcWWQ/L8ub3vE3A8Krc1Rhrf13vWbqe,iv:FwxK355v600fQjZKG81wweO1QeXsW8vzFvsZylZ2eD4=,tag:SEK4c5WXbCYDrof03TdFlw==,type:str]
@@ -21,8 +20,8 @@ sops:
             dlg0WHZNU3lyeEljaFJET2Eva3dXNmsKkghJxuuU+6ozF06cP0VGPM4tl/JJsSkp
             tOTfxMr5E4DwUBxVZHckBhLN5K23544GxbdiawF+dP/woK+frVHmzA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-09-23T16:16:09Z"
-    mac: ENC[AES256_GCM,data:x0Zyg5usXug0h47n6jyCgdk99wBD/FjsxgPacjmT3sYvagHb9bUq60Mk1x5x7xCzHU0IRxR5mPmNIwr0HSCc46OKdHeJzSUiGh6XSHmzMFc+2WsoYIgrhkDJgYA0smglU8goCnzS0uAL2UdlkP/N1/o5rmrBrPxOia5K08VrGug=,iv:4oCkoVy1txDW296zUAgtsbqn53enl0pb0xv479AoOFQ=,tag:dxMSMrAr3qYK2fzCLMhNGA==,type:str]
+    lastmodified: "2024-09-24T20:07:25Z"
+    mac: ENC[AES256_GCM,data:1YF9qLD5dJnt6HyWDU7QoOl4eBZYg3+hVGCFFZExtlWDza/DYudNO0GVoYBSn/jg8IWApyKODC6AO10yDg5fftNAeEybsmdOCT9Hhc0pprO+HxJunxAy/I3moHtI8uY7TlEK+fZ+D9q0pT9eJyS5k6JQMEWFhESBCZ50rK3jLzM=,iv:uh9J9nteLP7ttzLgEmMfmXhN7SxbbLH/IDIbMEBbgSE=,tag:Kq+gIRI/7jsqv8u7H24dVQ==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.9.0
