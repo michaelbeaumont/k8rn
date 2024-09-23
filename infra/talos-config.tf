@@ -1,5 +1,5 @@
 resource "talos_machine_secrets" "this" {
-  talos_version = "v1.7.5"
+  talos_version = "v1.8.0"
 }
 
 resource "random_uuid" "nodes" {
