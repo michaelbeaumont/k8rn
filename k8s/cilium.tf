@@ -89,12 +89,20 @@ resource "helm_release" "cilium" {
           seccompProfile:
             type: RuntimeDefault
         command: [sh, -c]
-        args: ["kubectl get nodes $(NODE_NAME) -o json | jq -r '.spec.podCIDRs | join(\",\")' > /mnt/share-pod-cidr/out"]
+        args:
+          - |
+            set -e
+            kubectl get nodes $(NODE_NAME) -o json > /mnt/share-pod-cidr/node_json
+            cat /mnt/share-pod-cidr/node_json | jq -r '.spec.podCIDRs | join(",")' > /mnt/share-pod-cidr/out
         env:
           - name: NODE_NAME
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
+          - name: KUBERNETES_SERVICE_HOST
+            value: "localhost"
+          - name: KUBERNETES_SERVICE_PORT
+            value: "7445"
         volumeMounts:
           - mountPath: /mnt/share-pod-cidr
             name: share-pod-cidr
