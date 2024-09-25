@@ -49,6 +49,10 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kube-prometheus
+  valuesFrom:
+  - kind: ConfigMap
+    name: flux-kube-state-metrics-config
+    valuesKey: kube-state-metrics-config.yaml
   values:
     alertmanager:
       enabled: false
