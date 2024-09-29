@@ -42,23 +42,13 @@ variable "cluster_name" {
 }
 
 variable "nodes" {
-  description = "A list of all nodes, used to generate initial images"
-  type        = list(string)
-}
-
-variable "control_plane_nodes" {
-  description = "The local IPs and tailscale IPs of the control plane nodes"
-  type        = map(object({ local_ip = string }))
+  description = "A description of all nodes, used to generate initial images"
+  type        = map(object({ local_ip = string, tags = list(string) }))
 }
 
 variable "bootstrap_node" {
   description = "The node to bootstrap from"
   type        = string
-}
-
-variable "worker_nodes" {
-  description = "The local IPs and tailscale IPs of worker-only nodes"
-  type        = map(object({ local_ip = string }))
 }
 
 variable "stable_secret" {
@@ -103,14 +93,24 @@ variable "mayastor_io_engine_nodes" {
 
 // port must match localAPIServerPort
 locals {
-  node_ips = merge(var.control_plane_nodes, var.worker_nodes)
   hostnames = merge({
-    for id, node in local.node_ips :
+    for id, node in var.nodes :
     node.local_ip => "${id}"
     }, {
-    for id, node in local.node_ips :
+    for id, node in var.nodes :
     id => id
   })
   dns_loadbalancer_hostname = "${var.cluster_name}.${var.dns_loadbalancer_domain}"
   cluster_endpoint          = "https://${local.dns_loadbalancer_hostname}:6443"
+}
+
+locals {
+  control_plane_nodes = {
+    for name, node in var.nodes :
+    name => node if contains(node.tags, "control_plane")
+  }
+  worker_nodes = {
+    for name, node in var.nodes :
+    name => node if contains(node.tags, "worker")
+  }
 }

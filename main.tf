@@ -48,9 +48,7 @@ module "infra" {
   cluster_name  = "k8rn"
 
   nodes                    = var.nodes
-  control_plane_nodes      = var.control_plane_nodes
   bootstrap_node           = var.bootstrap_node
-  worker_nodes             = var.worker_nodes
   tailnet_name             = var.tailnet_name
   mayastor_io_engine_nodes = var.mayastor_io_engine_nodes
   stable_secret            = var.stable_secret
@@ -99,6 +97,9 @@ provider "helm" {
   }
 }
 
+locals {
+  active_nodes = [for name, node in var.nodes : name if contains(node.tags, "control_plane") || contains(node.tags, "worker")]
+}
 module "k8s" {
   source = "./k8s"
 
@@ -112,7 +113,7 @@ module "k8s" {
   # TODO Tailscale MagicDNS doesn't return ipv6 yet
   nfs_server                = data.tailscale_device.external_server.addresses[0]
   prometheus_remote_write   = data.tailscale_device.external_server.addresses[0] # TODO ipv6
-  openebs_etcd_replicaCount = length(var.control_plane_nodes) + length(var.worker_nodes) >= 3 ? 3 : 1
+  openebs_etcd_replicaCount = length(local.active_nodes) >= 3 ? 3 : 1
   restic_remote_password    = var.restic_remote_password
   add_data_partition_nodes  = var.mayastor_io_engine_nodes
   local_cidr = {
@@ -123,5 +124,5 @@ module "k8s" {
     ipv4 = local.pod_subnets.ipv4
     ipv6 = local.pod_subnets.ipv6
   }
-  nodes = concat(keys(var.control_plane_nodes), keys(var.worker_nodes))
+  nodes = local.active_nodes
 }

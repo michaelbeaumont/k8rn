@@ -9,23 +9,13 @@ variable "talos_version" {
 }
 
 variable "nodes" {
-  description = "A list of all nodes, used to generate initial images"
-  type        = list(string)
-}
-
-variable "control_plane_nodes" {
-  description = "The local IPs and tailscale IPs of the control plane nodes"
-  type        = map(object({ local_ip = string }))
+  description = "A description of all nodes, used to generate initial images"
+  type        = map(object({ local_ip = string, tags = list(string) }))
 }
 
 variable "bootstrap_node" {
   description = "The node to bootstrap from"
   type        = string
-}
-
-variable "worker_nodes" {
-  description = "The local IPs and tailscale IPs of worker-only nodes"
-  type        = map(object({ local_ip = string }))
 }
 
 variable "mayastor_io_engine_nodes" {

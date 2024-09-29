@@ -3,7 +3,7 @@ resource "talos_machine_secrets" "this" {
 }
 
 resource "random_uuid" "nodes" {
-  for_each = toset(var.nodes)
+  for_each = toset(keys(var.nodes))
 }
 
 resource "talos_image_factory_schematic" "this" {
@@ -21,11 +21,11 @@ resource "talos_image_factory_schematic" "this" {
           "sysctl.net.ipv6.conf.default.stable_secret=${var.stable_secret}",
         ]
         systemExtensions = {
-          officialExtensions = [
+          officialExtensions = compact([
             "siderolabs/i915-ucode",
             "siderolabs/intel-ucode",
             "siderolabs/tailscale",
-          ]
+          ])
         }
       }
     }
@@ -53,7 +53,7 @@ locals {
 locals {
   // shared between both but we can't get rid of the each references
   common_patches_by_node = {
-    for node in keys(merge(var.control_plane_nodes, var.worker_nodes))
+    for node in keys(merge(local.control_plane_nodes, local.worker_nodes))
     : node => [
       templatefile(
         "${path.module}/files/base.yaml.tmpl",
@@ -69,7 +69,7 @@ locals {
         }
       ),
       templatefile("${path.module}/files/tailscale.yaml.tmpl", {
-        tailscale_key = contains(keys(var.control_plane_nodes), node) ? tailscale_tailnet_key.unsigned-cp[node].key : tailscale_tailnet_key.unsigned-worker[node].key
+        tailscale_key = contains(keys(local.control_plane_nodes), node) ? tailscale_tailnet_key.unsigned-cp[node].key : tailscale_tailnet_key.unsigned-worker[node].key
       }),
       templatefile("${path.module}/files/encrypt-kms.patch.yaml.tmpl", {
         kms_endpoint = var.kms_endpoint
@@ -108,7 +108,7 @@ locals {
 }
 
 data "talos_machine_configuration" "control_plane_nodes" {
-  for_each         = var.control_plane_nodes
+  for_each         = local.control_plane_nodes
   cluster_name     = var.cluster_name
   cluster_endpoint = local.cluster_endpoint
   machine_type     = "controlplane"
@@ -131,7 +131,7 @@ data "talos_machine_configuration" "control_plane_nodes" {
 }
 
 data "talos_machine_configuration" "worker_nodes" {
-  for_each         = var.worker_nodes
+  for_each         = local.worker_nodes
   cluster_name     = var.cluster_name
   cluster_endpoint = local.cluster_endpoint
   machine_type     = "worker"
