@@ -31,7 +31,7 @@ provider "cloudflare" {
 
 locals {
   pod_subnets = {
-    ipv6 = "fdd2:14fe:fb0::/52", // randomly generated
+    ipv6 = "fdd2:14fe:fb0::/52", # randomly generated
     ipv4 = "10.244.0.0/16",
   }
 }
@@ -55,11 +55,11 @@ module "infra" {
   mayastor_io_engine_nodes = var.mayastor_io_engine_nodes
   stable_secret            = var.stable_secret
   pod_subnets = [
-    // local.pod_subnets.ipv6, // TODO: ipv6 mayastor
+    # local.pod_subnets.ipv6, # TODO: ipv6 mayastor
     local.pod_subnets.ipv4,
   ]
   service_subnets = [
-    // "fdd2:14fe:fb0:1000::/108", // randomly generated, TODO: ipv6 mayastor
+    # "fdd2:14fe:fb0:1000::/108", # randomly generated, TODO: ipv6 mayastor
     "10.96.0.0/12",
   ]
   dns_loadbalancer_domain = var.dns_loadbalancer_domain
@@ -109,9 +109,9 @@ module "k8s" {
   services_hostname_suffix = var.services_hostname_suffix
   flux_ssh_private_key     = var.flux_ssh_private_key
   flux_sops_age_key        = var.flux_sops_age_key
-  // TODO Tailscale MagicDNS doesn't return ipv6 yet
+  # TODO Tailscale MagicDNS doesn't return ipv6 yet
   nfs_server                = data.tailscale_device.external_server.addresses[0]
-  prometheus_remote_write   = data.tailscale_device.external_server.addresses[0] // TODO ipv6
+  prometheus_remote_write   = data.tailscale_device.external_server.addresses[0] # TODO ipv6
   openebs_etcd_replicaCount = length(var.control_plane_nodes) + length(var.worker_nodes) >= 3 ? 3 : 1
   restic_remote_password    = var.restic_remote_password
   add_data_partition_nodes  = var.mayastor_io_engine_nodes
@@ -124,29 +124,4 @@ module "k8s" {
     ipv6 = local.pod_subnets.ipv6
   }
   nodes = concat(keys(var.control_plane_nodes), keys(var.worker_nodes))
-}
-
-output "talosconfig" {
-  value     = module.infra.talosconfig
-  sensitive = true
-}
-
-output "kubeconfig" {
-  value     = local.k8s_config.raw
-  sensitive = true
-}
-
-output "machine_secrets" {
-  value     = yamlencode(module.infra.machine_secrets)
-  sensitive = true
-}
-
-output "talos_url" {
-  value     = module.infra.talos_url
-  sensitive = false
-}
-
-output "talos_image" {
-  value     = module.infra.talos_image
-  sensitive = false
 }

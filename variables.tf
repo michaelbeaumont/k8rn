@@ -78,11 +78,13 @@ variable "tailnet_name" {
 }
 
 variable "flux_ssh_private_key" {
-  type = string
+  description = "Key used by Flux to access the repo"
+  type        = string
 }
 
 variable "flux_sops_age_key" {
-  type = string
+  description = "Key used by Flux to decrypt SOPS-encrypted resources"
+  type        = string
 }
 
 variable "restic_remote_password" {
