@@ -1,4 +1,5 @@
 terraform {
+  required_version = ">=1.9"
   required_providers {
     tailscale = {
       source  = "tailscale/tailscale"
@@ -68,11 +69,11 @@ module "infra" {
 
 locals {
   k8s_config = length(module.infra.kubeconfig) != 0 ? {
-    host                   = module.infra.kubeconfig.0.kubernetes_client_configuration.host
-    client_certificate     = base64decode(module.infra.kubeconfig.0.kubernetes_client_configuration.client_certificate)
-    client_key             = base64decode(module.infra.kubeconfig.0.kubernetes_client_configuration.client_key)
-    cluster_ca_certificate = base64decode(module.infra.kubeconfig.0.kubernetes_client_configuration.ca_certificate)
-    raw                    = module.infra.kubeconfig.0.kubeconfig_raw
+    host                   = module.infra.kubeconfig[0].kubernetes_client_configuration.host
+    client_certificate     = base64decode(module.infra.kubeconfig[0].kubernetes_client_configuration.client_certificate)
+    client_key             = base64decode(module.infra.kubeconfig[0].kubernetes_client_configuration.client_key)
+    cluster_ca_certificate = base64decode(module.infra.kubeconfig[0].kubernetes_client_configuration.ca_certificate)
+    raw                    = module.infra.kubeconfig[0].kubeconfig_raw
     } : {
     host                   = null
     client_certificate     = null
