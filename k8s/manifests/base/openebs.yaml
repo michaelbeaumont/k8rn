@@ -49,9 +49,13 @@ spec:
             enabled: false
       etcd:
         replicaCount: ${openebs_etcd_replicaCount}
+      eventing:
+        enabled: false
       io_engine:
         # unfortunately this doesn't work with va even with hugepages
         envcontext: "iova-mode=pa"
+      loki-stack:
+        enabled: false
       obs:
         callhome:
           enabled: false
