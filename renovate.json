@@ -8,5 +8,8 @@
   },
   "flux": {
     "fileMatch": ["k8s/manifests/.+\\.yaml$"]
+  },
+  "terraform": {
+    "fileMatch": ["\\.tf$"],
   }
 }
