@@ -1,13 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
   ],
   "kubernetes": {
-    "fileMatch": ["k8s/manifests/.+\\.yaml$"]
+    "fileMatch": ["k8s/manifests/.+\\.yaml$"],
   },
   "flux": {
-    "fileMatch": ["k8s/manifests/.+\\.yaml$"]
+    "fileMatch": ["k8s/manifests/.+\\.yaml$"],
   },
   "terraform": {
     "fileMatch": ["\\.tf$"],
