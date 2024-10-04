@@ -5,5 +5,8 @@
   ],
   "kubernetes": {
     "fileMatch": ["k8s/manifests/.+\\.yaml$"]
+  },
+  "flux": {
+    "fileMatch": ["k8s/manifests/.+\\.yaml$"]
   }
 }

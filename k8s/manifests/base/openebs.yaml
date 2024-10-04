@@ -31,6 +31,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: openebs
+      version: 4.1.1
   values:
     engines:
       local:
