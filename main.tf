@@ -98,7 +98,14 @@ provider "helm" {
 }
 
 locals {
-  active_nodes = [for name, node in var.nodes : name if contains(node.tags, "control_plane") || contains(node.tags, "worker")]
+  active_nodes = [
+    for name, node in var.nodes
+    : name if contains(node.tags, "control_plane") || contains(node.tags, "worker")
+  ]
+  num_openebs_etcd_nodes = length([
+    for name in local.active_nodes
+    : name if !contains(var.nodes[name].tags, "qemu")
+  ])
 }
 module "k8s" {
   source = "./k8s"
@@ -113,7 +120,7 @@ module "k8s" {
   # TODO Tailscale MagicDNS doesn't return ipv6 yet
   nfs_server                = data.tailscale_device.external_server.addresses[0]
   prometheus_remote_write   = data.tailscale_device.external_server.addresses[0] # TODO ipv6
-  openebs_etcd_replicaCount = length(local.active_nodes) >= 3 ? 3 : 1
+  openebs_etcd_replicaCount = local.num_openebs_etcd_nodes >= 3 ? 3 : 1
   restic_remote_password    = var.restic_remote_password
   add_data_partition_nodes  = var.mayastor_io_engine_nodes
   local_cidr = {

@@ -25,6 +25,7 @@ resource "talos_image_factory_schematic" "this" {
             "siderolabs/i915-ucode",
             "siderolabs/intel-ucode",
             "siderolabs/tailscale",
+            contains(var.nodes[each.key].tags, "qemu") ? "siderolabs/qemu-guest-agent" : "",
           ])
         }
       }
