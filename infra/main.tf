@@ -43,7 +43,7 @@ variable "cluster_name" {
 
 variable "nodes" {
   description = "A description of all nodes, used to generate initial images"
-  type        = map(object({ local_ip = string, tags = list(string) }))
+  type        = map(object({ local_ip = string, tags = list(string), install_disk = optional(string, "/dev/nvme0n1") }))
 }
 
 variable "bootstrap_node" {

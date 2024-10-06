@@ -53,23 +53,23 @@ locals {
 locals {
   // shared between both but we can't get rid of the each references
   common_patches_by_node = {
-    for node in keys(merge(local.control_plane_nodes, local.worker_nodes))
-    : node => [
+    for name, node in var.nodes
+    : name => [
       templatefile(
         "${path.module}/files/base.yaml.tmpl",
         {
-          image_uri                 = local.image_uri[node]
+          image_uri                 = local.image_uri[name]
           dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
-          hostname                  = local.hostnames[node]
-          tailscale_fqdn            = "${local.hostnames[node]}.${var.tailnet_name}"
-          install_disk              = "/dev/nvme0n1"
+          hostname                  = local.hostnames[name]
+          tailscale_fqdn            = "${local.hostnames[name]}.${var.tailnet_name}"
+          install_disk              = node.install_disk
           cluster_endpoint_host     = local.dns_loadbalancer_hostname
           pod_subnets               = var.pod_subnets
           service_subnets           = var.service_subnets
         }
       ),
       templatefile("${path.module}/files/tailscale.yaml.tmpl", {
-        tailscale_key = contains(keys(local.control_plane_nodes), node) ? tailscale_tailnet_key.unsigned-cp[node].key : tailscale_tailnet_key.unsigned-worker[node].key
+        tailscale_key = contains(keys(local.control_plane_nodes), name) ? tailscale_tailnet_key.unsigned-cp[name].key : tailscale_tailnet_key.unsigned-worker[name].key
       }),
       templatefile("${path.module}/files/encrypt-kms.patch.yaml.tmpl", {
         kms_endpoint = var.kms_endpoint
@@ -88,7 +88,7 @@ locals {
         node_ips    = local.tailscale_cidrs,
         pod_subnets = var.pod_subnets,
       }),
-      contains(var.mayastor_io_engine_nodes, node) ? [
+      contains(var.mayastor_io_engine_nodes, name) ? [
         file("${path.module}/files/mayastor.patch.yaml"),
         templatefile("${path.module}/files/mayastor-io-engine-rules.yaml.tmpl", {
           node_ips    = local.tailscale_cidrs,
@@ -103,7 +103,7 @@ locals {
         node_ips    = local.tailscale_cidrs,
         pod_subnets = var.pod_subnets,
       }),
-    ]
+    ] if contains(keys(merge(local.control_plane_nodes, local.worker_nodes)), name)
   }
 }
 
