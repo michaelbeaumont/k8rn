@@ -104,6 +104,9 @@ locals {
         node_ips    = local.tailscale_cidrs,
         pod_subnets = var.pod_subnets,
       }),
+      contains(node.tags, "qemu") ? [
+        file("${path.module}/files/qemu-exclusive-taints.yaml"),
+      ] : [],
     ] if contains(keys(merge(local.control_plane_nodes, local.worker_nodes)), name)
   }
 }

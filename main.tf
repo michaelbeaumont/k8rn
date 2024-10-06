@@ -98,14 +98,24 @@ provider "helm" {
 }
 
 locals {
-  active_nodes = [
+  active_nodes = {
     for name, node in var.nodes
-    : name if contains(node.tags, "control_plane") || contains(node.tags, "worker")
-  ]
+    : name => node if contains(node.tags, "control_plane") || contains(node.tags, "worker")
+  }
   num_openebs_etcd_nodes = length([
-    for name in local.active_nodes
-    : name if !contains(var.nodes[name].tags, "qemu")
+    for node in local.active_nodes
+    : node if !contains(node.tags, "qemu")
   ])
+  node_labels = {
+    for name, node in local.active_nodes
+    : name => merge(
+      contains(node.tags, "worker") ? { "node-role.kubernetes.io/worker" : "" } : {},
+      contains(node.tags, "qemu") ? { "node-role.kubernetes.io/kubevirt" : "" } : {},
+    )
+  }
+  # Just use `registerWithTaints` but leaving this functionality
+  # in case taints need to change after node registration
+  node_taints = {}
 }
 module "k8s" {
   source = "./k8s"
@@ -131,5 +141,12 @@ module "k8s" {
     ipv4 = local.pod_subnets.ipv4
     ipv6 = local.pod_subnets.ipv6
   }
-  nodes = local.active_nodes
+  node_labels = {
+    for name, labels in local.node_labels
+    : name => labels if length(labels) > 0
+  }
+  node_taints = {
+    for name, taints in local.node_taints
+    : name => taints if length(taints) > 0
+  }
 }
