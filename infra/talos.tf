@@ -2,8 +2,7 @@ data "talos_client_configuration" "this" {
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.this.client_configuration
   nodes = concat(
-    [for dev in data.tailscale_device.cp : dev.hostname],
-    [for dev in data.tailscale_device.worker : dev.addresses[1]], // TODO: hostname should work once tailscale DNS works in-node
+    [for dev in merge(data.tailscale_device.cp, data.tailscale_device.worker) : dev.hostname],
   )
   endpoints = [local.dns_loadbalancer_hostname]
 }
