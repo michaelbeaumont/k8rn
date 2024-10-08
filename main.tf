@@ -3,7 +3,7 @@ terraform {
   required_providers {
     tailscale = {
       source  = "tailscale/tailscale"
-      version = "0.17.1"
+      version = "0.17.2"
     }
     helm = {
       source  = "hashicorp/helm"
