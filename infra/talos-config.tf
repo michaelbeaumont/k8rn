@@ -84,7 +84,9 @@ locals {
         node_ips = local.tailscale_cidrs,
       }),
       file("${path.module}/files/services-ingress.yaml"),
-      file("${path.module}/files/watchdog.yaml"),
+      !contains(node.tags, "qemu") ? [
+        file("${path.module}/files/watchdog.yaml")
+      ] : [],
       templatefile("${path.module}/files/mayastor-rules.yaml.tmpl", {
         node_ips    = local.tailscale_cidrs,
         pod_subnets = var.pod_subnets,
