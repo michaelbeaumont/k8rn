@@ -19,3 +19,4 @@ resources:
   - linkding.yaml
   - pvc-data.yaml
   - restic-secret.yaml
+  - networkpolicy.yaml

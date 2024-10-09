@@ -55,3 +55,4 @@ resources:
   - pvc.yaml
   - restic-secret.yaml
   - svc.yaml
+  - networkpolicy.yaml

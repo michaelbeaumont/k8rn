@@ -48,3 +48,4 @@ resources:
   - jellyfin.yaml
   - pvc-config.yaml
   - restic-secret.yaml
+  - networkpolicy.yaml

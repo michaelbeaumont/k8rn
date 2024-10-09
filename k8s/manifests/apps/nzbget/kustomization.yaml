@@ -43,3 +43,4 @@ resources:
   - pvc.yaml
   - secret.yaml
   - svc.yaml
+  - networkpolicy.yaml
