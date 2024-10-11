@@ -12,3 +12,6 @@ get-secureboot-iso node:
 
 get-upgrade-image node:
     terraform output -json talos_image | jq -r '.["{{ node }}"]'
+
+upgrade-node node:
+    talosctl --talosconfig "{{ justfile_directory() }}/talosconfig" upgrade -n "{{ node }}" --debug -i "$(just get-upgrade-image {{ node }})"
