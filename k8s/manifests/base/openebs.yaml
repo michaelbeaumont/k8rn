@@ -53,8 +53,9 @@ spec:
       eventing:
         enabled: false
       io_engine:
-        # unfortunately this doesn't work with va even with hugepages
-        envcontext: "iova-mode=pa"
+        # It's the automatic mode, in the DPDK code IOVA_MODE_DC, that causes issues.
+        # Confirmed by EAL debug log output that this really selects VA
+        envcontext: "iova-mode=va"
       loki-stack:
         enabled: false
       obs:
