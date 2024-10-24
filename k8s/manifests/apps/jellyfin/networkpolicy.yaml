@@ -11,3 +11,8 @@ spec:
     - fromEntities:
         - host
         - remote-node
+    - fromEndpoints:
+        - matchLabels:
+            "k8s:io.kubernetes.pod.namespace": envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-name: local-services
+            gateway.envoyproxy.io/owning-gateway-namespace: infra
