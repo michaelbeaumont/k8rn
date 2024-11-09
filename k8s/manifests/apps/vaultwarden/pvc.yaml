@@ -37,6 +37,8 @@ spec:
     storageClassName: openebs-single-replica-delete
     cacheStorageClassName: openebs-single-replica-delete
     volumeSnapshotClassName: openebs-delete
+    cleanupCachePVC: true
+    cleanupTempPVC: true
 ---
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
