@@ -57,7 +57,7 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: [ALL]
-          image: nzbgetcom/nzbget:v24.4
+          image: nzbgetcom/nzbget:v24.5
           ports:
             - name: http
               containerPort: 6789
