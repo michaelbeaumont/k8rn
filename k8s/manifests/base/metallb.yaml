@@ -31,6 +31,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: metallb
-      version: v0.14.8
+      version: 0.14.9
   values:
     loadBalancerClass: metallb
