@@ -22,7 +22,7 @@ resource "talos_image_factory_schematic" "this" {
         ]
         systemExtensions = {
           officialExtensions = compact([
-            "siderolabs/i915-ucode",
+            "siderolabs/i915",
             "siderolabs/intel-ucode",
             "siderolabs/tailscale",
             contains(var.nodes[each.key].tags, "qemu") ? "siderolabs/qemu-guest-agent" : "",
