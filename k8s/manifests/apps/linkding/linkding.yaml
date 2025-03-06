@@ -27,7 +27,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: linkding
-          image: sissbruecker/linkding:1.38.0-plus
+          image: sissbruecker/linkding:1.39.1-plus
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
