@@ -43,11 +43,6 @@ spec:
         mayastor:
           enabled: true
     mayastor:
-      csi:
-        node:
-          # currently necessary because the init container checks for nvmeof module but Talos compiles it in
-          initContainers:
-            enabled: false
       etcd:
         replicaCount: ${openebs_etcd_replicaCount}
       eventing:
