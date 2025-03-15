@@ -1,8 +1,10 @@
 data "cloudflare_zone" "this" {
-  name = var.cloudflare_zone
+  filter = {
+    name = var.cloudflare_zone
+  }
 }
 
-resource "cloudflare_record" "cp_a" {
+resource "cloudflare_dns_record" "cp_a" {
   for_each = data.tailscale_device.cp
   zone_id  = data.cloudflare_zone.this.zone_id
   name     = var.cluster_name
@@ -12,7 +14,7 @@ resource "cloudflare_record" "cp_a" {
   comment  = "Talos control plane node"
 }
 
-resource "cloudflare_record" "cp_aaaa" {
+resource "cloudflare_dns_record" "cp_aaaa" {
   for_each = data.tailscale_device.cp
   zone_id  = data.cloudflare_zone.this.zone_id
   name     = var.cluster_name

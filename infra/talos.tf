@@ -33,7 +33,7 @@ resource "talos_machine_configuration_apply" "control_plane_post_init" {
   for_each                    = talos_machine_configuration_apply.control_plane_init
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.control_plane_nodes[each.key].machine_configuration
-  node                        = cloudflare_record.cp_aaaa[each.key].content
+  node                        = cloudflare_dns_record.cp_aaaa[each.key].content
   endpoint                    = local.dns_loadbalancer_hostname
 }
 
