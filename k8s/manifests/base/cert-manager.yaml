@@ -72,7 +72,7 @@ spec:
             sourceRef:
                 kind: HelmRepository
                 name: jetstack
-            version: v1.17.1
+            version: v1.17.2
     values:
         installCRDs: true
         extraArgs:
