@@ -52,7 +52,7 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: [ALL]
-          image: docker.io/redis:7.4
+          image: docker.io/redis:8.0
           args:
             - redis-server
             - /etc/redis/redis.conf
