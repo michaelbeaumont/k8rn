@@ -106,6 +106,12 @@ locals {
         node_ips    = local.tailscale_cidrs,
         pod_subnets = var.pod_subnets,
       }),
+      templatefile("${path.module}/files/eth-tailscale-optimizations.yaml.tmpl", {
+        device = "enp1s0"
+      }),
+      templatefile("${path.module}/files/eth-tailscale-optimizations.yaml.tmpl", {
+        device = "enp2s0"
+      }),
       contains(node.tags, "qemu") ? [
         file("${path.module}/files/qemu-exclusive-taints.yaml"),
       ] : [],

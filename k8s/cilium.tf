@@ -123,24 +123,6 @@ resource "helm_release" "cilium" {
             name: tailscaled-socket
           - mountPath: /mnt/share-pod-cidr
             name: share-pod-cidr
-      - name: set-tailscale-optimizations
-        image: chainguard/curl:latest
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop: [ALL]
-          runAsNonRoot: false
-          runAsUser: 0
-          readOnlyRootFilesystem: true
-          seccompProfile:
-            type: RuntimeDefault
-        args:
-          - "--unix-socket"
-          - "/var/run/tailscale/tailscaled.sock"
-          - "http://local-tailscaled.sock/localapi/v0/set-udp-gro-forwarding"
-        volumeMounts:
-          - mountPath: /var/run/tailscale/tailscaled.sock
-            name: tailscaled-socket
     extraVolumes:
       - name: tailscaled-socket
         hostPath:
