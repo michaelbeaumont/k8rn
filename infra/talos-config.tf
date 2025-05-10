@@ -115,6 +115,7 @@ locals {
       contains(node.tags, "qemu") ? [
         file("${path.module}/files/qemu-exclusive-taints.yaml"),
       ] : [],
+      file("${path.module}/files/kubelet-rotate-server-crts.yaml"),
     ] if contains(keys(merge(local.control_plane_nodes, local.worker_nodes)), name)
   }
 }
@@ -139,6 +140,7 @@ data "talos_machine_configuration" "control_plane_nodes" {
       control_plane_node_ips = local.tailscale_cidrs,
       node_ips               = local.tailscale_cidrs,
     }),
+    file("${path.module}/files/talos-api-kube-system.yaml"),
   ])
 }
 

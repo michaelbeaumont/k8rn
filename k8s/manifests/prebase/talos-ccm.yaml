@@ -1,0 +1,33 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: siderolabs
+  namespace: kube-system
+spec:
+  type: oci
+  interval: 10m0s
+  url: oci://ghcr.io/siderolabs/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: talos-cloud-controller-manager
+  namespace: kube-system
+spec:
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  interval: 10m0s
+  targetNamespace: kube-system
+  chart:
+    spec:
+      chart: talos-cloud-controller-manager
+      sourceRef:
+        kind: HelmRepository
+        name: siderolabs
+      version: 0.4.5
+  values:
+    enabledControllers:
+      - node-csr-approval
