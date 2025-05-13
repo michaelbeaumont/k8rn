@@ -6,3 +6,4 @@ resources:
   - linkding.yaml
   - paperless.yaml
   - vaultwarden.yaml
+  - syncthing.yaml

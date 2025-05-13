@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: basic-auth
+type: Opaque
+stringData:
+    credential: ENC[AES256_GCM,data:9K5olYGGrvLV+5sS1zpK18CqIlFn9Muf5+w=,iv:DJzloxuQsRNSvGm2ZI4f1LSshjNS+Ivz4kgKwV/2+qc=,tag:lvoXx4wxCat83oZd9NgOTQ==,type:str]
+sops:
+    age:
+        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBnb0NoSndNNWtyb1krWCtP
+            cFZkRzgxUFNPd1JrQzlqVUo2UGlaRHdNNTFNCnJQUUtGMThIZXYvMHQzY3JCVTdL
+            MzVWbU9ZQ2gxYWxuMUlodnNxVkN1aGcKLS0tIDZlNkRnUys1bWFTdjNsVW1CaHZO
+            VCtRT1FOamRsamtFY2l1c1pLWnhSR00KyNUrvGEO2kTIYYN6bZpNXIY8rA11qH5Q
+            K2LwcL0RzQXmVrgjf0bd/BlXsHT+VzOai3IoUpBUpZKS9YjTUUE0LA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-08-01T22:20:41Z"
+    mac: ENC[AES256_GCM,data:XISrn344LYlphTIOG19zeSZOzH2kmjObA+R21tT/U655b82ewaZt250FuKpbo0DJ2G6hlUH0m88jlp5n7yUvi5HbxRkCTKelmqCFNJGMvwlhkBLlhGk9JxfGG5zWzgTOwDTmyMo7fbwjq/YSLwCferld0eyEN6y3swrlXohl9WQ=,iv:Mn3h0rdXP7ZxVrLJtBtILF//c1vAfkt0IppVQ8CEDJY=,tag:SLOVeULAas86ZohCu+D2mg==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.10.2

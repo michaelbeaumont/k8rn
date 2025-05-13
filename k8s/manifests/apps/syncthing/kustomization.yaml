@@ -1,0 +1,67 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: syncthing
+labels:
+  - includeTemplates: true
+    includeSelectors: true
+    pairs:
+      app.kubernetes.io/name: syncthing
+patches:
+  # Syncthing doesn't set SNI :(
+  # so we can't set this on the listener/TLSRoute
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1alpha2
+      kind: TLSRoute
+      metadata:
+        name: syncthing
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: syncthing.${services_hostname_suffix}
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        name: web
+      spec:
+        hostnames:
+          - syncthing.${services_hostname_suffix}
+  - patch: |-
+      apiVersion: gateway.envoyproxy.io/v1alpha1
+      kind: SecurityPolicy
+      metadata:
+        name: oidc-web
+      spec:
+        oidc:
+          provider:
+            issuer: https://id.${services_hostname_suffix}
+          clientID: c8e89061-db80-4a1a-aaea-8e2152be1c56
+        jwt:
+          providers:
+            - issuer: https://id.${services_hostname_suffix}
+              name: id
+              remoteJWKS:
+                uri: https://id.${services_hostname_suffix}/.well-known/jwks.json
+              audiences:
+                - c8e89061-db80-4a1a-aaea-8e2152be1c56
+              extractFrom:
+                cookies:
+                  - IdToken
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: namespace-only-unset
+      namespace: syncthing
+    unsetOnly: true
+    fieldSpecs:
+    - path: metadata/name
+      kind: Namespace
+      create: true
+resources:
+  - syncthing.yaml
+  - config.yaml
+  - pvc.yaml
+  - web.yaml
+  - oidc-client-secret.yaml
+  - web-basic-auth.yaml

@@ -5,6 +5,7 @@ name: services-ingress
 portSelector:
   ports:
     - 443
+    - 22000
   protocol: tcp
 ingress:
   - subnet: 100.64.0.0/10

@@ -86,3 +86,16 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: services-tls-gateway
+    - name: syncthing
+      # Syncthing doesn't set SNI :(
+      # hostname: "syncthing.${services_hostname_suffix}"
+      protocol: TLS
+      tls:
+        mode: Passthrough
+      port: 22000
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: syncthing

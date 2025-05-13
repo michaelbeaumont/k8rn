@@ -66,6 +66,8 @@ spec:
         txtOwnerId: k8rn
         sources:
             - gateway-httproute
+            - gateway-tlsroute
+            - gateway-tcproute
             - service
         provider:
             name: cloudflare

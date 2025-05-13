@@ -1,0 +1,70 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  ports:
+    - port: 80
+      targetPort: web
+      name: web
+      appProtocol: http
+      protocol: TCP
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: HTTPRouteFilter
+metadata:
+  name: basic-auth
+spec:
+  credentialInjection:
+    credential:
+      valueRef:
+        name: basic-auth
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web
+  labels:
+    external-dns: "true"
+spec:
+  parentRefs:
+    - name: services
+      namespace: infra
+      sectionName: main
+  hostnames: []
+  rules:
+    - timeouts:
+        # the UI uses long polling
+        backendRequest: 61s
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: web
+          port: 80
+          filters:
+          - type: ExtensionRef
+            extensionRef:
+              group: gateway.envoyproxy.io
+              kind: HTTPRouteFilter
+              name: basic-auth
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: oidc-web
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: web
+  oidc:
+    provider:
+      issuer: ""
+    clientID: ""
+    clientSecret:
+      name: oidc-client-secret
+    cookieNames:
+      idToken: IdToken
+  jwt:
+    providers: []

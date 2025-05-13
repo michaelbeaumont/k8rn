@@ -1,0 +1,119 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: syncthing
+  labels:
+    gateway.infra.services/allow-routes: "true"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: syncthing
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+      containers:
+      - name: syncthing
+        image: syncthing/syncthing:1.30
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        args:
+          - --home=
+          - --data=/var/syncthing/data
+          - --config=/var/syncthing/config
+          - --gui-address=${POD_IP}:8384
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: [ALL]
+        ports:
+        - name: tcp
+          containerPort: 22000
+          protocol: TCP
+        - name: udp
+          containerPort: 22000
+          protocol: UDP
+        - name: web
+          containerPort: 8384
+        volumeMounts:
+         - name: config-dir
+           mountPath: /var/syncthing/config
+         - name: data-dir
+           mountPath: /var/syncthing/data
+         - name: synced
+           mountPath: /var/syncthing/synced
+         # These can be generated with `syncthing generate`:
+         - name: config
+           mountPath: /var/syncthing/config/config.xml
+           subPath: config.xml
+           readOnly: true
+         - name: device-key
+           mountPath: /var/syncthing/config/cert.pem
+           subPath: tls.crt
+           readOnly: true
+         - name: device-key
+           mountPath: /var/syncthing/config/key.pem
+           subPath: tls.key
+           readOnly: true
+      volumes:
+        - name: synced
+          persistentVolumeClaim:
+            claimName: data
+        - name: config-dir
+          emptyDir:
+            sizeLimit: 5Mi
+        - name: data-dir
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: config
+        - name: device-key
+          secret:
+            secretName: device-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: syncthing
+spec:
+  ports:
+    - port: 22000
+      targetPort: tcp
+      name: tcp
+      protocol: TCP
+    - port: 22000
+      targetPort: udp
+      name: udp
+      protocol: UDP
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TLSRoute
+metadata:
+  name: syncthing
+  labels:
+    external-dns: "true"
+spec:
+  parentRefs:
+    - name: services
+      namespace: infra
+      sectionName: syncthing
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: syncthing
+          port: 22000
