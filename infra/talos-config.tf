@@ -25,6 +25,7 @@ resource "talos_image_factory_schematic" "this" {
             "siderolabs/i915",
             "siderolabs/intel-ucode",
             "siderolabs/tailscale",
+            "siderolabs/zfs",
             contains(var.nodes[each.key].tags, "qemu") ? "siderolabs/qemu-guest-agent" : "",
           ])
         }
@@ -116,6 +117,7 @@ locals {
         file("${path.module}/files/qemu-exclusive-taints.yaml"),
       ] : [],
       file("${path.module}/files/kubelet-rotate-server-crts.yaml"),
+      file("${path.module}/files/zfs.yaml"),
     ] if contains(keys(merge(local.control_plane_nodes, local.worker_nodes)), name)
   }
 }

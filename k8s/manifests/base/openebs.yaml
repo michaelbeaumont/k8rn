@@ -38,10 +38,14 @@ spec:
         lvm:
           enabled: false
         zfs:
-          enabled: false
+          enabled: true
       replicated:
         mayastor:
           enabled: true
+    zfs-localpv:
+      zfsNode:
+        # See https://github.com/openebs/zfs-localpv/issues/545
+        encrKeysDir: /var/openebs/zfs/keys
     mayastor:
       etcd:
         replicaCount: ${openebs_etcd_replicaCount}
