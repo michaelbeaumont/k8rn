@@ -20,3 +20,4 @@ resources:
   - pvc-data.yaml
   - restic-secret.yaml
   - networkpolicy.yaml
+  - oidc.yaml

@@ -37,6 +37,11 @@ spec:
           env:
             - name: TZ
               value: Europe/Berlin
+          envFrom:
+            - configMapRef:
+                name: oidc-config
+            - secretRef:
+                name: oidc-client
           volumeMounts:
             - name: data
               mountPath: /etc/linkding/data
