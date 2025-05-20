@@ -38,20 +38,27 @@ spec:
               value: "8000"
             - name: PAPERLESS_TIME_ZONE
               value: Europe/Berlin
+            - name: S6_READ_ONLY_ROOT
+              value: "1"
+            - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+              value: "1"
           volumeMounts:
             - name: data
               mountPath: /usr/src/paperless/data
             - name: media
               mountPath: /usr/src/paperless/media
+            - name: paperless-scratch
+              mountPath: /run
+              subPath: run
+            - name: paperless-scratch
+              mountPath: /tmp
+              subPath: tmp
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop: [ALL]
+            readOnlyRootFilesystem: true
         - name: redis
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop: [ALL]
           image: docker.io/redis:8.0
           args:
             - redis-server
@@ -65,6 +72,10 @@ spec:
               name: redis-config
             - mountPath: /data
               name: redis-data
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -81,6 +92,8 @@ spec:
             items:
               - key: redis.conf
                 path: redis.conf
+        - name: paperless-scratch
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: ConfigMap
