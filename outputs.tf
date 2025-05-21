@@ -27,3 +27,13 @@ output "talos_image" {
   value       = module.infra.talos_image
   sensitive   = false
 }
+
+output "cluster_oidc_issuer_host" {
+  description = "OIDC issuer hostname for cluster access"
+  value       = var.cluster_oidc_issuer_host
+}
+
+output "cluster_oidc_client_id" {
+  description = "OIDC client ID for cluster access"
+  value       = var.cluster_oidc_client_id
+}

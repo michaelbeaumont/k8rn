@@ -47,6 +47,9 @@ module "infra" {
   talos_version = var.talos_version
   cluster_name  = "k8rn"
 
+  cluster_oidc_issuer_host = var.cluster_oidc_issuer_host
+  cluster_oidc_client_id   = var.cluster_oidc_client_id
+
   nodes                    = var.nodes
   bootstrap_node           = var.bootstrap_node
   tailnet_name             = var.tailnet_name

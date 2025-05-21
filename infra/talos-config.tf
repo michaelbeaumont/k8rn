@@ -141,6 +141,10 @@ data "talos_machine_configuration" "control_plane_nodes" {
       node_ips               = local.tailscale_cidrs,
     }),
     file("${path.module}/files/talos-api-kube-system.yaml"),
+    templatefile("${path.module}/files/oidc.yaml.tmpl", {
+      cluster_oidc_issuer    = "https://${var.cluster_oidc_issuer_host}",
+      cluster_oidc_client_id = var.cluster_oidc_client_id,
+    }),
   ])
 }
 

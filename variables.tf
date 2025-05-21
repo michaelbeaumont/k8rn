@@ -52,6 +52,16 @@ variable "tailnet_oauth_client_secret" {
   type        = string
 }
 
+variable "cluster_oidc_issuer_host" {
+  description = "The issuer hostname to use for cluster OIDC authentication"
+  type        = string
+}
+
+variable "cluster_oidc_client_id" {
+  description = "The client ID to use for cluster OIDC authentication"
+  type        = string
+}
+
 variable "cloudflare_zone" {
   description = "Name of the cloudflare zone"
   type        = string

@@ -17,6 +17,7 @@ This configuration depends on:
 - SSH key for flux
   - Must be a deploy key for this repo
 - Age key for SOPS-encrypted data with flux
+- An OIDC IdP for cluster authzn
 
 The cluster nodes have to be assigned IPs reachable from your machine.
 
@@ -164,3 +165,23 @@ Instead we rely on the nodes being Tailscale machines:
 
 Some services are running on a different server in the tailnet and a `Service`
 with a manually managed `EndpointSlice` handles forwarding the traffic.
+
+### OIDC
+
+This sets up Talos to authenticate using OIDC.
+
+In my case with Pocket ID + PKCE + wanting to use the `k8rn_admin` group for `cluster-admin`
+and eventually take advantage of `preferred_username`,
+I had to setup the `kubectl` `oidc-login` plugin as follows:
+
+```
+kubectl oidc-login setup \
+        --oidc-issuer-url=${MY_ISSUER} \
+        --oidc-client-id=${MY_CALLBACK} \
+        --oidc-pkce-method S256 \
+        --oidc-extra-scope profile \
+        --oidc-extra-scope groups
+```
+
+> [!IMPORTANT]
+> Replace this with `AuthenticationConfiguration` when Talos supports it

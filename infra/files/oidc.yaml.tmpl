@@ -1,0 +1,7 @@
+cluster:
+  apiServer:
+    extraArgs:
+      oidc-issuer-url: ${cluster_oidc_issuer}
+      oidc-client-id: ${cluster_oidc_client_id}
+      oidc-groups-claim: groups
+      oidc-groups-prefix: "oidc:"

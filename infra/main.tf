@@ -41,6 +41,16 @@ variable "cluster_name" {
   type        = string
 }
 
+variable "cluster_oidc_issuer_host" {
+  description = "The issuer hostname to use for cluster OIDC authentication"
+  type        = string
+}
+
+variable "cluster_oidc_client_id" {
+  description = "The client ID to use for cluster OIDC authentication"
+  type        = string
+}
+
 variable "nodes" {
   description = "A description of all nodes, used to generate initial images"
   type        = map(object({ local_ip = string, tags = list(string), install_disk = optional(string, "/dev/nvme0n1") }))
