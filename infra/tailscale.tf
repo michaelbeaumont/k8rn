@@ -6,7 +6,6 @@ resource "tailscale_tailnet_key" "unsigned-cp" {
   expiry        = 3600
   tags = [
     "tag:infra",
-    "tag:cname-k8rn",
     "tag:k8rn-node",
     "tag:k8rn-cp",
     "tag:${local.hostnames[each.key]}",
