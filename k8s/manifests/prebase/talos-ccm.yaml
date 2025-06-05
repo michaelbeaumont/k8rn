@@ -27,7 +27,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: siderolabs
-      version: 0.4.5
+      version: 0.4.6
   values:
     enabledControllers:
       - node-csr-approval
