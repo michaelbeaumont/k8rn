@@ -3,10 +3,6 @@ kind: Namespace
 metadata:
     name: cert-manager
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
     age:
         - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
           enc: |
@@ -17,11 +13,10 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-08-02T04:59:00Z"
-    mac: ENC[AES256_GCM,data:OdJxSEBf4JZEXTD8FY2mauV51T78pRUWyo9LpRZvhCHABjHqt43P7uogG1Zdx86PVN3Riv//b8GeKbwkhT0Wq3yZnKNXaLh6FvKRbO6s/rBBiKdAkn3PswNxrvPxB2WbnAUGiYXH0vo0xpPj4UxeaZsjwvvK4/LzL6P3WgX3V7k=,iv:FNuQ8Rz8M1FONiJpAoOvbu212Cza9dX+8TMNsdKeLEs=,tag:OXTc296inJdTXR5Va2KiqA==,type:str]
-    pgp: []
+    lastmodified: "2025-06-20T19:26:01Z"
+    mac: ENC[AES256_GCM,data:wU/1zScS/TvLyv3B+u8ORolFowSFhofQiat5dQjqZiV5FmAwhfV+Dm3NCTU0mJqG/KIXP+EEhxirIIZsAdsBdK2IDGRTrP9ZDfyOaZpAKwTrCig4NQF9ip4g1XjWXKOr35NSOj/lxR1KcOJDL56qCGhI0rB1Qw1WzVZa+Kto3j4=,iv:bFNvqKyi/eFhgtEr/AlEOoUZ8L7Xrdyo+RR7vanxhUg=,tag:MYRp91PJgUiQ8tWYyQpqlQ==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.9.0
+    version: 3.10.2
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
@@ -32,10 +27,6 @@ spec:
     interval: 10m0s
     url: https://charts.jetstack.io
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
     age:
         - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
           enc: |
@@ -46,11 +37,10 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-08-02T04:59:00Z"
-    mac: ENC[AES256_GCM,data:OdJxSEBf4JZEXTD8FY2mauV51T78pRUWyo9LpRZvhCHABjHqt43P7uogG1Zdx86PVN3Riv//b8GeKbwkhT0Wq3yZnKNXaLh6FvKRbO6s/rBBiKdAkn3PswNxrvPxB2WbnAUGiYXH0vo0xpPj4UxeaZsjwvvK4/LzL6P3WgX3V7k=,iv:FNuQ8Rz8M1FONiJpAoOvbu212Cza9dX+8TMNsdKeLEs=,tag:OXTc296inJdTXR5Va2KiqA==,type:str]
-    pgp: []
+    lastmodified: "2025-06-20T19:26:01Z"
+    mac: ENC[AES256_GCM,data:wU/1zScS/TvLyv3B+u8ORolFowSFhofQiat5dQjqZiV5FmAwhfV+Dm3NCTU0mJqG/KIXP+EEhxirIIZsAdsBdK2IDGRTrP9ZDfyOaZpAKwTrCig4NQF9ip4g1XjWXKOr35NSOj/lxR1KcOJDL56qCGhI0rB1Qw1WzVZa+Kto3j4=,iv:bFNvqKyi/eFhgtEr/AlEOoUZ8L7Xrdyo+RR7vanxhUg=,tag:MYRp91PJgUiQ8tWYyQpqlQ==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.9.0
+    version: 3.10.2
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -74,14 +64,13 @@ spec:
                 name: jetstack
             version: v1.18.1
     values:
+        global:
+            rbac:
+                disableHTTPChallengesRole: true
         installCRDs: true
-        extraArgs:
-            - --enable-gateway-api
+        config:
+            enableGatewayAPI: true
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
     age:
         - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
           enc: |
@@ -92,11 +81,10 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-08-02T04:59:00Z"
-    mac: ENC[AES256_GCM,data:OdJxSEBf4JZEXTD8FY2mauV51T78pRUWyo9LpRZvhCHABjHqt43P7uogG1Zdx86PVN3Riv//b8GeKbwkhT0Wq3yZnKNXaLh6FvKRbO6s/rBBiKdAkn3PswNxrvPxB2WbnAUGiYXH0vo0xpPj4UxeaZsjwvvK4/LzL6P3WgX3V7k=,iv:FNuQ8Rz8M1FONiJpAoOvbu212Cza9dX+8TMNsdKeLEs=,tag:OXTc296inJdTXR5Va2KiqA==,type:str]
-    pgp: []
+    lastmodified: "2025-06-20T19:26:01Z"
+    mac: ENC[AES256_GCM,data:wU/1zScS/TvLyv3B+u8ORolFowSFhofQiat5dQjqZiV5FmAwhfV+Dm3NCTU0mJqG/KIXP+EEhxirIIZsAdsBdK2IDGRTrP9ZDfyOaZpAKwTrCig4NQF9ip4g1XjWXKOr35NSOj/lxR1KcOJDL56qCGhI0rB1Qw1WzVZa+Kto3j4=,iv:bFNvqKyi/eFhgtEr/AlEOoUZ8L7Xrdyo+RR7vanxhUg=,tag:MYRp91PJgUiQ8tWYyQpqlQ==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.9.0
+    version: 3.10.2
 ---
 apiVersion: v1
 kind: Secret
@@ -106,10 +94,6 @@ metadata:
 stringData:
     token: ENC[AES256_GCM,data:B8foB19U2wec9/F812kQj7JkPpDnEUTlbYkqc6eKl5OJKSKqy5OQFg==,iv:c0trlBIw7HgE+HAKXyObhFH5pfbnSmWrs0DPl54mCS4=,tag:XgmIWtBF+jJsdxZ1iid05Q==,type:str]
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
     age:
         - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
           enc: |
@@ -120,8 +104,7 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-08-02T04:59:00Z"
-    mac: ENC[AES256_GCM,data:OdJxSEBf4JZEXTD8FY2mauV51T78pRUWyo9LpRZvhCHABjHqt43P7uogG1Zdx86PVN3Riv//b8GeKbwkhT0Wq3yZnKNXaLh6FvKRbO6s/rBBiKdAkn3PswNxrvPxB2WbnAUGiYXH0vo0xpPj4UxeaZsjwvvK4/LzL6P3WgX3V7k=,iv:FNuQ8Rz8M1FONiJpAoOvbu212Cza9dX+8TMNsdKeLEs=,tag:OXTc296inJdTXR5Va2KiqA==,type:str]
-    pgp: []
+    lastmodified: "2025-06-20T19:26:01Z"
+    mac: ENC[AES256_GCM,data:wU/1zScS/TvLyv3B+u8ORolFowSFhofQiat5dQjqZiV5FmAwhfV+Dm3NCTU0mJqG/KIXP+EEhxirIIZsAdsBdK2IDGRTrP9ZDfyOaZpAKwTrCig4NQF9ip4g1XjWXKOr35NSOj/lxR1KcOJDL56qCGhI0rB1Qw1WzVZa+Kto3j4=,iv:bFNvqKyi/eFhgtEr/AlEOoUZ8L7Xrdyo+RR7vanxhUg=,tag:MYRp91PJgUiQ8tWYyQpqlQ==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.9.0
+    version: 3.10.2

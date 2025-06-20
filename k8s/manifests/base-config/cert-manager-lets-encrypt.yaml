@@ -9,6 +9,7 @@ spec:
         server: https://acme-staging-v02.api.letsencrypt.org/directory
         privateKeySecretRef:
             name: lets-encrypt-staging-account-key
+        profile: "tlsserver"
         solvers:
             - dns01:
                 cloudflare:
@@ -26,6 +27,7 @@ spec:
         server: https://acme-v02.api.letsencrypt.org/directory
         privateKeySecretRef:
             name: lets-encrypt-prod-account-key
+        profile: "tlsserver"
         solvers:
             - dns01:
                 cloudflare:
