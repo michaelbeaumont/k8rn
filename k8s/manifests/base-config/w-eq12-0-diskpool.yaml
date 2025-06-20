@@ -1,9 +1,10 @@
-apiVersion: openebs.io/v1beta2
+---
+apiVersion: openebs.io/v1beta3
 kind: DiskPool
 metadata:
   name: w-eq12-0
   namespace: openebs
 spec:
-  node: k8rn-w-eq12-0
   disks:
     - "uring:///dev/disk/by-partlabel/data"
+  node: k8rn-w-eq12-0
