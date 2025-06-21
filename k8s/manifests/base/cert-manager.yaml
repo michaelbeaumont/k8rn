@@ -13,8 +13,8 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-20T19:26:01Z"
-    mac: ENC[AES256_GCM,data:wU/1zScS/TvLyv3B+u8ORolFowSFhofQiat5dQjqZiV5FmAwhfV+Dm3NCTU0mJqG/KIXP+EEhxirIIZsAdsBdK2IDGRTrP9ZDfyOaZpAKwTrCig4NQF9ip4g1XjWXKOr35NSOj/lxR1KcOJDL56qCGhI0rB1Qw1WzVZa+Kto3j4=,iv:bFNvqKyi/eFhgtEr/AlEOoUZ8L7Xrdyo+RR7vanxhUg=,tag:MYRp91PJgUiQ8tWYyQpqlQ==,type:str]
+    lastmodified: "2025-06-21T19:51:51Z"
+    mac: ENC[AES256_GCM,data:8NTZ2cG669GtEjYi73w/JVWgbwmnepusH1fvhz9f82OnXvaN0F6nwysbRxrt/RHLhMBLul3BrGg+n83BZt7suCJFRie2gFHIS19PlkrWye5GyDK3qpmE5QhvxnIv5yPdMqUzHPu5pmCuiLDAT2ENY1sFAkduq9ILQg+pRGdwqOY=,iv:O6Qg8bJLd+AXRsc5SFmDTQ85HThhoQ4dE1Ii3y9Gk/A=,tag:M1VJXwjMytX0NN51WWYYRg==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.10.2
 ---
@@ -37,8 +37,8 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-20T19:26:01Z"
-    mac: ENC[AES256_GCM,data:wU/1zScS/TvLyv3B+u8ORolFowSFhofQiat5dQjqZiV5FmAwhfV+Dm3NCTU0mJqG/KIXP+EEhxirIIZsAdsBdK2IDGRTrP9ZDfyOaZpAKwTrCig4NQF9ip4g1XjWXKOr35NSOj/lxR1KcOJDL56qCGhI0rB1Qw1WzVZa+Kto3j4=,iv:bFNvqKyi/eFhgtEr/AlEOoUZ8L7Xrdyo+RR7vanxhUg=,tag:MYRp91PJgUiQ8tWYyQpqlQ==,type:str]
+    lastmodified: "2025-06-21T19:51:51Z"
+    mac: ENC[AES256_GCM,data:8NTZ2cG669GtEjYi73w/JVWgbwmnepusH1fvhz9f82OnXvaN0F6nwysbRxrt/RHLhMBLul3BrGg+n83BZt7suCJFRie2gFHIS19PlkrWye5GyDK3qpmE5QhvxnIv5yPdMqUzHPu5pmCuiLDAT2ENY1sFAkduq9ILQg+pRGdwqOY=,iv:O6Qg8bJLd+AXRsc5SFmDTQ85HThhoQ4dE1Ii3y9Gk/A=,tag:M1VJXwjMytX0NN51WWYYRg==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.10.2
 ---
@@ -66,7 +66,8 @@ spec:
     values:
         global:
             rbac:
-                disableHTTPChallengesRole: true
+                # TODO: this is buggy currently: https://github.com/cert-manager/cert-manager/pull/7666#issuecomment-2988818732
+                disableHTTPChallengesRole: false
         installCRDs: true
         config:
             enableGatewayAPI: true
@@ -81,8 +82,8 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-20T19:26:01Z"
-    mac: ENC[AES256_GCM,data:wU/1zScS/TvLyv3B+u8ORolFowSFhofQiat5dQjqZiV5FmAwhfV+Dm3NCTU0mJqG/KIXP+EEhxirIIZsAdsBdK2IDGRTrP9ZDfyOaZpAKwTrCig4NQF9ip4g1XjWXKOr35NSOj/lxR1KcOJDL56qCGhI0rB1Qw1WzVZa+Kto3j4=,iv:bFNvqKyi/eFhgtEr/AlEOoUZ8L7Xrdyo+RR7vanxhUg=,tag:MYRp91PJgUiQ8tWYyQpqlQ==,type:str]
+    lastmodified: "2025-06-21T19:51:51Z"
+    mac: ENC[AES256_GCM,data:8NTZ2cG669GtEjYi73w/JVWgbwmnepusH1fvhz9f82OnXvaN0F6nwysbRxrt/RHLhMBLul3BrGg+n83BZt7suCJFRie2gFHIS19PlkrWye5GyDK3qpmE5QhvxnIv5yPdMqUzHPu5pmCuiLDAT2ENY1sFAkduq9ILQg+pRGdwqOY=,iv:O6Qg8bJLd+AXRsc5SFmDTQ85HThhoQ4dE1Ii3y9Gk/A=,tag:M1VJXwjMytX0NN51WWYYRg==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.10.2
 ---
@@ -104,7 +105,7 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-20T19:26:01Z"
-    mac: ENC[AES256_GCM,data:wU/1zScS/TvLyv3B+u8ORolFowSFhofQiat5dQjqZiV5FmAwhfV+Dm3NCTU0mJqG/KIXP+EEhxirIIZsAdsBdK2IDGRTrP9ZDfyOaZpAKwTrCig4NQF9ip4g1XjWXKOr35NSOj/lxR1KcOJDL56qCGhI0rB1Qw1WzVZa+Kto3j4=,iv:bFNvqKyi/eFhgtEr/AlEOoUZ8L7Xrdyo+RR7vanxhUg=,tag:MYRp91PJgUiQ8tWYyQpqlQ==,type:str]
+    lastmodified: "2025-06-21T19:51:51Z"
+    mac: ENC[AES256_GCM,data:8NTZ2cG669GtEjYi73w/JVWgbwmnepusH1fvhz9f82OnXvaN0F6nwysbRxrt/RHLhMBLul3BrGg+n83BZt7suCJFRie2gFHIS19PlkrWye5GyDK3qpmE5QhvxnIv5yPdMqUzHPu5pmCuiLDAT2ENY1sFAkduq9ILQg+pRGdwqOY=,iv:O6Qg8bJLd+AXRsc5SFmDTQ85HThhoQ4dE1Ii3y9Gk/A=,tag:M1VJXwjMytX0NN51WWYYRg==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.10.2
