@@ -53,7 +53,7 @@ variable "cluster_oidc_client_id" {
 
 variable "nodes" {
   description = "A description of all nodes, used to generate initial images"
-  type        = map(object({ local_ip = string, tags = list(string), install_disk = optional(string, "/dev/nvme0n1") }))
+  type        = map(object({ local_ip = string, install_disk = optional(string), network_devices = list(string), tags = list(string) }))
 }
 
 variable "bootstrap_node" {
