@@ -94,11 +94,13 @@ data "talos_cluster_health" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
   control_plane_nodes = flatten([
     for name, apply in talos_machine_configuration_apply.control_plane_post_init
-    : [data.tailscale_device.cp[name].addresses[0]] // , data.tailscale_device.cp[name].addresses[1]]
+    # TODO after health is fixed use both IPs
+    : [data.tailscale_device.cp[name].addresses[1]] // , data.tailscale_device.cp[name].addresses[0]]
   ])
   worker_nodes = flatten([
     for name, apply in talos_machine_configuration_apply.workers_post_init
-    : [data.tailscale_device.worker[name].addresses[0]] // , data.tailscale_device.worker[name].addresses[1]]
+    # TODO after health is fixed use both IPs
+    : [data.tailscale_device.worker[name].addresses[1]] // , data.tailscale_device.worker[name].addresses[0]]
   ])
   skip_kubernetes_checks = true
   endpoints              = [local.dns_loadbalancer_hostname]
@@ -107,5 +109,5 @@ data "talos_cluster_health" "this" {
 resource "talos_cluster_kubeconfig" "this" {
   count                = length(local.control_plane_nodes) > 0 ? 1 : 0
   client_configuration = talos_machine_secrets.this.client_configuration
-  node                 = one(data.talos_cluster_health.this.0.control_plane_nodes) // TODO after health [1] -> ipv6 of first node
+  node                 = one(data.talos_cluster_health.this.0.control_plane_nodes)
 }
