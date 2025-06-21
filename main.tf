@@ -56,11 +56,11 @@ module "infra" {
   mayastor_io_engine_nodes = var.mayastor_io_engine_nodes
   stable_secret            = var.stable_secret
   pod_subnets = [
-    # local.pod_subnets.ipv6, # TODO: ipv6 mayastor
+    local.pod_subnets.ipv6,
     local.pod_subnets.ipv4,
   ]
   service_subnets = [
-    # "fdd2:14fe:fb0:1000::/108", # randomly generated, TODO: ipv6 mayastor
+    "fdd2:14fe:fb0:1000::/108", # randomly generated
     "10.96.0.0/12",
   ]
   dns_loadbalancer_domain = var.dns_loadbalancer_domain

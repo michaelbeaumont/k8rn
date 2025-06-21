@@ -11,8 +11,9 @@ resource "helm_release" "cilium" {
       mode: kubernetes
     routingMode: native
     ipv4NativeRoutingCIDR: "${var.pod_cidr.ipv4}"
+    ipv6NativeRoutingCIDR: "${var.pod_cidr.ipv6}"
     ipv6:
-      enabled: false # TODO when mayastor
+      enabled: true
     kubeProxyReplacement: true
     envoy:
       baseID: 4244

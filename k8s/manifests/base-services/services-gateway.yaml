@@ -10,6 +10,7 @@ metadata:
   name: tailscale-services
   namespace: envoy-gateway-system
 spec:
+  ipFamily: DualStack
   provider:
     type: Kubernetes
     kubernetes:
