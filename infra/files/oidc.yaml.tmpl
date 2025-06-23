@@ -3,5 +3,7 @@ cluster:
     extraArgs:
       oidc-issuer-url: ${cluster_oidc_issuer}
       oidc-client-id: ${cluster_oidc_client_id}
+      oidc-username-claim: preferred_username
+      oidc-username-prefix: "-"
       oidc-groups-claim: groups
       oidc-groups-prefix: "oidc:"
