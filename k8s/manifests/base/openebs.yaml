@@ -31,7 +31,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: openebs
-      version: 4.3.1
+      version: 4.3.2
   values:
     # Until https://github.com/openebs/openebs/issues/3977
     alloy:
