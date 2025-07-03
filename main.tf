@@ -130,9 +130,8 @@ module "k8s" {
   services_hostname_suffix = var.services_hostname_suffix
   flux_ssh_private_key     = var.flux_ssh_private_key
   flux_sops_age_key        = var.flux_sops_age_key
-  # TODO Tailscale MagicDNS doesn't return ipv6 yet
-  nfs_server                = data.tailscale_device.external_server.addresses[0]
-  prometheus_remote_write   = data.tailscale_device.external_server.addresses[0] # TODO ipv6
+  nfs_server                = data.tailscale_device.external_server.addresses[1]
+  prometheus_remote_write   = data.tailscale_device.external_server.addresses[1]
   openebs_etcd_replicaCount = local.num_openebs_etcd_nodes >= 3 ? 3 : 1
   restic_remote_password    = var.restic_remote_password
   add_data_partition_nodes  = var.mayastor_io_engine_nodes

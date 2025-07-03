@@ -16,7 +16,7 @@ spec:
     matchLabels: {}
   egress:
     - toCIDR:
-        - "${prometheus_remote_write}/32"
+        - "${prometheus_remote_write}/128"
       toPorts:
         - ports:
             - port: "9090"
@@ -67,4 +67,4 @@ spec:
           matchLabels:
             prometheus.io/scrape: "true"
         remoteWrite:
-          - url: http://${prometheus_remote_write}:9090/api/v1/write
+          - url: http://[${prometheus_remote_write}]:9090/api/v1/write

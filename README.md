@@ -84,6 +84,19 @@ Assuming `cluster_name = "k8rn"`, this can be achieved via ACLs:
 Each node is assigned `tag:<node hostname>` which Tailscale then uses to assign an IP pool,
 in this case a pool of size one.
 
+Also don't forget to enable MagicDNS + IPv6:
+
+```json
+	"nodeAttrs": [
+		{
+			"target": ["*"],
+			"attr": [
+				"magicdns-aaaa",
+			],
+		},
+    ],
+```
+
 ## Kubernetes
 
 ### Cilium

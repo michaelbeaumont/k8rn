@@ -24,7 +24,7 @@ variable "flux_sops_age_key" {
 }
 
 variable "prometheus_remote_write" {
-  description = "Remote write endpoint for Prometheus"
+  description = "Remote write endpoint for Prometheus, assumed to be IPv6"
   type        = string
 }
 
