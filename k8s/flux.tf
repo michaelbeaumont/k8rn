@@ -57,7 +57,7 @@ resource "helm_release" "flux" {
   chart      = "flux2"
   name       = "flux"
   namespace  = kubernetes_namespace.flux-system.metadata[0].name
-  version    = "2.16.2"
+  version    = "2.16.3"
 
   values = [
     <<-EOT
