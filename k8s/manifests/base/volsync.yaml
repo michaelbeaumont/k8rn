@@ -33,7 +33,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: backube
-      version: 0.13.0
+      version: 0.12.1
   values:
     metrics:
       disableAuth: true
