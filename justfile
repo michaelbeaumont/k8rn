@@ -24,6 +24,9 @@ write-kubeconfig outfile:
 write-secrets-yaml outfile:
     terraform output -raw machine_secrets > {{ outfile }}
 
+generate-iso-urls:
+    terraform apply -target module.infra.data.talos_image_factory_urls.this
+
 get-secureboot-iso node:
     wget -O "{{ justfile_directory() }}/disk-images/{{ node }}-talos.iso" `terraform output -json talos_url | jq -r '.["{{ node }}"]'`
 
