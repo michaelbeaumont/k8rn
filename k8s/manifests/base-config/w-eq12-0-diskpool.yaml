@@ -6,5 +6,5 @@ metadata:
   namespace: openebs
 spec:
   disks:
-    - "uring:///dev/disk/by-partlabel/data"
+    - "uring:///dev/disk/by-partlabel/${openebs_diskpool_partition_label}"
   node: k8rn-w-eq12-0

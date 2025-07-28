@@ -101,6 +101,11 @@ variable "mayastor_io_engine_nodes" {
   type        = list(string)
 }
 
+variable "openebs_diskpool_volume_name" {
+  description = "Name of Talos RawVolumeConfig for OpenEBS DiskPool partitions"
+  type        = string
+}
+
 // port must match localAPIServerPort
 locals {
   hostnames = merge({

@@ -1,0 +1,15 @@
+---
+apiVersion: v1alpha1
+kind: RawVolumeConfig
+# Note this must correspond to the reference in the OpenEBS DiskPool
+name: ${name}
+provisioning:
+  diskSelector:
+    match: system_disk
+  minSize: 10GB
+encryption:
+  provider: luks2
+  keys:
+    - kms:
+        endpoint: ${kms_endpoint}
+      slot: 0

@@ -38,15 +38,15 @@ variable "openebs_etcd_replicaCount" {
   type        = number
 }
 
+variable "openebs_diskpool_partition_label" {
+  description = "Label for OpenEBS DiskPool partitions"
+  type        = string
+}
+
 variable "restic_remote_password" {
   description = "Password for remote restic repo"
   type        = string
   sensitive   = true
-}
-
-variable "add_data_partition_nodes" {
-  description = "Nodes to run add partition job on"
-  type        = set(string)
 }
 
 variable "local_cidr" {

@@ -34,6 +34,8 @@ locals {
     ipv6 = "fdd2:14fe:fb0::/52", # randomly generated
     ipv4 = "10.244.0.0/16",
   }
+  openebs_diskpool_volume_name     = "openebs-diskpool"
+  openebs_diskpool_partition_label = "r-${local.openebs_diskpool_volume_name}"
 }
 
 data "tailscale_device" "external_server" {
@@ -50,11 +52,12 @@ module "infra" {
   cluster_oidc_issuer_host = var.cluster_oidc_issuer_host
   cluster_oidc_client_id   = var.cluster_oidc_client_id
 
-  nodes                    = var.nodes
-  bootstrap_node           = var.bootstrap_node
-  tailnet_name             = var.tailnet_name
-  mayastor_io_engine_nodes = var.mayastor_io_engine_nodes
-  stable_secret            = var.stable_secret
+  nodes                        = var.nodes
+  bootstrap_node               = var.bootstrap_node
+  tailnet_name                 = var.tailnet_name
+  mayastor_io_engine_nodes     = var.mayastor_io_engine_nodes
+  openebs_diskpool_volume_name = local.openebs_diskpool_volume_name
+  stable_secret                = var.stable_secret
   pod_subnets = [
     local.pod_subnets.ipv6,
     local.pod_subnets.ipv4,
@@ -125,16 +128,16 @@ module "k8s" {
 
   count = length(module.infra.kubeconfig) > 0 ? 1 : 0
 
-  github_repo              = var.github_repo
-  lets_encrypt_email       = var.lets_encrypt_email
-  services_hostname_suffix = var.services_hostname_suffix
-  flux_ssh_private_key     = var.flux_ssh_private_key
-  flux_sops_age_key        = var.flux_sops_age_key
-  nfs_server                = data.tailscale_device.external_server.addresses[1]
-  prometheus_remote_write   = data.tailscale_device.external_server.addresses[1]
-  openebs_etcd_replicaCount = local.num_openebs_etcd_nodes >= 3 ? 3 : 1
-  restic_remote_password    = var.restic_remote_password
-  add_data_partition_nodes  = var.mayastor_io_engine_nodes
+  github_repo                      = var.github_repo
+  lets_encrypt_email               = var.lets_encrypt_email
+  services_hostname_suffix         = var.services_hostname_suffix
+  flux_ssh_private_key             = var.flux_ssh_private_key
+  flux_sops_age_key                = var.flux_sops_age_key
+  nfs_server                       = data.tailscale_device.external_server.addresses[1]
+  prometheus_remote_write          = data.tailscale_device.external_server.addresses[1]
+  openebs_etcd_replicaCount        = local.num_openebs_etcd_nodes >= 3 ? 3 : 1
+  openebs_diskpool_partition_label = local.openebs_diskpool_partition_label
+  restic_remote_password           = var.restic_remote_password
   local_cidr = {
     ipv4 = "192.168.0.1/23"
     ipv6 = "fd4a:f9c7:76ae:1::/64"

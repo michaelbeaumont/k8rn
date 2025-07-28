@@ -14,7 +14,6 @@ variable "services_hostname_suffix" {
 }
 
 resource "kubernetes_namespace" "flux-system" {
-  depends_on = [kubernetes_job_v1.add_data_partition]
   metadata {
     name = "flux-system"
   }
@@ -174,6 +173,7 @@ resource "helm_release" "flux-sync-base-config" {
           substitute:
             lets_encrypt_email: "${var.lets_encrypt_email}"
             restic_remote_password: "${var.restic_remote_password}"
+            openebs_diskpool_partition_label: "${var.openebs_diskpool_partition_label}"
     EOT
   ]
 }

@@ -100,6 +100,10 @@ locals {
           pod_subnets = var.pod_subnets,
         }),
         file("${path.module}/files/mayastor-io-node-ephemeral-config.yaml"),
+        templatefile("${path.module}/files/openebs-diskpool-volume.yaml", {
+          kms_endpoint = var.kms_endpoint
+          name         = var.openebs_diskpool_volume_name
+        }),
       ] : [],
       templatefile("${path.module}/files/metallb-rules.yaml.tmpl", {
         node_ips = local.tailscale_cidrs,
