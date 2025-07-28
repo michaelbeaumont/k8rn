@@ -18,6 +18,7 @@ spec:
   template:
     spec:
       automountServiceAccountToken: false
+      hostUsers: false
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
