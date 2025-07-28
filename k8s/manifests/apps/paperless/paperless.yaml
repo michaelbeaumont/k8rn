@@ -38,10 +38,15 @@ spec:
               value: "8000"
             - name: PAPERLESS_TIME_ZONE
               value: Europe/Berlin
+            - name: PAPERLESS_APPS
+              value: allauth.socialaccount.providers.openid_connect
             - name: S6_READ_ONLY_ROOT
               value: "1"
             - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
               value: "1"
+          envFrom:
+            - secretRef:
+                name: oidc-client
           volumeMounts:
             - name: data
               mountPath: /usr/src/paperless/data
