@@ -121,6 +121,7 @@ locals {
       file("${path.module}/files/kubelet-rotate-server-crts.yaml"),
       file("${path.module}/files/zfs.yaml"),
       file("${path.module}/files/nfs.yaml"),
+      file("${path.module}/files/user-namespaces.yaml"),
     ] if contains(keys(merge(local.control_plane_nodes, local.worker_nodes)), name)
   }
 }
