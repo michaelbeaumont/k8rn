@@ -66,5 +66,18 @@ spec:
       name: oidc-client-secret
     cookieNames:
       idToken: IdToken
+    scopes:
+      - groups
   jwt:
     providers: []
+  authorization:
+    rules:
+      - action: Allow
+        principal:
+          jwt:
+            provider: id
+            claims:
+              - name: groups
+                valueType: StringArray
+                values:
+                  - admins
