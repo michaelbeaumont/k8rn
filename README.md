@@ -183,7 +183,7 @@ with a manually managed `EndpointSlice` handles forwarding the traffic.
 
 This sets up Talos to authenticate using OIDC.
 
-In my case with Pocket ID + PKCE + wanting to use the `k8rn_admin` group for `cluster-admin`
+In my case with Pocket ID + PKCE + wanting to use the `admins` group for `cluster-admin`
 and eventually take advantage of `preferred_username`,
 I had to setup the `kubectl` `oidc-login` plugin as follows:
 
