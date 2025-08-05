@@ -64,9 +64,9 @@ spec:
               drop: [ALL]
             readOnlyRootFilesystem: true
         - name: redis
-          image: docker.io/redis:8.0
+          image: docker.io/valkey/valkey:8.1
           args:
-            - redis-server
+            - valkey-server
             - /etc/redis/redis.conf
           ports:
             - containerPort: 6379
