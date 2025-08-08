@@ -1,15 +1,21 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
   ],
-  "kubernetes": {
-    "fileMatch": ["k8s/manifests/.+\\.yaml$"],
+  kubernetes: {
+    managerFilePatterns: [
+      '/k8s/manifests/.+\\.yaml$/',
+    ],
   },
-  "flux": {
-    "fileMatch": ["k8s/manifests/.+\\.yaml$"],
+  flux: {
+    managerFilePatterns: [
+      '/k8s/manifests/.+\\.yaml$/',
+    ],
   },
-  "terraform": {
-    "fileMatch": ["\\.tf$"],
-  }
+  terraform: {
+    managerFilePatterns: [
+      '/\\.tf$/',
+    ],
+  },
 }
