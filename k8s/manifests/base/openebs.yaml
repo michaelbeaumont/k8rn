@@ -33,7 +33,6 @@ spec:
         name: openebs
       version: 4.3.2
   values:
-    # Until https://github.com/openebs/openebs/issues/3977
     alloy:
       enabled: false
     engines:
@@ -50,7 +49,6 @@ spec:
         # See https://github.com/openebs/zfs-localpv/issues/545
         encrKeysDir: /var/openebs/zfs/keys
     mayastor:
-      # Until https://github.com/openebs/openebs/issues/3977
       alloy:
         enabled: false
       etcd:
