@@ -75,7 +75,7 @@ resource "helm_release" "flux-sync-prebase" {
   chart      = "flux2-sync"
   name       = "flux-sync-prebase"
   namespace  = helm_release.flux.namespace
-  version    = "1.13.3"
+  version    = "1.13.4"
 
   values = [
     <<-EOT
@@ -109,7 +109,7 @@ resource "helm_release" "flux-sync-base" {
   chart      = "flux2-sync"
   name       = "flux-sync-base"
   namespace  = helm_release.flux.namespace
-  version    = "1.13.3"
+  version    = "1.13.4"
 
   values = [
     <<-EOT
@@ -145,7 +145,7 @@ resource "helm_release" "flux-sync-base-config" {
   chart      = "flux2-sync"
   name       = "flux-sync-base-config"
   namespace  = helm_release.flux.namespace
-  version    = "1.13.3"
+  version    = "1.13.4"
 
   values = [
     <<-EOT
@@ -183,7 +183,7 @@ resource "helm_release" "flux-sync-base-services" {
   chart      = "flux2-sync"
   name       = "flux-sync-base-services"
   namespace  = helm_release.flux.namespace
-  version    = "1.13.3"
+  version    = "1.13.4"
 
   values = [
     <<-EOT
@@ -221,7 +221,7 @@ resource "helm_release" "flux-sync-apps" {
   chart      = "flux2-sync"
   name       = "flux-sync-apps"
   namespace  = helm_release.flux.namespace
-  version    = "1.13.3"
+  version    = "1.13.4"
 
   values = [
     <<-EOT
