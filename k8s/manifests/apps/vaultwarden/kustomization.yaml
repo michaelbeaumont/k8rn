@@ -23,7 +23,7 @@ patches:
       data:
         DOMAIN: "https://passwords.${services_hostname_suffix}"
 resources:
-  - admin-token.yaml
+  - secrets.yaml
   - deployment.yaml
   - namespace.yaml
   - pvc.yaml

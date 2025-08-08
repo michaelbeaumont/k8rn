@@ -38,9 +38,16 @@ spec:
             - containerPort: 8080
               name: http
               protocol: TCP
+          env:
+          - name: ROCKET_ADDRESS
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
           envFrom:
             - configMapRef:
                 name: config
+            - secretRef:
+                name: oidc
             - secretRef:
                 name: admin-token
           volumeMounts:
