@@ -13,6 +13,7 @@ spec:
   path: ./k8s/manifests/apps/syncthing
   prune: true
   timeout: 10m
+  deletionPolicy: WaitForTermination
   decryption:
     provider: sops
     secretRef:

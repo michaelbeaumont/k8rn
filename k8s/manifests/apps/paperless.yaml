@@ -13,6 +13,7 @@ spec:
   path: ./k8s/manifests/apps/paperless
   prune: true
   timeout: 10m
+  deletionPolicy: WaitForTermination
   decryption:
     provider: sops
     secretRef:

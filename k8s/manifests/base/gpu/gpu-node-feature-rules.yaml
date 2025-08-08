@@ -25,3 +25,4 @@ spec:
   path: /deployments/nfd/overlays/node-feature-rules
   prune: true
   timeout: 10m
+  deletionPolicy: WaitForTermination

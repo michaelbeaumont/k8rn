@@ -28,3 +28,4 @@ spec:
   path: /deployment/overlays/default
   prune: true
   timeout: 10m
+  deletionPolicy: WaitForTermination
