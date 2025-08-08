@@ -35,6 +35,8 @@ spec:
   values:
     alloy:
       enabled: false
+    loki:
+      enabled: false
     engines:
       local:
         lvm:
@@ -59,7 +61,7 @@ spec:
         # It's the automatic mode, in the DPDK code IOVA_MODE_DC, that causes issues.
         # Confirmed by EAL debug log output that this really selects VA
         envcontext: "iova-mode=va"
-      loki-stack:
+      loki:
         enabled: false
       obs:
         callhome:
