@@ -14,6 +14,7 @@ spec:
   replicas: 1
   template:
     spec:
+      automountServiceAccountToken: false
       hostUsers: false
       securityContext:
         runAsUser: 1000
@@ -50,6 +51,22 @@ spec:
           protocol: UDP
         - name: web
           containerPort: 8384
+        livenessProbe:
+          httpGet:
+            path: /rest/noauth/health
+            port: web
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /rest/noauth/health
+            port: web
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 3
         volumeMounts:
          - name: config-dir
            mountPath: /var/syncthing/config
