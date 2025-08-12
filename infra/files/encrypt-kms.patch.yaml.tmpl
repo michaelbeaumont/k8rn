@@ -1,12 +1,23 @@
-machine:
-  systemDiskEncryption:
-    ephemeral:
-      keys:
-        - kms:
-            endpoint: ${kms_endpoint}
-          slot: 0
-    state:
-      keys:
-        - kms:
-            endpoint: ${kms_endpoint}
-          slot: 0
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: STATE
+encryption:
+  provider: luks2
+  keys:
+    - kms:
+        endpoint: ${kms_endpoint}
+      slot: 0
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+encryption:
+  provider: luks2
+  keys:
+    - kms:
+        endpoint: ${kms_endpoint}
+      slot: 0
+      # Not enabling this for now
+      # Minor security benefit but makes each partition dependent on STATE
+      #lockToSTATE: true
