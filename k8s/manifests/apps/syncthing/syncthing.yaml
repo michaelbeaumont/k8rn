@@ -25,7 +25,7 @@ spec:
         runAsNonRoot: true
       containers:
       - name: syncthing
-        image: syncthing/syncthing:1.30
+        image: syncthing/syncthing:2.0
         env:
         - name: POD_IP
           valueFrom:
