@@ -34,8 +34,8 @@ spec:
               fieldPath: status.podIP
         args:
           - --home=
-          - --data=/var/syncthing/data
           - --config=/var/syncthing/config
+          - --data=/var/syncthing/data
           - --gui-address=${POD_IP}:8384
         securityContext:
           allowPrivilegeEscalation: false
@@ -74,6 +74,8 @@ spec:
            mountPath: /var/syncthing/data
          - name: synced
            mountPath: /var/syncthing/synced
+         - name: tmp
+           mountPath: /tmp
          # These can be generated with `syncthing generate`:
          - name: config
            mountPath: /var/syncthing/config/config.xml
@@ -88,17 +90,21 @@ spec:
            subPath: tls.key
            readOnly: true
       volumes:
+        - name: config-dir
+          emptyDir:
+            sizeLimit: 50Mi
+        - name: data-dir
+          emptyDir:
+            sizeLimit: 5Gi
         - name: synced
           persistentVolumeClaim:
             claimName: data
-        - name: config-dir
-          emptyDir:
-            sizeLimit: 5Mi
-        - name: data-dir
-          emptyDir: {}
         - name: config
           configMap:
             name: config
+        - name: tmp
+          emptyDir:
+            sizeLimit: 500Mi
         - name: device-key
           secret:
             secretName: device-key
