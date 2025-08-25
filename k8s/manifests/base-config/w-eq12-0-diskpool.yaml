@@ -6,5 +6,8 @@ metadata:
   namespace: openebs
 spec:
   disks:
-    - "uring:///dev/disk/by-partlabel/${openebs_diskpool_partition_label}"
+    # Hopefully we can return to something like the following at some point:
+    # - "uring:///dev/disk/by-partlabel/${openebs_diskpool_partition_label}"
+    # for now we can only refer to the mapped device as follows:
+    - "uring:///dev/mapper/nvme0n1p5-encrypted"
   node: k8rn-w-eq12-0
