@@ -1,0 +1,37 @@
+cluster:
+  apiServer:
+    extraArgs:
+      authentication-config: /etc/kubernetes/authentication-config.yaml
+    extraVolumes:
+      - hostPath: /var/authentication-config.yaml
+        mountPath: /etc/kubernetes/authentication-config.yaml
+        readonly: true
+machine:
+  files:
+  - permissions: 0o444
+    path: /var/authentication-config.yaml
+    op: create
+    content: |
+      ---
+      apiVersion: apiserver.config.k8s.io/v1
+      kind: AuthenticationConfiguration
+      #anonymous:
+      #  enabled: true
+      #  conditions:
+      #    - path: /.well-known/openid-configuration
+      #    - path: /openid/v1/jwks
+      jwt:
+        - issuer:
+            url: ${cluster_oidc_issuer}
+            audiences:
+              - ${cluster_oidc_client_id}
+            audienceMatchPolicy: MatchAny
+          claimMappings:
+            username:
+              claim: preferred_username
+              prefix: ""
+            groups:
+              claim: groups
+              prefix: "oidc:"
+            uid:
+              claim: "sub"
