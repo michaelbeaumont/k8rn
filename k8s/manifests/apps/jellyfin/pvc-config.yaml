@@ -36,6 +36,7 @@ spec:
     copyMethod: Snapshot
     storageClassName: openebs-single-replica-delete
     cacheStorageClassName: openebs-single-replica-delete
+    cacheCapacity: 5Gi
     volumeSnapshotClassName: openebs-delete
     cleanupCachePVC: true
     cleanupTempPVC: true
@@ -65,4 +66,5 @@ spec:
     copyMethod: Snapshot # Clone would be the best
     storageClassName: openebs-single-replica-delete
     cacheStorageClassName: openebs-single-replica-delete
+    cacheCapacity: 5Gi
     volumeSnapshotClassName: openebs-delete
