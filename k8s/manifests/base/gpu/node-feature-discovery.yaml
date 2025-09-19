@@ -13,7 +13,7 @@ spec:
   interval: 30m
   url: https://github.com/kubernetes-sigs/node-feature-discovery
   ref:
-    tag: v0.17.3
+    tag: v0.17.4
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
