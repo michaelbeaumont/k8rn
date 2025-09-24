@@ -139,6 +139,8 @@ data "talos_machine_configuration" "control_plane_nodes" {
     templatefile("${path.module}/files/inline-manifests.yaml.tmpl", {
       manifests = {
         "oidc-cluster-admin" = file("${path.module}/files/oidc-cluster-admin.yaml"),
+        "anonymous-auth" = file("${path.module}/files/anonymous-auth.yaml"),
+        "anonymous-oidc-issuer" = file("${path.module}/files/anonymous-oidc-issuer.yaml"),
       }
     }),
     file("${path.module}/files/permissive-admission.yaml"),
