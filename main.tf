@@ -154,4 +154,5 @@ module "k8s" {
     for name, taints in local.node_taints
     : name => taints if length(taints) > 0
   }
+  kms_endpoint = var.kms_endpoint
 }
