@@ -50,6 +50,69 @@ spec:
       zfsNode:
         # See https://github.com/openebs/zfs-localpv/issues/545
         encrKeysDir: /var/openebs/zfs/keys
+        initContainers:
+          aa-external-data-unseal:
+            image: ghcr.io/michaelbeaumont/talos-kms-seals:latest
+            securityContext:
+              privileged: true
+            args:
+              - --endpoint
+              - "${kms_endpoint}"
+              - --device
+              - /dev/sda
+              - --mapped-name
+              - external-data
+              - --only-on-node
+              - k8rn-w-eq12-0
+              - unseal
+            env:
+              - name: NODE_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+          ab-data1-unseal:
+            image: ghcr.io/michaelbeaumont/talos-kms-seals:latest
+            securityContext:
+              privileged: true
+            args:
+              - --endpoint
+              - "${kms_endpoint}"
+              - --device
+              - /dev/disk/by-uuid/a6afe516-1d0b-4a54-8e71-5f70ab3f8200
+              - --mapped-name
+              - data1
+              - --only-on-node
+              - k8rn-core
+              - unseal
+            env:
+              - name: NODE_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+          ac-data2-unseal:
+            image: ghcr.io/michaelbeaumont/talos-kms-seals:latest
+            securityContext:
+              privileged: true
+            args:
+              - --endpoint
+              - "${kms_endpoint}"
+              - --device
+              - /dev/disk/by-uuid/da635a66-94c6-46b2-99bc-0ee46c9c6ef1
+              - --mapped-name
+              - data2
+              - --only-on-node
+              - k8rn-core
+              - unseal
+            env:
+              - name: NODE_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+          b-zfs-import-all:
+            image: docker.io/michaelbeaumont/zfs-part-utils:latest
+            securityContext:
+              privileged: true
+            command: ["zpool", "import", "-a"]
     mayastor:
       alloy:
         enabled: false

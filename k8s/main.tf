@@ -68,3 +68,7 @@ variable "node_taints" {
   description = "Nodes"
   type        = map(map(string))
 }
+
+variable "kms_endpoint" {
+  type = string
+}

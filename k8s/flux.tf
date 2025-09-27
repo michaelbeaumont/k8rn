@@ -136,6 +136,7 @@ resource "helm_release" "flux-sync-base" {
         postBuild:
           substitute:
             openebs_etcd_replicaCount: "${var.openebs_etcd_replicaCount}"
+            kms_endpoint: "${var.kms_endpoint}"
     EOT
   ]
 }
