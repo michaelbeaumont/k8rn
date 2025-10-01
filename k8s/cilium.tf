@@ -81,7 +81,7 @@ resource "helm_release" "cilium" {
     k8sServicePort: 7445
     extraInitContainers:
       - name: get-node-pod-cidr
-        image: bitnami/kubectl:latest
+        image: alpine/kubectl:1.34.1@sha256:bd5f9dc1ef4673686791ec669b24bf20b86befc9a0a51fb701a1e70d14cd1744
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -95,7 +95,6 @@ resource "helm_release" "cilium" {
           - |
             set -e
             kubectl get nodes $(NODE_NAME) -o json > /mnt/share-pod-cidr/node_json
-            cat /mnt/share-pod-cidr/node_json | jq -r '.spec.podCIDRs | join(",")' > /mnt/share-pod-cidr/out
         env:
           - name: NODE_NAME
             valueFrom:
@@ -105,6 +104,26 @@ resource "helm_release" "cilium" {
             value: "localhost"
           - name: KUBERNETES_SERVICE_PORT
             value: "7445"
+        volumeMounts:
+          - mountPath: /mnt/share-pod-cidr
+            name: share-pod-cidr
+      - name: concat-pod-cidrs
+        image: docker.io/alpine/xml:1.8.0@sha256:3ac0a6c5dc1c68d9b66094eb1812fc84b8df87de36a101a9b581259ad2389332
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: [ALL]
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        command: [sh, -c]
+        args:
+          - |
+            set -e
+            jq -r '.spec.podCIDRs | join(",")' /mnt/share-pod-cidr/node_json  > /mnt/share-pod-cidr/out
         volumeMounts:
           - mountPath: /mnt/share-pod-cidr
             name: share-pod-cidr
