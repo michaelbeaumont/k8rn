@@ -32,7 +32,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: envoy-gateway
-      version: 1.5.1
+      version: 1.5.2
   values:
     config:
       envoyGateway:
