@@ -1,9 +1,5 @@
 terraform {
   required_providers {
-    sops = {
-      source  = "carlpett/sops"
-      version = ">=1.0.0"
-    }
     helm = {
       source  = "hashicorp/helm"
       version = ">=2.14.0"
