@@ -13,10 +13,10 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-21T19:51:51Z"
-    mac: ENC[AES256_GCM,data:8NTZ2cG669GtEjYi73w/JVWgbwmnepusH1fvhz9f82OnXvaN0F6nwysbRxrt/RHLhMBLul3BrGg+n83BZt7suCJFRie2gFHIS19PlkrWye5GyDK3qpmE5QhvxnIv5yPdMqUzHPu5pmCuiLDAT2ENY1sFAkduq9ILQg+pRGdwqOY=,iv:O6Qg8bJLd+AXRsc5SFmDTQ85HThhoQ4dE1Ii3y9Gk/A=,tag:M1VJXwjMytX0NN51WWYYRg==,type:str]
+    lastmodified: "2025-10-27T02:32:55Z"
+    mac: ENC[AES256_GCM,data:I6+9NJX/gYsZcblw4Y/0+I+FpxrZeZpdcpV7Rn5gZYR75O1ASRv9Pw4zzpqslHQCA2hKwuNbsmAEFB/qDGLufO78BblEkLMvdF8gCweHzooikpMXwVUDk0c5eCFE2PnmbHypqy6rQWm2U7ixOTy6cxGTDN+5T2eNaYD6BgGs5qs=,iv:RJNImpLo375KfpVDBc097uoqt+iuOgh6cSQz5H5NFvc=,tag:DsYBI1Byj2vB0TLWliMO6Q==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
@@ -37,10 +37,10 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-21T19:51:51Z"
-    mac: ENC[AES256_GCM,data:8NTZ2cG669GtEjYi73w/JVWgbwmnepusH1fvhz9f82OnXvaN0F6nwysbRxrt/RHLhMBLul3BrGg+n83BZt7suCJFRie2gFHIS19PlkrWye5GyDK3qpmE5QhvxnIv5yPdMqUzHPu5pmCuiLDAT2ENY1sFAkduq9ILQg+pRGdwqOY=,iv:O6Qg8bJLd+AXRsc5SFmDTQ85HThhoQ4dE1Ii3y9Gk/A=,tag:M1VJXwjMytX0NN51WWYYRg==,type:str]
+    lastmodified: "2025-10-27T02:32:55Z"
+    mac: ENC[AES256_GCM,data:I6+9NJX/gYsZcblw4Y/0+I+FpxrZeZpdcpV7Rn5gZYR75O1ASRv9Pw4zzpqslHQCA2hKwuNbsmAEFB/qDGLufO78BblEkLMvdF8gCweHzooikpMXwVUDk0c5eCFE2PnmbHypqy6rQWm2U7ixOTy6cxGTDN+5T2eNaYD6BgGs5qs=,iv:RJNImpLo375KfpVDBc097uoqt+iuOgh6cSQz5H5NFvc=,tag:DsYBI1Byj2vB0TLWliMO6Q==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -65,9 +65,7 @@ spec:
             version: v1.19.1
     values:
         global:
-            rbac:
-                # TODO: this is buggy currently: https://github.com/cert-manager/cert-manager/pull/7666#issuecomment-2988818732
-                disableHTTPChallengesRole: false
+            hostUsers: true
         installCRDs: true
         config:
             enableGatewayAPI: true
@@ -82,10 +80,10 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-21T19:51:51Z"
-    mac: ENC[AES256_GCM,data:8NTZ2cG669GtEjYi73w/JVWgbwmnepusH1fvhz9f82OnXvaN0F6nwysbRxrt/RHLhMBLul3BrGg+n83BZt7suCJFRie2gFHIS19PlkrWye5GyDK3qpmE5QhvxnIv5yPdMqUzHPu5pmCuiLDAT2ENY1sFAkduq9ILQg+pRGdwqOY=,iv:O6Qg8bJLd+AXRsc5SFmDTQ85HThhoQ4dE1Ii3y9Gk/A=,tag:M1VJXwjMytX0NN51WWYYRg==,type:str]
+    lastmodified: "2025-10-27T02:32:55Z"
+    mac: ENC[AES256_GCM,data:I6+9NJX/gYsZcblw4Y/0+I+FpxrZeZpdcpV7Rn5gZYR75O1ASRv9Pw4zzpqslHQCA2hKwuNbsmAEFB/qDGLufO78BblEkLMvdF8gCweHzooikpMXwVUDk0c5eCFE2PnmbHypqy6rQWm2U7ixOTy6cxGTDN+5T2eNaYD6BgGs5qs=,iv:RJNImpLo375KfpVDBc097uoqt+iuOgh6cSQz5H5NFvc=,tag:DsYBI1Byj2vB0TLWliMO6Q==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0
 ---
 apiVersion: v1
 kind: Secret
@@ -105,7 +103,7 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-21T19:51:51Z"
-    mac: ENC[AES256_GCM,data:8NTZ2cG669GtEjYi73w/JVWgbwmnepusH1fvhz9f82OnXvaN0F6nwysbRxrt/RHLhMBLul3BrGg+n83BZt7suCJFRie2gFHIS19PlkrWye5GyDK3qpmE5QhvxnIv5yPdMqUzHPu5pmCuiLDAT2ENY1sFAkduq9ILQg+pRGdwqOY=,iv:O6Qg8bJLd+AXRsc5SFmDTQ85HThhoQ4dE1Ii3y9Gk/A=,tag:M1VJXwjMytX0NN51WWYYRg==,type:str]
+    lastmodified: "2025-10-27T02:32:55Z"
+    mac: ENC[AES256_GCM,data:I6+9NJX/gYsZcblw4Y/0+I+FpxrZeZpdcpV7Rn5gZYR75O1ASRv9Pw4zzpqslHQCA2hKwuNbsmAEFB/qDGLufO78BblEkLMvdF8gCweHzooikpMXwVUDk0c5eCFE2PnmbHypqy6rQWm2U7ixOTy6cxGTDN+5T2eNaYD6BgGs5qs=,iv:RJNImpLo375KfpVDBc097uoqt+iuOgh6cSQz5H5NFvc=,tag:DsYBI1Byj2vB0TLWliMO6Q==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0
