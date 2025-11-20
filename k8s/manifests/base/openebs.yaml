@@ -58,6 +58,8 @@ spec:
             args:
               - --endpoint
               - "${kms_endpoint}"
+              - --slot
+              - "1"
               - --device
               - /dev/sda
               - --mapped-name
