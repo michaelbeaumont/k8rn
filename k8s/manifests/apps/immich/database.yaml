@@ -1,0 +1,109 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-database
+spec:
+  instances: 1
+  managed:
+    services:
+      disabledDefaultServices: ["ro", "r"]
+  storage:
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      #dataSourceRef:
+      #  kind: ReplicationDestination
+      #  apiGroup: volsync.backube
+      #  name: database-restore
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: openebs-single-replica
+      volumeMode: Filesystem
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.1-minimal-trixie
+  postgresql:
+    extensions:
+      - name: vchord
+        image:
+          reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.0.0
+        dynamic_library_path:
+          - /usr/lib/postgresql/18/lib/
+        extension_control_path:
+          - /usr/share/postgresql/18/
+    shared_preload_libraries:
+      - "vchord.so"
+  bootstrap:
+    # TODO: until cloudnative-pg isn't gitops unfriendly this is unfortunately
+    # what we have to deal with. this should be handled by volsync, see above
+    # pvcTemplate
+    initdb:
+      owner: immich
+      database: app
+      secret:
+        name: immich-database-app
+      postInitSQL:
+        - ALTER USER immich WITH SUPERUSER;
+    #recovery:
+    #  database: app
+    #  owner: immich
+    #  volumeSnapshots:
+    #    storage:
+    #      apiGroup: snapshot.storage.k8s.io
+    #      kind: VolumeSnapshot
+    #      name: volsync-database-restore-dest-20260129090043
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: database-restore
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+    repository: restic-config-database
+    capacity: 5Gi
+    accessModes:
+      - ReadWriteOnce
+    copyMethod: Snapshot
+    storageClassName: openebs-single-replica-delete
+    cacheStorageClassName: openebs-single-replica-delete
+    volumeSnapshotClassName: openebs-delete
+    cleanupCachePVC: true
+    cleanupTempPVC: true
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: database-backup
+spec:
+  sourcePVC: immich-database-1
+  trigger:
+    schedule: "0 */1 * * *"
+  restic:
+    pruneIntervalDays: 14
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+    repository: restic-config-database
+    retain:
+      hourly: 6
+      daily: 5
+      weekly: 4
+      monthly: 2
+      yearly: 1
+    copyMethod: Snapshot # Clone would be the best
+    storageClassName: openebs-single-replica-delete
+    cacheStorageClassName: openebs-single-replica-delete
+    volumeSnapshotClassName: openebs-delete

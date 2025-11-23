@@ -1,0 +1,43 @@
+# Separating this is necessary for flux to understand the CRDs in the app Kustomization
+# If we ever need more than one DB in the cluster, might make sense to just do
+# a cluster wide install of cpng
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: immich
+  labels:
+    gateway.infra.services/allow-routes: "true"
+    pod-security.kubernetes.io/enforce: restricted
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: cloudnative-pg
+  namespace: immich
+spec:
+  interval: 10m0s
+  url: https://cloudnative-pg.github.io/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cloudnative-pg
+  namespace: immich
+spec:
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  interval: 10m0s
+  targetNamespace: immich
+  chart:
+    spec:
+      chart: cloudnative-pg
+      sourceRef:
+        kind: HelmRepository
+        name: cloudnative-pg
+      version: 0.27.0
+  values:
+    config:
+      clusterWide: false

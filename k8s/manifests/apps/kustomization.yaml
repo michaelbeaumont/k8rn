@@ -7,3 +7,4 @@ resources:
   - paperless.yaml
   - vaultwarden.yaml
   - syncthing.yaml
+  - immich.yaml
