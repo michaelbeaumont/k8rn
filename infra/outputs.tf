@@ -22,3 +22,8 @@ output "talos_url" {
   value     = { for node, urls in data.talos_image_factory_urls.this : node => urls.urls.iso_secureboot }
   sensitive = false
 }
+
+output "nodes" {
+  value     = { for node_name, node in random_uuid.nodes : node_name => node.result }
+  sensitive = false
+}

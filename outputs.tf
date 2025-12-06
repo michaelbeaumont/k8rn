@@ -37,3 +37,9 @@ output "cluster_oidc_client_id" {
   description = "OIDC client ID for cluster access"
   value       = var.cluster_oidc_client_id
 }
+
+output "nodes" {
+  description = "Nodes and their UUIDs"
+  value       = module.infra.nodes
+  sensitive   = false
+}
