@@ -65,7 +65,7 @@ locals {
           dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
           hostname                  = local.hostnames[name]
           tailscale_fqdn            = "${local.hostnames[name]}.${var.tailnet_name}"
-          install_disk              = node.install_disk
+          disk_selector             = yamlencode(node.disk_selector)
           cluster_endpoint_host     = local.dns_loadbalancer_hostname
           pod_subnets               = var.pod_subnets
           service_subnets           = var.service_subnets
@@ -138,8 +138,8 @@ data "talos_machine_configuration" "control_plane_nodes" {
     file("${path.module}/files/cp-config.yaml"),
     templatefile("${path.module}/files/inline-manifests.yaml.tmpl", {
       manifests = {
-        "oidc-cluster-admin" = file("${path.module}/files/oidc-cluster-admin.yaml"),
-        "anonymous-auth" = file("${path.module}/files/anonymous-auth.yaml"),
+        "oidc-cluster-admin"    = file("${path.module}/files/oidc-cluster-admin.yaml"),
+        "anonymous-auth"        = file("${path.module}/files/anonymous-auth.yaml"),
         "anonymous-oidc-issuer" = file("${path.module}/files/anonymous-oidc-issuer.yaml"),
       }
     }),
