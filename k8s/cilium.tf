@@ -87,6 +87,8 @@ resource "helm_release" "cilium" {
           capabilities:
             drop: [ALL]
           runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
           readOnlyRootFilesystem: true
           seccompProfile:
             type: RuntimeDefault
