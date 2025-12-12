@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
     name: external-dns
+    labels:
+        pod-security.kubernetes.io/enforce: restricted
 sops:
     age:
         - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
@@ -13,10 +15,10 @@ sops:
             UTFPSEZVTzVseHhCQ2EwUFppUWVDaEkKImc0+qoBPzDQqAE21AXjwvTMaRalFGrz
             oxC540vkyttoiA/SB4wQe7r3YombgGncaN3cFJuEs9LouMHr0LZaig==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-20T20:05:29Z"
-    mac: ENC[AES256_GCM,data:9QzspvZy8ZMpVXotZbuOIE2GdHBBlUgx8fbRBR1+Y7LF8h8ufwbGVKmLncQM4KwUdg0AnkcXbjuyoaSJmTzx0FkMwtTHFirv6brIRTgADRMSAhaJauvCBYhFOZmz9LqMC4fBj4W6XPrq8Ec/3SVIi3jOmKg1WLNc2x+b+Y9Wyvc=,iv:jZOl1mm83+Jl93FHExY+4lwKT+98hWIoT7DPSFyZ2wc=,tag:1nHNOZCKEPUiLiVZV1oLWg==,type:str]
+    lastmodified: "2025-12-12T19:48:43Z"
+    mac: ENC[AES256_GCM,data:KWjoPbXnASWhtVU2DUdhqKHoHmK8ZG2SlxFLFWeJlkERO6X2cdN+8eg77dQ3W/DQgsDuW8G1uWUSz2ydDay0edDqpDel8R6ZdSslujByuYYY1MLxLciS8lZw19lftZ7GW288px9djbRe10HZjaQvuCO3AclRQ6jmFVysv6AEa3g=,iv:0EyGqQlrOrW63Xpx4D4X8T3ve2WdpO3Gqtt3F03AqYI=,tag:DrrBoYWB/kWAYqy7GJn5Rw==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
@@ -37,10 +39,10 @@ sops:
             UTFPSEZVTzVseHhCQ2EwUFppUWVDaEkKImc0+qoBPzDQqAE21AXjwvTMaRalFGrz
             oxC540vkyttoiA/SB4wQe7r3YombgGncaN3cFJuEs9LouMHr0LZaig==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-20T20:05:29Z"
-    mac: ENC[AES256_GCM,data:9QzspvZy8ZMpVXotZbuOIE2GdHBBlUgx8fbRBR1+Y7LF8h8ufwbGVKmLncQM4KwUdg0AnkcXbjuyoaSJmTzx0FkMwtTHFirv6brIRTgADRMSAhaJauvCBYhFOZmz9LqMC4fBj4W6XPrq8Ec/3SVIi3jOmKg1WLNc2x+b+Y9Wyvc=,iv:jZOl1mm83+Jl93FHExY+4lwKT+98hWIoT7DPSFyZ2wc=,tag:1nHNOZCKEPUiLiVZV1oLWg==,type:str]
+    lastmodified: "2025-12-12T19:48:43Z"
+    mac: ENC[AES256_GCM,data:KWjoPbXnASWhtVU2DUdhqKHoHmK8ZG2SlxFLFWeJlkERO6X2cdN+8eg77dQ3W/DQgsDuW8G1uWUSz2ydDay0edDqpDel8R6ZdSslujByuYYY1MLxLciS8lZw19lftZ7GW288px9djbRe10HZjaQvuCO3AclRQ6jmFVysv6AEa3g=,iv:0EyGqQlrOrW63Xpx4D4X8T3ve2WdpO3Gqtt3F03AqYI=,tag:DrrBoYWB/kWAYqy7GJn5Rw==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -95,7 +97,7 @@ sops:
             UTFPSEZVTzVseHhCQ2EwUFppUWVDaEkKImc0+qoBPzDQqAE21AXjwvTMaRalFGrz
             oxC540vkyttoiA/SB4wQe7r3YombgGncaN3cFJuEs9LouMHr0LZaig==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-20T20:05:29Z"
-    mac: ENC[AES256_GCM,data:9QzspvZy8ZMpVXotZbuOIE2GdHBBlUgx8fbRBR1+Y7LF8h8ufwbGVKmLncQM4KwUdg0AnkcXbjuyoaSJmTzx0FkMwtTHFirv6brIRTgADRMSAhaJauvCBYhFOZmz9LqMC4fBj4W6XPrq8Ec/3SVIi3jOmKg1WLNc2x+b+Y9Wyvc=,iv:jZOl1mm83+Jl93FHExY+4lwKT+98hWIoT7DPSFyZ2wc=,tag:1nHNOZCKEPUiLiVZV1oLWg==,type:str]
+    lastmodified: "2025-12-12T19:48:43Z"
+    mac: ENC[AES256_GCM,data:KWjoPbXnASWhtVU2DUdhqKHoHmK8ZG2SlxFLFWeJlkERO6X2cdN+8eg77dQ3W/DQgsDuW8G1uWUSz2ydDay0edDqpDel8R6ZdSslujByuYYY1MLxLciS8lZw19lftZ7GW288px9djbRe10HZjaQvuCO3AclRQ6jmFVysv6AEa3g=,iv:0EyGqQlrOrW63Xpx4D4X8T3ve2WdpO3Gqtt3F03AqYI=,tag:DrrBoYWB/kWAYqy7GJn5Rw==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0

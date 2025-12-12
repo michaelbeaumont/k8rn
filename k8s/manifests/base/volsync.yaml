@@ -5,6 +5,7 @@ metadata:
   name: volsync-system
   labels:
     prometheus.io/scrape: "true"
+    pod-security.kubernetes.io/enforce: restricted
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository

@@ -5,3 +5,4 @@ metadata:
   name: nzbget
   labels:
     gateway.infra.services/allow-routes: "true"
+    pod-security.kubernetes.io/enforce: restricted

@@ -16,6 +16,9 @@ variable "services_hostname_suffix" {
 resource "kubernetes_namespace" "flux-system" {
   metadata {
     name = "flux-system"
+    labels = {
+      "pod-security.kubernetes.io/enforce" = "restricted"
+    }
   }
 }
 

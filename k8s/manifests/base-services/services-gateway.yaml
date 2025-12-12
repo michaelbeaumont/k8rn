@@ -3,6 +3,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: infra
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy

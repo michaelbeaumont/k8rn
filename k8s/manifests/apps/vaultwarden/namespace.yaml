@@ -4,4 +4,5 @@ kind: Namespace
 metadata:
   labels:
     gateway.infra.services/allow-routes: "true"
+    pod-security.kubernetes.io/enforce: restricted
   name: vaultwarden

@@ -5,6 +5,7 @@ metadata:
   name: linkding
   labels:
     gateway.infra.services/allow-routes: "true"
+    pod-security.kubernetes.io/enforce: restricted
 ---
 apiVersion: apps/v1
 kind: Deployment

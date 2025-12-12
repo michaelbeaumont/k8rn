@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
     name: cert-manager
+    labels:
+        pod-security.kubernetes.io/enforce: restricted
 sops:
     age:
         - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
@@ -13,8 +15,8 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-10-27T02:32:55Z"
-    mac: ENC[AES256_GCM,data:I6+9NJX/gYsZcblw4Y/0+I+FpxrZeZpdcpV7Rn5gZYR75O1ASRv9Pw4zzpqslHQCA2hKwuNbsmAEFB/qDGLufO78BblEkLMvdF8gCweHzooikpMXwVUDk0c5eCFE2PnmbHypqy6rQWm2U7ixOTy6cxGTDN+5T2eNaYD6BgGs5qs=,iv:RJNImpLo375KfpVDBc097uoqt+iuOgh6cSQz5H5NFvc=,tag:DsYBI1Byj2vB0TLWliMO6Q==,type:str]
+    lastmodified: "2025-12-12T19:47:45Z"
+    mac: ENC[AES256_GCM,data:OhvyY4fun+Lma80ZWx1PYTjzaFD5WeXAIskHm6UCqYkyGtoLO6HLrB5YY7Vd0NQp5E762MvNAUInO2g/gEY0Le1mKG5GKmEkRhXDYSMKYc64YvFvl3Bja0DETPJ0S0P6Vr0VV5Y4Mb6HOHGoRvty7q7ExXPvLgPPd2nY2YD6ylc=,iv:Nb5K0cU5q4K3wa9po3lKuN9UEOI/WYnK3d4jecDgNAo=,tag:NKJ9egGHfJAgwtS0jd4hMw==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.11.0
 ---
@@ -37,8 +39,8 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-10-27T02:32:55Z"
-    mac: ENC[AES256_GCM,data:I6+9NJX/gYsZcblw4Y/0+I+FpxrZeZpdcpV7Rn5gZYR75O1ASRv9Pw4zzpqslHQCA2hKwuNbsmAEFB/qDGLufO78BblEkLMvdF8gCweHzooikpMXwVUDk0c5eCFE2PnmbHypqy6rQWm2U7ixOTy6cxGTDN+5T2eNaYD6BgGs5qs=,iv:RJNImpLo375KfpVDBc097uoqt+iuOgh6cSQz5H5NFvc=,tag:DsYBI1Byj2vB0TLWliMO6Q==,type:str]
+    lastmodified: "2025-12-12T19:47:45Z"
+    mac: ENC[AES256_GCM,data:OhvyY4fun+Lma80ZWx1PYTjzaFD5WeXAIskHm6UCqYkyGtoLO6HLrB5YY7Vd0NQp5E762MvNAUInO2g/gEY0Le1mKG5GKmEkRhXDYSMKYc64YvFvl3Bja0DETPJ0S0P6Vr0VV5Y4Mb6HOHGoRvty7q7ExXPvLgPPd2nY2YD6ylc=,iv:Nb5K0cU5q4K3wa9po3lKuN9UEOI/WYnK3d4jecDgNAo=,tag:NKJ9egGHfJAgwtS0jd4hMw==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.11.0
 ---
@@ -80,8 +82,8 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-10-27T02:32:55Z"
-    mac: ENC[AES256_GCM,data:I6+9NJX/gYsZcblw4Y/0+I+FpxrZeZpdcpV7Rn5gZYR75O1ASRv9Pw4zzpqslHQCA2hKwuNbsmAEFB/qDGLufO78BblEkLMvdF8gCweHzooikpMXwVUDk0c5eCFE2PnmbHypqy6rQWm2U7ixOTy6cxGTDN+5T2eNaYD6BgGs5qs=,iv:RJNImpLo375KfpVDBc097uoqt+iuOgh6cSQz5H5NFvc=,tag:DsYBI1Byj2vB0TLWliMO6Q==,type:str]
+    lastmodified: "2025-12-12T19:47:45Z"
+    mac: ENC[AES256_GCM,data:OhvyY4fun+Lma80ZWx1PYTjzaFD5WeXAIskHm6UCqYkyGtoLO6HLrB5YY7Vd0NQp5E762MvNAUInO2g/gEY0Le1mKG5GKmEkRhXDYSMKYc64YvFvl3Bja0DETPJ0S0P6Vr0VV5Y4Mb6HOHGoRvty7q7ExXPvLgPPd2nY2YD6ylc=,iv:Nb5K0cU5q4K3wa9po3lKuN9UEOI/WYnK3d4jecDgNAo=,tag:NKJ9egGHfJAgwtS0jd4hMw==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.11.0
 ---
@@ -103,7 +105,7 @@ sops:
             OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
             1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-10-27T02:32:55Z"
-    mac: ENC[AES256_GCM,data:I6+9NJX/gYsZcblw4Y/0+I+FpxrZeZpdcpV7Rn5gZYR75O1ASRv9Pw4zzpqslHQCA2hKwuNbsmAEFB/qDGLufO78BblEkLMvdF8gCweHzooikpMXwVUDk0c5eCFE2PnmbHypqy6rQWm2U7ixOTy6cxGTDN+5T2eNaYD6BgGs5qs=,iv:RJNImpLo375KfpVDBc097uoqt+iuOgh6cSQz5H5NFvc=,tag:DsYBI1Byj2vB0TLWliMO6Q==,type:str]
+    lastmodified: "2025-12-12T19:47:45Z"
+    mac: ENC[AES256_GCM,data:OhvyY4fun+Lma80ZWx1PYTjzaFD5WeXAIskHm6UCqYkyGtoLO6HLrB5YY7Vd0NQp5E762MvNAUInO2g/gEY0Le1mKG5GKmEkRhXDYSMKYc64YvFvl3Bja0DETPJ0S0P6Vr0VV5Y4Mb6HOHGoRvty7q7ExXPvLgPPd2nY2YD6ylc=,iv:Nb5K0cU5q4K3wa9po3lKuN9UEOI/WYnK3d4jecDgNAo=,tag:NKJ9egGHfJAgwtS0jd4hMw==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.11.0
