@@ -71,6 +71,10 @@ locals {
           service_subnets           = var.service_subnets
         }
       ),
+      templatefile("${path.module}/files/hostname.yaml.tmpl", {
+        hostname = local.hostnames[name]
+      }),
+      file("${path.module}/files/nameservers.yaml"),
       templatefile("${path.module}/files/tailscale.yaml.tmpl", {
         tailscale_key = contains(keys(local.control_plane_nodes), name) ? tailscale_tailnet_key.unsigned-cp[name].key : tailscale_tailnet_key.unsigned-worker[name].key
       }),

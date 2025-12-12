@@ -1,0 +1,7 @@
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: "fd7a:115c:a1e0::53" # tailscale dns
+  - address: "2606:4700:4700::1111" # cloudflare 1111
+  - address: "1.1.1.1"

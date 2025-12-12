@@ -1,11 +1,11 @@
-machine:
-  network:
-    extraHostEntries:
 %{ for host in extra_hosts }
-      - ip: "${host.ip}"
-        aliases:
+---
+apiVersion: v1alpha1
+kind: StaticHostConfig
+name: "${host.ip}"
+hostnames:
 %{ for alias in host.aliases }
-          - "${alias}"
+  - "${alias}"
 %{ endfor }
 %{ endfor }
 
