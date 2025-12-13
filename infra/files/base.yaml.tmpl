@@ -8,8 +8,7 @@ machine:
     - ${hostname}
     - ${tailscale_fqdn}
   install:
-    diskSelector:
-      ${disk_selector}
+    diskSelector: ${disk_selector}
     image: ${image_uri}
   kubelet:
     nodeIP:

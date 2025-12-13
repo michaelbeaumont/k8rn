@@ -65,7 +65,7 @@ locals {
           dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
           hostname                  = local.hostnames[name]
           tailscale_fqdn            = "${local.hostnames[name]}.${var.tailnet_name}"
-          disk_selector             = yamlencode(node.disk_selector)
+          disk_selector             = jsonencode(node.disk_selector)
           cluster_endpoint_host     = local.dns_loadbalancer_hostname
           pod_subnets               = var.pod_subnets
           service_subnets           = var.service_subnets
