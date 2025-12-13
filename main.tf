@@ -110,7 +110,7 @@ locals {
   }
   num_openebs_etcd_nodes = length([
     for node in local.active_nodes
-    : node if !contains(node.tags, "qemu")
+    : node if !contains(node.tags, "worker")
   ])
   node_labels = {
     for name, node in local.active_nodes
