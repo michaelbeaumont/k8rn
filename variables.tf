@@ -10,7 +10,7 @@ variable "talos_version" {
 
 variable "nodes" {
   description = "A description of all nodes, used to generate initial images"
-  type        = map(object({ local_ip = string, disk_selector = map(any), network_devices = list(string), tags = list(string) }))
+  type        = map(object({ local_ip = string, disk_selector = map(any), kernel_args = optional(list(string), []), network_devices = list(string), tags = list(string) }))
 }
 
 variable "bootstrap_node" {

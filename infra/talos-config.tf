@@ -17,9 +17,12 @@ resource "talos_image_factory_schematic" "this" {
             value : each.value.id,
           }
         ]
-        extraKernelArgs = [
-          "sysctl.net.ipv6.conf.default.stable_secret=${var.stable_secret}",
-        ]
+        extraKernelArgs = concat(
+          [
+            "sysctl.net.ipv6.conf.default.stable_secret=${var.stable_secret}",
+          ],
+          var.nodes[each.key].kernel_args,
+        )
         systemExtensions = {
           officialExtensions = compact([
             "siderolabs/i915",
