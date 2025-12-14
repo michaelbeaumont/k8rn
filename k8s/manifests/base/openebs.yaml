@@ -83,6 +83,8 @@ spec:
             args:
               - --endpoint
               - "${kms_endpoint}"
+              - --slot
+              - "2"
               - --device
               - /dev/disk/by-uuid/a6afe516-1d0b-4a54-8e71-5f70ab3f8200
               - --mapped-name
@@ -90,6 +92,9 @@ spec:
               - --only-on-node
               - k8rn-core
               - unseal
+            volumeMounts:
+            - mountPath: /dev
+              name: device-dir
             env:
               - name: NODE_NAME
                 valueFrom:
@@ -102,6 +107,8 @@ spec:
             args:
               - --endpoint
               - "${kms_endpoint}"
+              - --slot
+              - "2"
               - --device
               - /dev/disk/by-uuid/da635a66-94c6-46b2-99bc-0ee46c9c6ef1
               - --mapped-name
@@ -109,6 +116,9 @@ spec:
               - --only-on-node
               - k8rn-core
               - unseal
+            volumeMounts:
+            - mountPath: /dev
+              name: device-dir
             env:
               - name: NODE_NAME
                 valueFrom:
