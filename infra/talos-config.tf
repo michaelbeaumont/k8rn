@@ -24,14 +24,12 @@ resource "talos_image_factory_schematic" "this" {
           var.nodes[each.key].kernel_args,
         )
         systemExtensions = {
-          officialExtensions = compact([
-            "siderolabs/i915",
+          officialExtensions = concat([
             "siderolabs/intel-ucode",
-            "siderolabs/nfsd",
             "siderolabs/tailscale",
-            "siderolabs/zfs",
-            contains(var.nodes[each.key].tags, "qemu") ? "siderolabs/qemu-guest-agent" : "",
-          ])
+            ],
+            var.nodes[each.key].extensions,
+          ),
         }
       }
     }
@@ -133,6 +131,9 @@ locals {
         templatefile("${path.module}/files/media-volume.yaml", {
           kms_endpoint = var.kms_endpoint
         }),
+      ] : [],
+      contains(node.tags, "xe-sriov") ? [
+        templatefile("${path.module}/files/xe-sriov_numvfs.yaml", { device = "0xa780", pci_bus = 2, vfio_pci_num = 2, total_num = 3 }),
       ] : [],
     ] if contains(keys(merge(local.control_plane_nodes, local.worker_nodes)), name)
   }

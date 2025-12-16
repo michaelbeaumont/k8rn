@@ -1,0 +1,12 @@
+machine:
+  kernel:
+    modules:
+      - name: vfio_pci
+  udev:
+    rules:
+      - SUBSYSTEM=="pci", DRIVERS=="xe", ATTRS{device}=="${device}", ATTR{sriov_numvfs}="${total_num}"
+---
+apiVersion: v1alpha1
+kind: PCIDriverRebindConfig
+name: 0000:00:0${pci_bus}.${vfio_pci_num}
+targetDriver: vfio-pci

@@ -63,6 +63,8 @@ spec:
       zfsNode:
         # See https://github.com/openebs/zfs-localpv/issues/545
         encrKeysDir: /var/openebs/zfs/keys
+        nodeSelector:
+          kubernetes.io/hostname: k8rn-core
         additionalVolumes:
           talos-secrets:
             secret:
