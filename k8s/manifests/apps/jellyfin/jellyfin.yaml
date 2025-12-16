@@ -12,17 +12,29 @@ kind: PersistentVolume
 metadata:
   name: jellyfin-media
 spec:
-  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
   capacity:
-    storage: 1Ti # kind of arbitrary that doesn't matter since we're readOnly
+    storage: 1Gi
   claimRef:
     name: media
-  accessModes:
-    - ReadOnlyMany
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: data
+    volumeHandle: media
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k8rn-core
   persistentVolumeReclaimPolicy: Retain
-  nfs:
-    path: /data/media
-    readOnly: true
+  storageClassName: openebs-zfs-data
+  volumeMode: Filesystem
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -30,12 +42,12 @@ metadata:
   name: media
 spec:
   volumeName: jellyfin-media
-  storageClassName: ""
+  storageClassName: openebs-zfs-data
   accessModes:
-    - ReadOnlyMany
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 50Gi # TODO this can't matter for read only data, right?
+      storage: 1Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -48,6 +60,7 @@ spec:
   template:
     spec:
       automountServiceAccountToken: false
+      nodeName: k8rn-core
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
@@ -98,6 +111,7 @@ spec:
               name: config
             - mountPath: /media
               name: media
+              readOnly: true
       volumes:
         - name: config
           persistentVolumeClaim:
