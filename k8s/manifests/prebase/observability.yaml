@@ -9,22 +9,6 @@ metadata:
     pod-security.kubernetes.io/audit: privileged
     pod-security.kubernetes.io/warn: privileged
 ---
-apiVersion: "cilium.io/v2"
-kind: CiliumNetworkPolicy
-metadata:
-  name: allow-prometheus
-  namespace: observability
-spec:
-  endpointSelector:
-    matchLabels: {}
-  egress:
-    - toCIDR:
-        - "${prometheus_remote_write}/128"
-      toPorts:
-        - ports:
-            - port: "9090"
-              protocol: ANY
----
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
@@ -69,5 +53,3 @@ spec:
         serviceMonitorNamespaceSelector:
           matchLabels:
             prometheus.io/scrape: "true"
-        remoteWrite:
-          - url: http://[${prometheus_remote_write}]:9090/api/v1/write

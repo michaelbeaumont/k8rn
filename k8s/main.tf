@@ -19,11 +19,6 @@ variable "flux_sops_age_key" {
   type = string
 }
 
-variable "prometheus_remote_write" {
-  description = "Remote write endpoint for Prometheus, assumed to be IPv6"
-  type        = string
-}
-
 variable "openebs_etcd_replicaCount" {
   description = "How many replicas OpenEBS's etcd storage should use"
   type        = number

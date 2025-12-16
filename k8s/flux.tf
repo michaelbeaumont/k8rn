@@ -100,9 +100,6 @@ resource "helm_release" "flux-sync-prebase" {
           provider: sops
           secretRef:
             name: sops
-        postBuild:
-          substitute:
-            prometheus_remote_write: "${var.prometheus_remote_write}"
     EOT
   ]
 }
