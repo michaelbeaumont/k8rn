@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: paperless-docs
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  claimRef:
+    name: docs
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: data
+    volumeHandle: docs
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k8rn-core
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: openebs-zfs-data
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: docs
+spec:
+  volumeName: paperless-docs
+  storageClassName: openebs-zfs-data
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

@@ -15,3 +15,20 @@ spec:
   shared: "yes"
 status:
   state: Ready
+---
+apiVersion: zfs.openebs.io/v1
+kind: ZFSVolume
+metadata:
+  name: docs
+  namespace: openebs
+  finalizers:
+    - k8rn/dummy-finalizer
+spec:
+  capacity: "1073741824"
+  fsType: zfs
+  ownerNodeID: k8rn-core
+  poolName: data
+  volumeType: DATASET
+  shared: "yes"
+status:
+  state: Ready

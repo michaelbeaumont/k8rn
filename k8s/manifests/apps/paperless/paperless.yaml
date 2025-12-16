@@ -25,6 +25,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
         runAsNonRoot: true
+      nodeName: k8rn-core
       containers:
         - name: paperless
           image: ghcr.io/paperless-ngx/paperless-ngx:2.20.2
@@ -51,7 +52,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /usr/src/paperless/data
-            - name: media
+            - name: docs
               mountPath: /usr/src/paperless/media
             - name: paperless-scratch
               mountPath: /run
@@ -86,9 +87,9 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: data
-        - name: media
+        - name: docs
           persistentVolumeClaim:
-            claimName: media
+            claimName: docs
         - name: redis-data
           persistentVolumeClaim:
             claimName: redis-data

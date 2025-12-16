@@ -1,33 +1,24 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: paperless
 labels:
   - includeTemplates: true
     includeSelectors: true
     pairs:
       app.kubernetes.io/name: paperless
-replacements:
-  - source:
-      kind: PersistentVolumeClaim
-      name: media
-      fieldPath: metadata.namespace
-    targets:
-      - select:
-          kind: PersistentVolume
-          name: paperless-media
-        fieldPaths:
-          - spec.claimRef.namespace
-        options:
-          create: true
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: paperless
+      namespace: paperless
+    unsetOnly: true
+    fieldSpecs:
+      - path: spec/claimRef/namespace
+        kind: PersistentVolume
+        name: paperless-docs
+        create: true
 patches:
-  - patch: |-
-      apiVersion: v1
-      kind: PersistentVolume
-      metadata:
-        name: paperless-media
-      spec:
-        nfs:
-          server: ${nfs_server}
   - patch: |-
       apiVersion: apps/v1
       kind: Deployment
@@ -50,7 +41,7 @@ patches:
         hostnames:
           - docs.${services_hostname_suffix}
 resources:
-  - nfs-pvc.yaml
+  - docs-pvc.yaml
   - paperless.yaml
   - pvc.yaml
   - restic-secret.yaml
