@@ -38,11 +38,6 @@ locals {
   openebs_diskpool_partition_label = "r-${local.openebs_diskpool_volume_name}"
 }
 
-data "tailscale_device" "external_server" {
-  hostname = var.external_server_hostname
-  wait_for = "30s"
-}
-
 module "infra" {
   source = "./infra"
 
@@ -133,8 +128,6 @@ module "k8s" {
   services_hostname_suffix         = var.services_hostname_suffix
   flux_ssh_private_key             = var.flux_ssh_private_key
   flux_sops_age_key                = var.flux_sops_age_key
-  nfs_server                       = data.tailscale_device.external_server.addresses[1]
-  prometheus_remote_write          = data.tailscale_device.external_server.addresses[1]
   openebs_etcd_replicaCount        = local.num_openebs_etcd_nodes >= 3 ? 3 : 1
   openebs_diskpool_partition_label = local.openebs_diskpool_partition_label
   restic_remote_password           = var.restic_remote_password

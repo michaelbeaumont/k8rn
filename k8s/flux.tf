@@ -256,7 +256,6 @@ resource "helm_release" "flux-sync-apps" {
             - kind: Secret
               name: restic-remote-password
           substitute:
-            nfs_server: "${var.nfs_server}"
             services_hostname_suffix: "${var.services_hostname_suffix}"
     EOT
   ]
