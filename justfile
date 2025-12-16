@@ -18,8 +18,8 @@ write-kubeconfig outfile:
         --exec-arg="--oidc-extra-scope=profile" \
         --exec-arg="--oidc-extra-scope=groups" \
         --exec-arg="--oidc-pkce-method=S256"
-    KUBECONFIG={{ outfile }} kubectl config set-context ${issuer} --cluster=k8rn --user=${issuer}
-    KUBECONFIG={{ outfile }} kubectl config use-context ${issuer}
+    KUBECONFIG={{ outfile }} kubectl config set-context k8rn --cluster=k8rn --user=${issuer}
+    KUBECONFIG={{ outfile }} kubectl config use-context k8rn
 
 write-secrets-yaml outfile:
     terraform output -raw machine_secrets > {{ outfile }}
