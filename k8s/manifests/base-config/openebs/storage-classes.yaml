@@ -28,7 +28,7 @@ reclaimPolicy: Delete
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: openebs-zfs-data-unmanaged
+  name: openebs-zfs-data
 parameters:
   fstype: zfs
   poolname: data
