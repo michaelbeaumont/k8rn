@@ -8,6 +8,7 @@ spec:
     type: Recreate
   template:
     spec:
+      nodeName: k8rn-core
       automountServiceAccountToken: false
       securityContext:
         runAsUser: 2001 # nzbget user on NFS
@@ -96,6 +97,7 @@ spec:
               readOnly: true
             - name: downloads
               mountPath: /downloads
+              subPath: nzbget/dst
           resources: {}
       volumes:
         - name: tmp

@@ -20,5 +20,4 @@ spec:
       name: sops
   postBuild:
     substitute:
-      nfs_server: "${nfs_server}"
       services_hostname_suffix: "${services_hostname_suffix}"

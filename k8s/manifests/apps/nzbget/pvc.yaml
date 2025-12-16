@@ -17,16 +17,29 @@ kind: PersistentVolume
 metadata:
   name: nzbget-downloads
 spec:
-  claimRef:
-    name: downloads
-  capacity:
-    storage: 30Gi
-  volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  storageClassName: ""
-  nfs:
-    path: /data/media/nzbget/dst
+  capacity:
+    storage: 1Gi
+  claimRef:
+    name: downloads
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: data
+    volumeHandle: media
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k8rn-core
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: openebs-zfs-data
+  volumeMode: Filesystem
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -34,9 +47,9 @@ metadata:
   name: downloads
 spec:
   volumeName: nzbget-downloads
-  storageClassName: ""
+  storageClassName: openebs-zfs-data
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 30Gi
+      storage: 1Gi
