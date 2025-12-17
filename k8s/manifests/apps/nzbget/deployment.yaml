@@ -8,7 +8,6 @@ spec:
     type: Recreate
   template:
     spec:
-      nodeName: k8rn-core
       automountServiceAccountToken: false
       securityContext:
         runAsUser: 2001 # nzbget user on NFS

@@ -25,7 +25,6 @@ spec:
         seccompProfile:
           type: RuntimeDefault
         runAsNonRoot: true
-      nodeName: k8rn-core
       containers:
         - name: paperless
           image: ghcr.io/paperless-ngx/paperless-ngx:2.20.2

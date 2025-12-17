@@ -60,7 +60,6 @@ spec:
   template:
     spec:
       automountServiceAccountToken: false
-      nodeName: k8rn-core
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
