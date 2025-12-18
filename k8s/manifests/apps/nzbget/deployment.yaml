@@ -9,6 +9,7 @@ spec:
   template:
     spec:
       automountServiceAccountToken: false
+      hostUsers: false
       securityContext:
         runAsUser: 2001 # nzbget user on NFS
         runAsGroup: 2001 # nzbget-users
