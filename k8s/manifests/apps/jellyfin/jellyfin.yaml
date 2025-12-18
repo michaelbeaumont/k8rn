@@ -79,7 +79,7 @@ spec:
             capabilities:
               drop: [ALL]
           # Note: this image in particular has the OpenCL runtime
-          image: jellyfin/jellyfin:10.11.4
+          image: jellyfin/jellyfin:10.11.5
           imagePullPolicy: Always
           name: jellyfin
           ports:
