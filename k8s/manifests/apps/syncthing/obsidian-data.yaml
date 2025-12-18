@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: syncthing-obsidian-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: synced-obsidian-data
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: data
+    volumeHandle: obsidian
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k8rn-core
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: openebs-zfs-data
+  volumeMode: Filesystem
+---
+apiVersion: zfs.openebs.io/v1
+kind: ZFSVolume
+metadata:
+  name: obsidian
+  namespace: openebs
+  finalizers:
+    - k8rn/dummy-finalizer
+spec:
+  capacity: "4000000000000"
+  fsType: zfs
+  ownerNodeID: k8rn-core
+  poolName: data
+  volumeType: DATASET
+  shared: "yes"
+status:
+  state: Ready
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: synced-obsidian-data
+spec:
+  storageClassName: openebs-zfs-data
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: syncthing-obsidian-data
+

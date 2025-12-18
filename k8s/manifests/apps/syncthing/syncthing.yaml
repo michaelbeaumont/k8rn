@@ -73,8 +73,10 @@ spec:
            mountPath: /var/syncthing/config
          - name: data-dir
            mountPath: /var/syncthing/data
-         - name: synced
-           mountPath: /var/syncthing/synced
+         - name: synced-shared
+           mountPath: /var/syncthing/synced-shared
+         - name: synced-obsidian
+           mountPath: /var/syncthing/synced-obsidian
          - name: tmp
            mountPath: /tmp
          # These can be generated with `syncthing generate`:
@@ -97,9 +99,12 @@ spec:
         - name: data-dir
           emptyDir:
             sizeLimit: 5Gi
-        - name: synced
+        - name: synced-shared
           persistentVolumeClaim:
-            claimName: data
+            claimName: synced-shared-data
+        - name: synced-obsidian
+          persistentVolumeClaim:
+            claimName: synced-obsidian-data
         - name: config
           configMap:
             name: config
