@@ -29,6 +29,8 @@ spec:
       runAsGroup: 1000
       fsGroup: 1000
       runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
     repository: restic-config-jellyfin-config
     capacity: 10Gi
     accessModes:
@@ -56,6 +58,8 @@ spec:
       runAsGroup: 1000
       fsGroup: 1000
       runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
     repository: restic-config-jellyfin-config
     retain:
       hourly: 6
