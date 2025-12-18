@@ -1,0 +1,21 @@
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: media
+volumeType: disk
+provisioning:
+  diskSelector:
+    match: >-
+      disk.wwid == 'eui.e8238fa6bf530001001b448b4cdf9919'
+      && disk.model == 'WD Red SN700 4000GB'
+      && disk.serial == '23494L800294'
+      && disk.transport == 'nvme'
+filesystem:
+  type: xfs
+encryption:
+  provider: luks2
+  keys:
+    - kms:
+        endpoint: ${kms_endpoint}
+      slot: 1
+  options: [] # only perf here so we need to manually add allow-discards, no_read_workqueue, no_write_workqueue
