@@ -97,7 +97,6 @@ spec:
               readOnly: true
             - name: downloads
               mountPath: /downloads
-              subPath: nzbget/dst
           resources: {}
       volumes:
         - name: tmp
