@@ -7,48 +7,6 @@ metadata:
     gateway.infra.services/allow-routes: "true"
     pod-security.kubernetes.io/enforce: restricted
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: jellyfin-media
-spec:
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: 1Gi
-  claimRef:
-    name: media
-  csi:
-    driver: zfs.csi.openebs.io
-    fsType: zfs
-    volumeAttributes:
-      openebs.io/poolname: data
-    volumeHandle: media
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - k8rn-core
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: openebs-zfs-data
-  volumeMode: Filesystem
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: media
-spec:
-  volumeName: jellyfin-media
-  storageClassName: openebs-zfs-data
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -108,9 +66,14 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
-            - mountPath: /media
+            - mountPath: /media/tv
               name: media
               readOnly: true
+              subPath: tv
+            - mountPath: /media/movies
+              name: media-ng
+              readOnly: true
+              subPath: movies
       volumes:
         - name: config
           persistentVolumeClaim:
@@ -119,6 +82,10 @@ spec:
           readOnly: true
           persistentVolumeClaim:
             claimName: media
+        - name: media-ng
+          readOnly: true
+          persistentVolumeClaim:
+            claimName: media-ng
 ---
 kind: Service
 apiVersion: v1

@@ -1,0 +1,82 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jellyfin-media-ng
+spec:
+  capacity:
+    storage: 4Ti
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: media-ng
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /var/mnt/media
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - k8rn-core
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-ng
+spec:
+  volumeName: jellyfin-media-ng
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Ti
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jellyfin-media
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  claimRef:
+    name: media
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: data
+    volumeHandle: media
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k8rn-core
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: openebs-zfs-data
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media
+spec:
+  volumeName: jellyfin-media
+  storageClassName: openebs-zfs-data
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

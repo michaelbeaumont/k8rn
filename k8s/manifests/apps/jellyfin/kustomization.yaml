@@ -38,5 +38,6 @@ patches:
 resources:
   - jellyfin.yaml
   - pvc-config.yaml
+  - media.yaml
   - restic-secret.yaml
   - networkpolicy.yaml
