@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: prometheus-oauth
+    namespace: observability
+type: Opaque
+stringData:
+    client_id: ENC[AES256_GCM,data:LrFd4SqTcUAH8Ut/OFVvvAnzlu/4kKxjXwFFxzsTpXhKkNau,iv:/f73VumxrSNT/4fccY3U0a2koOtLOU7S9dKu2PBKBoI=,tag:p4KZvrIsccRRnMCVBxou7A==,type:str]
+    client_secret: ENC[AES256_GCM,data:p4VpiaJsJ5B1GmZpYNZkZW589fX4rdoZh2kANjjQGTI=,iv:GUmKKNyTwGw7bd63dFj0yYoaR9UZxUSiGX9qtjAJy/E=,tag:E0AjLDx3SsG0dGBmkQkesw==,type:str]
+sops:
+    age:
+        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBlb3NJc3lGSUIrUjFqbW5K
+            QWxMUGFDOFZ5aXdvbUd0ZlRNTkZiZVhIaFc0CjVZaU9XeHJNcTlaSEJQcWhrSTlr
+            SWhjRi9adExwY0haaGdmY3JuTk1ENzQKLS0tIGdrYW9UQlN4T3d1RVdmelhoZE1H
+            U2pwWVUxbnlKR3RIWTNEZXR4VkJXSmsKc03fGLLhgblJ+oV6CK9W1Don1lxrhsqC
+            8t78730K96utnbhWrNIWZTSDEO2Q+TXB1bU+P67/idNDM4c2kvaWHQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-12-22T21:50:15Z"
+    mac: ENC[AES256_GCM,data:lBRNajt3s/5teNYzj8vBcmqycWh/BYeKCQ0uUcJwExm8jZ9Mra9fr0fIomBiZGNs9MLw+TgLHCE1Fgx8vhlkL8aOZUfvmIcwwsePvYLWDL524z8Sc0VoaQAcpuVU73Z9XfIuID+WlQYn2efC2L4wEMEm8X1Ic6KehYRuAQCjQg8=,iv:L88r/BgpC19IeZ92ArkkRwXONe/GuuCO1Pk8RWlaTnk=,tag:MSB+0J3H5Fybuoazvjvc9A==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.11.0

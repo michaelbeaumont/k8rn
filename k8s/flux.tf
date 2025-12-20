@@ -13,6 +13,11 @@ variable "services_hostname_suffix" {
   type        = string
 }
 
+variable "cluster_oidc_issuer_host" {
+  description = "The issuer hostname to use for cluster OIDC authentication"
+  type        = string
+}
+
 resource "kubernetes_namespace_v1" "flux-system" {
   metadata {
     name = "flux-system"
@@ -103,6 +108,10 @@ resource "helm_release" "flux-sync-prebase" {
           provider: sops
           secretRef:
             name: sops
+        postBuild:
+          substitute:
+            services_hostname_suffix: "${var.services_hostname_suffix}"
+            cluster_oidc_issuer_host: "${var.cluster_oidc_issuer_host}"
     EOT
   ]
 }

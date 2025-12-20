@@ -126,6 +126,7 @@ module "k8s" {
   github_repo                      = var.github_repo
   lets_encrypt_email               = var.lets_encrypt_email
   services_hostname_suffix         = var.services_hostname_suffix
+  cluster_oidc_issuer_host         = var.cluster_oidc_issuer_host
   flux_ssh_private_key             = var.flux_ssh_private_key
   flux_sops_age_key                = var.flux_sops_age_key
   openebs_etcd_replicaCount        = local.num_openebs_etcd_nodes >= 3 ? 3 : 1

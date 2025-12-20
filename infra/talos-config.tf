@@ -167,6 +167,9 @@ data "talos_machine_configuration" "control_plane_nodes" {
       cluster_oidc_issuer    = "https://${var.cluster_oidc_issuer_host}",
       cluster_oidc_client_id = var.cluster_oidc_client_id,
     }),
+    templatefile("${path.module}/files/kube-services-metrics-ingress.yaml.tmpl", {
+      pod_subnets = var.pod_subnets,
+    }),
   ])
 }
 

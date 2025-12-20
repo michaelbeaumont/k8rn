@@ -1,0 +1,24 @@
+---
+cluster:
+  controllerManager:
+    extraArgs:
+      bind-address: 0.0.0.0
+  scheduler:
+    extraArgs:
+      bind-address: 0.0.0.0
+  etcd:
+    extraArgs:
+      listen-metrics-urls: http://0.0.0.0:2381
+---
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: kube-scheduler-and-controller-manager-metrics
+portSelector:
+  ports:
+    - 10257 # controller-manager
+    - 10259 # scheduler
+  protocol: tcp
+ingress:
+%{ for subnet in pod_subnets }
+  - subnet: "${subnet}"
+%{ endfor }

@@ -4,6 +4,7 @@ kind: Namespace
 metadata:
   name: observability
   labels:
+    gateway.infra.services/allow-routes: "true"
     prometheus.io/scrape: "true"
     pod-security.kubernetes.io/enforce: privileged
     pod-security.kubernetes.io/audit: privileged
@@ -36,18 +37,109 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kube-prometheus
+      version: "80.6.0"
   valuesFrom:
-  - kind: ConfigMap
-    name: flux-kube-state-metrics-config
-    valuesKey: kube-state-metrics-config.yaml
+    - kind: ConfigMap
+      name: flux-kube-state-metrics-config
+      valuesKey: kube-state-metrics-config.yaml
   values:
-    alertmanager:
-      enabled: false
     grafana:
-      enabled: false
+      enabled: true
+      sidecar:
+        # TODO
+        # This mess is due to:
+        # - https://github.com/grafana/helm-charts/issues/4039 not being solved
+        #   properly
+        # - https://github.com/grafana/helm-charts/issues/4031 REQ_SKIP_INIT
+        #   only needs to be set on initContainers
+        dashboards:
+          restartPolicy: Always
+          skipReload: true
+          initDashboards: true
+        datasources:
+          restartPolicy: Always
+          skipReload: true
+          initDatasources: true
+          env:
+            HEALTH_PORT: "8081"
+      route:
+        main:
+          enabled: true
+          labels:
+            external-dns: "true"
+          hostnames:
+            - grafana.${services_hostname_suffix}
+          parentRefs:
+            - name: services
+              namespace: infra
+              sectionName: main
+      grafana.ini:
+        server:
+          root_url: https://grafana.${services_hostname_suffix}
+        auth.generic_oauth:
+          enabled: true
+          auth_url: https://${cluster_oidc_issuer_host}/authorize
+          token_url: https://${cluster_oidc_issuer_host}/api/oidc/token
+          api_url: https://${cluster_oidc_issuer_host}/api/oidc/userinfo
+          auto_login: true
+          client_id: "$__file{/var/run/secrets/client_id}"
+          client_secret: "$__file{/var/run/secrets/client_secret}"
+          use_pkce: true
+          scopes: openid profile email groups
+          use_refresh_token: true
+          login_attribute_path: preferred_username
+          role_attribute_path: contains(groups[*], 'admins') && 'GrafanaAdmin' || 'Viewer'
+          allow_assign_grafana_admin: true
+      extraSecretMounts:
+        - name: prometheus-oauth
+          secretName: prometheus-oauth
+          defaultMode: 0440
+          mountPath: /var/run/secrets
+          readOnly: true
+    alertmanager:
+      enabled: true
+      alertmanagerSpec:
+        secrets:
+          - alertmanager-telegram
+      config:
+        route:
+          routes:
+            - receiver: 'null'
+              matchers:
+                - alertname = "Watchdog"
+            - receiver: telegram
+              matchers:
+                - severity =~ "warning|critical"
+        receivers:
+          - name: 'null'
+          - name: telegram
+            telegram_configs:
+            - bot_token_file: "/etc/alertmanager/secrets/alertmanager-telegram/token"
+              chat_id: 1771190175
+      route:
+        main:
+          enabled: true
+          labels:
+            external-dns: "true"
+          hostnames:
+            - alertmanager.${services_hostname_suffix}
+          parentRefs:
+            - name: services
+              namespace: infra
+              sectionName: main
     prometheus:
       enabled: true
-      agentMode: true
+      route:
+        main:
+          enabled: true
+          labels:
+            external-dns: "true"
+          hostnames:
+            - prometheus.${services_hostname_suffix}
+          parentRefs:
+            - name: services
+              namespace: infra
+              sectionName: main
       prometheusSpec:
         serviceMonitorSelectorNilUsesHelmValues: false
         serviceMonitorNamespaceSelector:
