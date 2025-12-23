@@ -13,20 +13,22 @@ variable "services_hostname_suffix" {
   type        = string
 }
 
-resource "kubernetes_namespace" "flux-system" {
+resource "kubernetes_namespace_v1" "flux-system" {
   metadata {
     name = "flux-system"
     labels = {
       "pod-security.kubernetes.io/enforce" = "restricted"
     }
   }
+  wait_for_default_service_account = false
 }
 
-resource "kubernetes_secret" "sops" {
+resource "kubernetes_secret_v1" "sops" {
   metadata {
     name      = "sops"
-    namespace = kubernetes_namespace.flux-system.metadata[0].name
+    namespace = kubernetes_namespace_v1.flux-system.metadata[0].name
   }
+  wait_for_service_account_token = false
 
   data = {
     "identity.agekey" = var.flux_sops_age_key
@@ -37,11 +39,12 @@ data "tls_public_key" "flux_ssh" {
   private_key_openssh = var.flux_ssh_private_key
 }
 
-resource "kubernetes_secret" "deploy-key" {
+resource "kubernetes_secret_v1" "deploy-key" {
   metadata {
     name      = "deploy-key"
-    namespace = kubernetes_namespace.flux-system.metadata[0].name
+    namespace = kubernetes_namespace_v1.flux-system.metadata[0].name
   }
+  wait_for_service_account_token = false
 
   data = {
     identity       = var.flux_ssh_private_key
@@ -58,7 +61,7 @@ resource "helm_release" "flux" {
   repository = "https://fluxcd-community.github.io/helm-charts"
   chart      = "flux2"
   name       = "flux"
-  namespace  = kubernetes_namespace.flux-system.metadata[0].name
+  namespace  = kubernetes_namespace_v1.flux-system.metadata[0].name
   version    = "2.17.2"
 
   values = [
