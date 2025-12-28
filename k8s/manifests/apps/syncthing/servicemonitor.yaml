@@ -1,0 +1,16 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: syncthing
+spec:
+  endpoints:
+  - port: web
+    authorization:
+      type: Bearer
+      credentials:
+        key: apikey
+        name: api-key
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: syncthing

@@ -66,3 +66,6 @@ resources:
   - web.yaml
   - oidc-client-secret.yaml
   - web-basic-auth.yaml
+  - servicemonitor.yaml
+  - apikey.yaml
+  - alerts.yaml

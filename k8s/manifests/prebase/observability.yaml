@@ -148,6 +148,7 @@ spec:
               namespace: infra
               sectionName: main
       prometheusSpec:
+        ruleSelectorNilUsesHelmValues: false
         serviceDiscoveryRole: EndpointSlice
         serviceMonitorSelectorNilUsesHelmValues: false
         serviceMonitorNamespaceSelector:

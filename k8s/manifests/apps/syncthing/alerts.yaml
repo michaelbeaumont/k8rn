@@ -1,0 +1,33 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: alerts
+  namespace: syncthing
+spec:
+  groups:
+    - name: syncthing
+      rules:
+        - alert: SyncthingDeviceDisconnected
+          annotations:
+            description: "Device {{ $labels.name }} hasn't connected in a long time"
+            summary: "Device hasn't connected in a long time"
+          expr: |-
+            (
+              max_over_time(syncthing_connections_active[2d]) * on (device) group_left (name) syncthing_config_device_info{name!="k8rn"} == 0
+            )
+          for: 10m
+          labels:
+            severity: warning
+        - alert: SyncthingFolderError
+          annotations:
+            description: "Folder {{ $labels.folder }} is in error state."
+            summary: "Syncthing folder error state detected"
+          # https://github.com/syncthing/syncthing/blob/main/lib/model/folderstate.go#L20
+          expr: |-
+            (
+              syncthing_model_folder_state >= 8
+            )
+          for: 10m
+          labels:
+            severity: warning

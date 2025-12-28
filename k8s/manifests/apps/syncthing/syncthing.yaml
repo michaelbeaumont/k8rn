@@ -6,6 +6,7 @@ metadata:
   labels:
     gateway.infra.services/allow-routes: "true"
     pod-security.kubernetes.io/enforce: restricted
+    prometheus.io/scrape: "true"
 ---
 apiVersion: apps/v1
 kind: StatefulSet
