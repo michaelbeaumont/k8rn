@@ -6,3 +6,4 @@ machine:
         - os:reader
       allowedKubernetesNamespaces:
         - kube-system
+        - openebs
