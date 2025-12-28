@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">=2.31.0"
     }
+    corefunc = {
+      source  = "northwood-labs/corefunc"
+      version = "~> 2.0"
+    }
   }
 }
 

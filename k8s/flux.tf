@@ -112,6 +112,9 @@ resource "helm_release" "flux-sync-prebase" {
           substitute:
             services_hostname_suffix: "${var.services_hostname_suffix}"
             cluster_oidc_issuer_host: "${var.cluster_oidc_issuer_host}"
+            local_cidr_ipv4: "${var.local_cidr.ipv4}"
+            local_cidr_ipv6: "${var.local_cidr.ipv6}"
+            kms_endpoint_domain: "${provider::corefunc::url_parse(var.kms_endpoint).hostname}"
     EOT
   ]
 }
