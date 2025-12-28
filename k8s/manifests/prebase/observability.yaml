@@ -131,6 +131,9 @@ spec:
             - name: services
               namespace: infra
               sectionName: main
+    prometheusOperator:
+      kubeletEndpointsEnabled: false
+      kubeletEndpointSliceEnabled: true
     prometheus:
       enabled: true
       route:
@@ -145,6 +148,7 @@ spec:
               namespace: infra
               sectionName: main
       prometheusSpec:
+        serviceDiscoveryRole: EndpointSlice
         serviceMonitorSelectorNilUsesHelmValues: false
         serviceMonitorNamespaceSelector:
           matchLabels:
