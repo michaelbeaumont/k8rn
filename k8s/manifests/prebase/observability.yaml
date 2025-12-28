@@ -43,6 +43,10 @@ spec:
       name: flux-kube-state-metrics-config
       valuesKey: kube-state-metrics-config.yaml
   values:
+    defaultRules:
+      kubeProxy: false
+    kubeProxy:
+      enabled: false
     grafana:
       enabled: true
       sidecar:
