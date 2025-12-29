@@ -1,18 +1,20 @@
 ---
-apiVersion: v1
-kind: Namespace
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
 metadata:
-  name: intel-gpu-plugin
-  labels:
-    pod-security.kubernetes.io/enforce: privileged
-    pod-security.kubernetes.io/audit: baseline
-    pod-security.kubernetes.io/warn: baseline
+  name: intel-resource-drivers
+  namespace: flux-system
+spec:
+  interval: 30m
+  url: https://github.com/intel/intel-resource-drivers-for-kubernetes
+  ref:
+    tag: gpu-v0.9.1
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: intel-gpu-plugin
-  namespace: intel-gpu-plugin
+  name: intel-dra-driver
+  namespace: flux-system
 spec:
   dependsOn:
     - name: node-feature-discovery
@@ -20,12 +22,47 @@ spec:
     - name: intel-node-feature-rules
       namespace: node-feature-discovery
   interval: 10m
-  targetNamespace: intel-gpu-plugin
   sourceRef:
     kind: GitRepository
-    name: intel-device-plugins
-    namespace: node-feature-discovery
-  path: /deployments/gpu_plugin/overlays/nfd_labeled_nodes
+    name: intel-resource-drivers
+    namespace: flux-system
+  path: /deployments/gpu/overlays/nfd_labeled_nodes
+  patches:
+    - target:
+        kind: Namespace
+        name: intel-gpu-resource-driver
+      patch: |-
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: intel-gpu-resource-driver
+          labels:
+            pod-security.kubernetes.io/enforce: privileged
+            pod-security.kubernetes.io/audit: baseline
+            pod-security.kubernetes.io/warn: baseline
+    - target:
+        kind: DaemonSet
+        name: intel-gpu-resource-driver-kubelet-plugin
+      # Talos has readOnly /etc so the default containerd directories don't work
+      # we elsewhere customize CRI to use writable directories
+      # https://docs.siderolabs.com/talos/v1.12/configure-your-talos-cluster/images-container-runtime/containerd#set-cdi-plugin-spec-dirs-to-writable-directories
+      patch: |-
+        apiVersion: apps/v1
+        kind: DaemonSet
+        metadata:
+          name: intel-gpu-resource-sdfsdf
+        spec:
+          template:
+            spec:
+              volumes:
+                - name: cdi
+                  hostPath:
+                    path: /var/cdi/static
+                    type: ""
+                - name: varruncdi
+                  hostPath:
+                    path: /var/cdi/dynamic
+                    type: ""
   prune: true
-  timeout: 10m
+  timeout: 3m
   deletionPolicy: WaitForTermination

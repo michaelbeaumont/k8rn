@@ -7,6 +7,18 @@ metadata:
     gateway.infra.services/allow-routes: "true"
     pod-security.kubernetes.io/enforce: restricted
 ---
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaimTemplate
+metadata:
+  name: intel-gpu
+spec:
+  spec:
+    devices:
+      requests:
+      - name: gpu
+        exactly:
+          deviceClassName: gpu.intel.com
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -61,8 +73,8 @@ spec:
             timeoutSeconds: 10
             failureThreshold: 3
           resources:
-            limits:
-              gpu.intel.com/xe: 1
+            claims:
+            - name: gpu
           volumeMounts:
             - mountPath: /config
               name: config
@@ -74,6 +86,9 @@ spec:
               name: media-ng
               readOnly: true
               subPath: movies
+      resourceClaims:
+      - name: gpu
+        resourceClaimTemplateName: intel-gpu
       volumes:
         - name: config
           persistentVolumeClaim:

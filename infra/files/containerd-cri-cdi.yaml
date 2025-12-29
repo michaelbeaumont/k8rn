@@ -1,0 +1,7 @@
+machine:
+  files:
+  - path: /etc/cri/conf.d/20-customization.part
+    op: create
+    content: |
+      [plugins."io.containerd.cri.v1.runtime"]
+        cdi_spec_dirs = ["/var/cdi/static", "/var/cdi/dynamic"]
