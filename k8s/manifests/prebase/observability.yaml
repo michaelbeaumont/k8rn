@@ -47,6 +47,12 @@ spec:
       kubeProxy: false
     kubeProxy:
       enabled: false
+    nodeExporter:
+      operatingSystems:
+        aix:
+          enabled: false
+        darwin:
+          enabled: false
     grafana:
       enabled: true
       sidecar:
