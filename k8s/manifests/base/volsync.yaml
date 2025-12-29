@@ -38,3 +38,24 @@ spec:
   values:
     metrics:
       disableAuth: true
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: alerts
+  namespace: volsync-system
+spec:
+  groups:
+    - name: volsync
+      rules:
+        - alert: VolsyncFailing
+          annotations:
+            description: "VolSync backup {{ $labels.obj_namespace }}/{{ $labels.obj_name }} failing"
+            summary: "VolSync backup failing"
+          expr: |-
+            (
+              volsync_volume_out_of_sync{role="source"} > 0
+            )
+          for: 10m
+          labels:
+            severity: critical
