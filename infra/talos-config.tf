@@ -125,12 +125,12 @@ locals {
       ] : [],
       file("${path.module}/files/kubelet-rotate-server-crts.yaml"),
       file("${path.module}/files/zfs.yaml"),
-      file("${path.module}/files/nfs.yaml"),
       file("${path.module}/files/user-namespaces.yaml"),
       contains(node.tags, "media-volume") ? [
         templatefile("${path.module}/files/media-volume.yaml", {
           kms_endpoint = var.kms_endpoint
         }),
+        file("${path.module}/files/nfsd.yaml"),
       ] : [],
       contains(node.tags, "xe-sriov") ? [
         templatefile("${path.module}/files/xe-sriov_numvfs.yaml", { device = "0xa780", pci_bus = 2, vfio_pci_num = 2, total_num = 3 }),
