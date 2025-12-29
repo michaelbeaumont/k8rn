@@ -77,6 +77,11 @@ resource "helm_release" "flux" {
       create: false
     imageAutomationController:
       create: false
+    kustomizeController:
+      container:
+        additionalArgs:
+          - --feature-gates
+          - CancelHealthCheckOnNewRevision=true
     EOT
   ]
 }
