@@ -124,12 +124,12 @@ locals {
         file("${path.module}/files/qemu-exclusive-taints.yaml"),
       ] : [],
       file("${path.module}/files/kubelet-rotate-server-crts.yaml"),
-      file("${path.module}/files/zfs.yaml"),
       file("${path.module}/files/user-namespaces.yaml"),
       contains(node.tags, "media-volume") ? [
         templatefile("${path.module}/files/media-volume.yaml", {
           kms_endpoint = var.kms_endpoint
         }),
+        file("${path.module}/files/zfs.yaml"),
         file("${path.module}/files/nfsd.yaml"),
       ] : [],
       contains(node.tags, "xe-sriov") ? [
