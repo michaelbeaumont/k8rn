@@ -33,7 +33,7 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop: [ALL]
-          image: docker.io/vaultwarden/server:1.35.0
+          image: docker.io/vaultwarden/server:1.35.1
           ports:
             - containerPort: 8080
               name: http
