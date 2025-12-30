@@ -18,9 +18,7 @@ metadata:
 spec:
   dependsOn:
     - name: node-feature-discovery
-      namespace: node-feature-discovery
-    - name: intel-node-feature-rules
-      namespace: node-feature-discovery
+      namespace: flux-system
   interval: 10m
   sourceRef:
     kind: GitRepository

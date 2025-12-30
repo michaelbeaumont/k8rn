@@ -1,18 +1,9 @@
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: node-feature-discovery
-  labels:
-    pod-security.kubernetes.io/enforce: privileged
-    pod-security.kubernetes.io/audit: privileged
-    pod-security.kubernetes.io/warn: privileged
----
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: node-feature-discovery
-  namespace: node-feature-discovery
+  namespace: flux-system
 spec:
   interval: 30m
   url: https://github.com/kubernetes-sigs/node-feature-discovery
@@ -23,13 +14,26 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: node-feature-discovery
-  namespace: node-feature-discovery
+  namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: GitRepository
     name: node-feature-discovery
   path: /deployment/overlays/default
+  patches:
+    - target:
+        kind: Namespace
+        name: node-feature-discovery
+      patch: |-
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: node-feature-discovery
+          labels:
+            pod-security.kubernetes.io/enforce: privileged
+            pod-security.kubernetes.io/audit: privileged
+            pod-security.kubernetes.io/warn: privileged
   prune: true
   timeout: 10m
   deletionPolicy: WaitForTermination
