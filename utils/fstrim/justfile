@@ -1,0 +1,2 @@
+push-image tag:
+    docker build . --push -t ghcr.io/michaelbeaumont/fstrim:{{ tag }}

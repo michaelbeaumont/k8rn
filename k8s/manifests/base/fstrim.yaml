@@ -1,0 +1,55 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fstrim
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: weekly-media-fstrim
+  namespace: fstrim
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    metadata:
+      name: fstrim
+    spec:
+      template:
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                          - k8rn-core
+          securityContext:
+            runAsNonRoot: false
+            seccompProfile:
+              type: RuntimeDefault
+          restartPolicy: OnFailure
+          containers:
+            - image: ghcr.io/michaelbeaumont/fstrim:latest
+              name: fstrim
+              args:
+                - --verbose # note this number is kind of meaningless
+                - /mnt
+              volumeMounts:
+                - mountPath: /mnt
+                  name: media
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
+                  add: [SYS_ADMIN]
+          volumes:
+            - hostPath:
+                path: /var/mnt/media
+                type: Directory
+              name: media
+  schedule: "@weekly"
