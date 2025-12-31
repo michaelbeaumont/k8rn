@@ -114,18 +114,18 @@ spec:
       config:
         route:
           routes:
-            - receiver: 'null'
+            - receiver: "null"
               matchers:
                 - alertname = "Watchdog"
             - receiver: telegram
               matchers:
                 - severity =~ "warning|critical"
         receivers:
-          - name: 'null'
+          - name: "null"
           - name: telegram
             telegram_configs:
-            - bot_token_file: "/etc/alertmanager/secrets/alertmanager-telegram/token"
-              chat_id: 1771190175
+              - bot_token_file: "/etc/alertmanager/secrets/alertmanager-telegram/token"
+                chat_id: 1771190175
       route:
         main:
           enabled: true
@@ -137,6 +137,43 @@ spec:
             - name: services
               namespace: infra
               sectionName: main
+      templateFiles:
+        telegram.tmpl: |-
+          {{ define "telegram.default.message" }}
+          {{- range .Alerts -}}
+          {{- if eq .Status "firing" -}}
+              {{- if eq .Labels.severity "critical" -}}
+                  🚨
+              {{- else if eq .Labels.severity "warning" -}}
+                  ⚠
+              {{- else -}}
+                  ℹ
+              {{- end }} <strong>{{ .Labels.alertname }}</strong>
+          {{- else if eq .Status "resolved" -}}
+              ✅ <strong>{{ .Labels.alertname }}</strong> {{ if eq .Labels.severity "critical" -}}
+                  🚨
+              {{- else if eq .Labels.severity "warning" -}}
+                  ⚠
+              {{- else -}}
+                  ℹ
+              {{- end }}
+          {{- end }}
+          <a href="{{ .GeneratorURL }}">➡{{ .Annotations.description }}</a>
+          {{- if eq .Status "firing" }}
+          🕐 from {{ .StartsAt | date "Mon, 02 Jan 2006 15:04:05 MST" }}
+          🕐 for {{ .StartsAt | since | humanizeDuration }}
+          {{- end -}}
+          {{- if eq .Status "resolved" }}
+          🕐 from {{ .StartsAt | date "Mon, 02 Jan 2006 15:04:05 MST" }}
+          🕐 until {{ .EndsAt | date "Mon, 02 Jan 2006 15:04:05 MST" }}
+          🕐 for {{ .EndsAt.Sub .StartsAt | humanizeDuration }}
+          {{- end -}}
+          {{- if .Annotations.runbook_url }}
+          <a href="{{ .Annotations.runbook_url }}">📖 docs</a>
+          {{- end }}
+          {{ end }}
+          {{ end }}
+
     prometheusOperator:
       kubeletEndpointsEnabled: false
       kubeletEndpointSliceEnabled: true
@@ -154,9 +191,19 @@ spec:
               namespace: infra
               sectionName: main
       prometheusSpec:
+        externalUrl: https://prometheus.${services_hostname_suffix}
         ruleSelectorNilUsesHelmValues: false
         serviceDiscoveryRole: EndpointSlice
         serviceMonitorSelectorNilUsesHelmValues: false
         serviceMonitorNamespaceSelector:
           matchLabels:
             prometheus.io/scrape: "true"
+        scrapeClasses:
+          - default: true
+            name: cluster-relabeling
+            relabelings:
+              - sourceLabels: [ __name__ ]
+                regex: (.*)
+                targetLabel: cluster
+                replacement: k8rn
+                action: replace
