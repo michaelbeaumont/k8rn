@@ -47,6 +47,13 @@ spec:
       kubeProxy: false
     kubeProxy:
       enabled: false
+    kubeEtcd:
+      service:
+        selector:
+          # Note this is just to get the endpoint IP
+          # it's just Pods running with hostNetwork on the same nodes that
+          # etcd runs on
+          app.kubernetes.io/name: kube-apiserver
     nodeExporter:
       operatingSystems:
         aix:

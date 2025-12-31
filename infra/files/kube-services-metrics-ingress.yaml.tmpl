@@ -17,6 +17,7 @@ portSelector:
   ports:
     - 10257 # controller-manager
     - 10259 # scheduler
+    - 2381 # etcd metrics
   protocol: tcp
 ingress:
 %{ for subnet in pod_subnets }
