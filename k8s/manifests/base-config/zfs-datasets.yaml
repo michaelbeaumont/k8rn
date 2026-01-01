@@ -32,3 +32,20 @@ spec:
   shared: "yes"
 status:
   state: Ready
+---
+apiVersion: zfs.openebs.io/v1
+kind: ZFSVolume
+metadata:
+  name: random-backups
+  namespace: openebs
+  finalizers:
+    - k8rn/dummy-finalizer
+spec:
+  capacity: "3985729650688"
+  fsType: zfs
+  ownerNodeID: k8rn-core
+  poolName: data
+  volumeType: DATASET
+  shared: "yes"
+status:
+  state: Ready
