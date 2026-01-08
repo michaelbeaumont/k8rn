@@ -75,6 +75,7 @@ spec:
             securityContext:
               privileged: true
             args:
+              - --in-cluster
               - --endpoint
               - "${kms_endpoint}"
               - --slot
@@ -101,6 +102,7 @@ spec:
             securityContext:
               privileged: true
             args:
+              - --in-cluster
               - --endpoint
               - "${kms_endpoint}"
               - --slot
@@ -146,3 +148,17 @@ spec:
       storageClass:
         # we can't override reclaimPolicy so just make the classes explicit in base-config
         enabled: false
+  postRenderers:
+    - kustomize:
+        patches:
+          # TODO: can be removed on next localpv-zfs release and set in values
+          - patch: |
+              apiVersion: apps/v1
+              kind: DaemonSet
+              metadata:
+                name: openebs-openebs-zfs-localpv-node
+                namespace: openebs
+              spec:
+                template:
+                  spec:
+                    dnsPolicy: ClusterFirstWithHostNet
