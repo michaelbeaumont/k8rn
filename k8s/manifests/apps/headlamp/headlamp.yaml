@@ -1,0 +1,75 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: headlamp
+  namespace: headlamp
+spec:
+  interval: 10m0s
+  url: https://kubernetes-sigs.github.io/headlamp
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: headlamp
+  namespace: headlamp
+spec:
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  interval: 10m0s
+  targetNamespace: headlamp
+  chart:
+    spec:
+      chart: headlamp
+      sourceRef:
+        kind: HelmRepository
+        name: headlamp
+      version: 0.40.0
+  values:
+    hostUsers: false
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    config:
+      oidc:
+        usePKCE: true
+        secret:
+          create: false
+        externalSecret:
+          enabled: true
+          name: oidc
+    volumeMounts:
+      - mountPath: /headlamp/plugins/flux
+        name: flux-plugin
+        subPath: plugins/flux
+    volumes:
+      - name: flux-plugin
+        image:
+          reference: ghcr.io/headlamp-k8s/headlamp-plugin-flux:latest
+          pullPolicy: IfNotPresent
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: headlamp
+  labels:
+    external-dns: "true"
+spec:
+  parentRefs:
+    - name: services
+      namespace: infra
+      sectionName: main
+  hostnames: []
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: headlamp-headlamp
+          port: 80

@@ -15,6 +15,7 @@ write-kubeconfig outfile:
         --exec-arg=get-token \
         --exec-arg="--oidc-issuer-url=https://${issuer}" \
         --exec-arg="--oidc-client-id=$(terraform output -raw cluster_oidc_client_id)" \
+        --exec-arg="--oidc-client-secret=$(terraform output -raw cluster_oidc_client_secret)" \
         --exec-arg="--oidc-extra-scope=profile" \
         --exec-arg="--oidc-extra-scope=groups" \
         --exec-arg="--oidc-pkce-method=S256"

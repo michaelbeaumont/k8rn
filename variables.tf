@@ -51,10 +51,14 @@ variable "cluster_oidc_issuer_host" {
   description = "The issuer hostname to use for cluster OIDC authentication"
   type        = string
 }
-
 variable "cluster_oidc_client_id" {
   description = "The client ID to use for cluster OIDC authentication"
   type        = string
+}
+variable "cluster_oidc_client_secret" {
+  description = "The client secret to use for cluster OIDC authentication. Only currently used in the justfile"
+  type        = string
+  sensitive   = true
 }
 
 variable "cloudflare_zone" {

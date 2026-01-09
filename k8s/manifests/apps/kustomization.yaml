@@ -9,3 +9,4 @@ resources:
   - syncthing.yaml
   - immich.yaml
   - sshfs.yaml
+  - headlamp

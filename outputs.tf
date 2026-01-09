@@ -42,6 +42,10 @@ output "cluster_oidc_client_id" {
   description = "OIDC client ID for cluster access"
   value       = var.cluster_oidc_client_id
 }
+output "cluster_oidc_client_secret" {
+  description = "OIDC client secret for cluster access"
+  value       = var.cluster_oidc_client_secret
+}
 
 output "nodes" {
   description = "Nodes and their UUIDs"
