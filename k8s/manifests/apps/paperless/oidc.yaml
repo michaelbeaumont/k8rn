@@ -4,6 +4,7 @@ metadata:
     name: oidc-client
 type: Opaque
 stringData:
+    PAPERLESS_DISABLE_REGULAR_LOGIN: ENC[AES256_GCM,data:ckQQsg==,iv:Pf/ei/1i7kgv58Kwj4wbYSr5nz+p6y3oMjLWT4f1vss=,tag:nHArntDDlrcU9hFk3GQkXA==,type:str]
     PAPERLESS_SOCIALACCOUNT_PROVIDERS: ENC[AES256_GCM,data:lqfhdA2MGd/hpX55p2nxPLmzhZrcPhRLOoiIkmHGC4N+5utCHZ1K+Ne9EmwqdYOBa3ZLX2evArWZbNM8d/7K7nTC/HN4RG9IeT0MigjUi5C+Dkfsp2l4ur325TIKBGIj8gi+wbDuffiGM//v+yAjPBxLvo84hoCUaQqbIluzz8ssFovW0JvmR+9DyatztwXnt5P6kHOIGmoZgJKjEFI/VTXvpT1b23rC5i/O/6p2qWTqnTlpkYhc9MpboqAZPVRcGxmZbB2ELU5ppy62iOQkMNV5d+4X9S/9piZZvgRyNWkTmaWq5vAF9HUuRTpmreIySSs47U0aHTMUGsghF44MjwO/uIxJW1wL/szPOX9UmYyGwsxjQCUEapLMGWs10C8oNN4sPAFdJxD+y9Gw/RmIAY5dTlqijLRoelpWAHPGyFmxRPTL82R5r2X6QKpqGxlapdMJrh9i9CjmYS89Cno4wW0+fcrghqQk2JeGVa/2BigEfACuyG7retrKWbrGGLNaxzk=,iv:9ZndlNOpR767dV20ILscKpcJ63y5XXqMglLrck+TovI=,tag:2PuyZ3BSsdum22cpmHANcg==,type:str]
 sops:
     age:
@@ -16,7 +17,7 @@ sops:
             cndNUmltOUJsZTQybGhxTk81clZJRjAKtKQDC0L3ToAUSygh404Do2jx/XsobNXF
             cqw9f9pzNPGLBrABExcTz3cIfHk1LIjUYCG5bWuQ7BPfzFKEwn4opw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-05-20T11:40:32Z"
-    mac: ENC[AES256_GCM,data:JMYKSMikfxbcX0SKm0DE71fLEVQLoKEnrljae1ZLEanOf3voBLFfMOtuw3EARbr4IH6oATl2fqBBU3YzcpMXMWuNpUOj9QBJ6GhojvIVanyLlyVcoB55m2vSpQQGwW5kqmC31K40mXYA48KSCo+k/sYAkpbt4/MPB3JxmO64rrU=,iv:0//zX2mKUmGTwcsMA4dLkoqdVtt2GIhrBsj+BRU2uLQ=,tag:eM/mhwe77NWvTfNS6I9e1w==,type:str]
+    lastmodified: "2026-01-14T10:22:50Z"
+    mac: ENC[AES256_GCM,data:1cH1OFSEml4pWwIbYhm8nQdNgf4tft2eJ5ReQcrjwcTaURrqs5Wtsh7oTMY+H257KNHCzNw3XY2/jQmUpZcQ674MVSAxHk5+t+zBlERgqE9qfSg95NULoUjUqJbPh8xPvZw3fInebVQ4SMFwwVbxAkGPTf7nmMWMkrYbaOrHmv8=,iv:VDGs7P18zA4/Eq4H/X76V3/7fBKRNldG4fk/xSOohRw=,tag:JALIa2UIBDTC7dNCOrZRHw==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0
