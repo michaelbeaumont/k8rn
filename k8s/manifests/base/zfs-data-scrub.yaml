@@ -1,0 +1,51 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: zfs-scrub
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: zfs-scrub
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: weekly-zfs-data-scrub
+  namespace: zfs-scrub
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    metadata:
+      name: weekly-zfs-data-scrub
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                          - k8rn-core
+          containers:
+            - name: scrub
+              image: ghcr.io/michaelbeaumont/zfs-scrub:latest
+              imagePullPolicy: Always
+              args:
+                - data
+              securityContext:
+                privileged: true
+  schedule: "0 0 * * 1"

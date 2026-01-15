@@ -6,6 +6,17 @@ metadata:
   labels:
     pod-security.kubernetes.io/enforce: privileged
 ---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: fstrim
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -52,4 +63,4 @@ spec:
                 path: /var/mnt/media
                 type: Directory
               name: media
-  schedule: "@weekly"
+  schedule: "0 0 * * 0"
