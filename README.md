@@ -151,9 +151,11 @@ This requires some ACLs set up in Tailscale:
 My nodes are Beelink EQ12s, their N100 CPU is a 12th generation Intel,
 so it has Intel Quick Sync Video support for hardware acceleration with Jellyfin.
 
-This repo uses
-[Intel's GPU plugin](https://github.com/intel/intel-device-plugins-for-kubernetes/blob/main/cmd/gpu_plugin/README.md)
-to [make everything available to the Jellyfin `Pods`](./k8s/base/gpu).
+Using
+[DRA](https://docs.siderolabs.com/kubernetes-guides/advanced-guides/dynamic-resource-allocation)
+and [Intel's GPU resource driver](https://github.com/intel/intel-resource-drivers-for-kubernetes/blob/main/doc/gpu/README.md),
+we [can make GPUs available](./k8s/manifests/base/intel-resource-driver.yaml)
+[via resource claims](./k8s/manifests/apps/jellyfin/jellyfin.yaml).
 
 ### Envoy gateway
 
@@ -174,11 +176,6 @@ Instead we rely on the nodes being Tailscale machines:
     have Envoy gateway running. But this seems to work from my testing
   - Otherwise Envoy can be deployed as a `DaemonSet`
 
-### External services
-
-Some services are running on a different server in the tailnet and a `Service`
-with a manually managed `EndpointSlice` handles forwarding the traffic.
-
 ### OIDC
 
 This sets up Talos to authenticate using OIDC.
@@ -195,6 +192,3 @@ kubectl oidc-login setup \
         --oidc-extra-scope profile \
         --oidc-extra-scope groups
 ```
-
-> [!IMPORTANT]
-> Replace this with `AuthenticationConfiguration` when Talos supports it
