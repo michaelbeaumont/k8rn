@@ -1,0 +1,2 @@
+push-image tag:
+    docker build --build-arg EXTENSION_VERSION={{ tag }} --push -t ghcr.io/michaelbeaumont/nzbgetcom-extension-videosort:{{ tag }} .

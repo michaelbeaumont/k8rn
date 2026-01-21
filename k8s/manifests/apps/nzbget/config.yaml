@@ -12,6 +12,8 @@ data:
     QueueDir=/config/persistence/queue
     TempDir=/tmp
 
+    ConfigTemplate=/app/nzbget/share/nzbget/nzbget.conf
+
     # Should be group writeable
     UMask=0002
 
@@ -21,7 +23,7 @@ data:
     ScriptDir=$${MainDir}/scripts
     LogFile=/dev/stdout
 
-    ConfigTemplate=/app/nzbget/share/nzbget/nzbget.conf
+    Extensions=VideoSort
 
     Server1.Active=yes
     # from secret
@@ -123,15 +125,6 @@ data:
 
     # Category name is passed to post-processing script and can be used by it
     # to perform category specific processing.
-    Category1.Name=Movies
-
-    # List of aliases.
-    # Example: TV - HD, TV - SD, TV*
-    Category1.Aliases=
-
-    Category2.Name=Series
-    Category3.Name=Music
-    Category4.Name=Software
 
     # Feed1 from args
     Feed1.Interval=15
@@ -334,3 +327,27 @@ data:
 
     # Files to ignore during unpack.
     UnpackIgnoreExt=.cbr
+
+    VideoSort:MoviesDir=/media/movies
+    VideoSort:SeriesDir=/media/tv
+    VideoSort:DatedDir=
+    VideoSort:OtherTvDir=
+    VideoSort:TvCategories=tv
+    VideoSort:VideoExtensions=.mkv,.avi,.divx,.xvid,.mov,.wmv,.mp4,.mpg,.mpeg,.vob,.iso
+    VideoSort:SatelliteExtensions=.srt,.sub
+    VideoSort:MinSize=100
+    VideoSort:MoviesFormat=%t (%y)/%t
+    VideoSort:SeriesFormat=%sn (%y)/Season %0s/%sn S%0sE%0e
+    VideoSort:MultipleEpisodes=range
+    VideoSort:EpisodeSeparator=-E
+    VideoSort:SeriesYear=yes
+    VideoSort:DatedFormat=%sn/%sn - %en - %y-%0m-%0d
+    VideoSort:OtherTvFormat=%t
+    VideoSort:LowerWords=the,of,and,at,vs,a,an,but,nor,for,on,so,yet
+    VideoSort:UpperWords=III,II,IV
+    VideoSort:DNZBHeaders=yes
+    VideoSort:PreferNZBName=no
+    VideoSort:Overwrite=no
+    VideoSort:Cleanup=yes
+    VideoSort:Preview=no
+    VideoSort:Verbose=yes

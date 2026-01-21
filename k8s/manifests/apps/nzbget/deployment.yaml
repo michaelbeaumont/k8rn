@@ -9,11 +9,13 @@ spec:
   template:
     spec:
       automountServiceAccountToken: false
-      hostUsers: false
+      # TODO: this doesn't work with image volumes?
+      # https://github.com/containerd/containerd/issues/12812
+      # hostUsers: false
       securityContext:
-        runAsUser: 2001 # nzbget user on NFS
-        runAsGroup: 2001 # nzbget-users
-        fsGroup: 2001 # nzbget-users
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile:
           type: RuntimeDefault
@@ -97,6 +99,15 @@ spec:
               readOnly: true
             - name: downloads
               mountPath: /downloads
+            - name: media
+              mountPath: /media/tv
+              subPath: tv
+            - name: media-ng
+              mountPath: /media/movies
+              subPath: movies
+            - name: extension-videosort
+              mountPath: /config/scripts/videosort
+              readOnly: true
           resources: {}
       volumes:
         - name: tmp
@@ -110,3 +121,13 @@ spec:
         - name: downloads
           persistentVolumeClaim:
             claimName: downloads
+        - name: extension-videosort
+          image:
+            reference: ghcr.io/michaelbeaumont/nzbgetcom-extension-videosort:10.6
+            pullPolicy: IfNotPresent
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+        - name: media-ng
+          persistentVolumeClaim:
+            claimName: media-ng
