@@ -63,22 +63,15 @@ spec:
     grafana:
       enabled: true
       sidecar:
-        # TODO
-        # This mess is due to:
-        # - https://github.com/grafana/helm-charts/issues/4039 not being solved
-        #   properly
-        # - https://github.com/grafana/helm-charts/issues/4031 REQ_SKIP_INIT
-        #   only needs to be set on initContainers
+        # Not really worth running the process just for live updates
         dashboards:
-          restartPolicy: Always
-          skipReload: true
+          watchMethod: LIST
           initDashboards: true
-        datasources:
-          restartPolicy: Always
           skipReload: true
+        datasources:
+          watchMethod: LIST
           initDatasources: true
-          env:
-            HEALTH_PORT: "8081"
+          skipReload: true
       route:
         main:
           enabled: true
