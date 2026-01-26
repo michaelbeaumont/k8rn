@@ -79,7 +79,7 @@ spec:
             - mountPath: /config
               name: config
             - mountPath: /media/tv
-              name: media
+              name: media-ng
               readOnly: true
               subPath: tv
             - mountPath: /media/movies
@@ -93,10 +93,6 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: config
-        - name: media
-          readOnly: true
-          persistentVolumeClaim:
-            claimName: media
         - name: media-ng
           readOnly: true
           persistentVolumeClaim:

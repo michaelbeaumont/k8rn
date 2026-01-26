@@ -99,7 +99,7 @@ spec:
               readOnly: true
             - name: downloads
               mountPath: /downloads
-            - name: media
+            - name: media-ng
               mountPath: /media/tv
               subPath: tv
             - name: media-ng
@@ -125,9 +125,6 @@ spec:
           image:
             reference: ghcr.io/michaelbeaumont/nzbgetcom-extension-videosort:10.6
             pullPolicy: IfNotPresent
-        - name: media
-          persistentVolumeClaim:
-            claimName: media
         - name: media-ng
           persistentVolumeClaim:
             claimName: media-ng
