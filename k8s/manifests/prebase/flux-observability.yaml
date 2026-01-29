@@ -104,7 +104,7 @@ data:
                       url: [ spec, url ]
               - groupVersionKind:
                   group: source.toolkit.fluxcd.io
-                  version: v1beta2
+                  version: v1
                   kind: Bucket
                 metricNamePrefix: gotk
                 metrics:
@@ -163,7 +163,7 @@ data:
                       chart_version: [ spec, version ]
               - groupVersionKind:
                   group: source.toolkit.fluxcd.io
-                  version: v1beta2
+                  version: v1
                   kind: OCIRepository
                 metricNamePrefix: gotk
                 metrics:
@@ -232,7 +232,7 @@ data:
               #        webhook_path: [ status, webhookPath ]
               #- groupVersionKind:
               #    group: image.toolkit.fluxcd.io
-              #    version: v1beta2
+              #    version: v1
               #    kind: ImageRepository
               #  metricNamePrefix: gotk
               #  metrics:
@@ -250,7 +250,7 @@ data:
               #        image: [ spec, image ]
               #- groupVersionKind:
               #    group: image.toolkit.fluxcd.io
-              #    version: v1beta2
+              #    version: v1
               #    kind: ImagePolicy
               #  metricNamePrefix: gotk
               #  metrics:
@@ -268,7 +268,7 @@ data:
               #        source_name: [ spec, imageRepositoryRef, name ]
               #- groupVersionKind:
               #    group: image.toolkit.fluxcd.io
-              #    version: v1beta2
+              #    version: v1
               #    kind: ImageUpdateAutomation
               #  metricNamePrefix: gotk
               #  metrics:
@@ -284,3 +284,25 @@ data:
               #        ready: [ status, conditions, "[type=Ready]", status ]
               #        suspended: [ spec, suspend ]
               #        source_name: [ spec, sourceRef, name ]
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: alerts
+  namespace: flux-system
+spec:
+  groups:
+    - name: flux
+      rules:
+        - alert: FluxResourceNotReady
+          annotations:
+            description: "{{ $labels.customresource_kind }} {{ $labels.namespace }}/{{ $labels.name }} isn't ready!"
+            summary: "A Flux resource isn't ready"
+          # OCI HelmRepository doesn't report readiness
+          expr: |-
+            (
+              gotk_resource_info{ready!="True",url!~"oci://.*"} != 0
+            )
+          for: 10m
+          labels:
+            severity: warning
