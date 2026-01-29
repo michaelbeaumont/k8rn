@@ -195,6 +195,7 @@ resource "helm_release" "flux-sync-base-config" {
             lets_encrypt_email: "${var.lets_encrypt_email}"
             restic_remote_password: "${var.restic_remote_password}"
             openebs_diskpool_partition_label: "${var.openebs_diskpool_partition_label}"
+            kms_endpoint_domain: "${provider::corefunc::url_parse(var.kms_endpoint).hostname}"
     EOT
   ]
 }
