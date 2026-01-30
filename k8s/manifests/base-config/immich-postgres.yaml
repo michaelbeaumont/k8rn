@@ -7,8 +7,11 @@ kind: Namespace
 metadata:
   name: immich
   labels:
-    gateway.infra.services/allow-routes: "true"
+    # Annoyingly we have to add all labels here, otherwise each kustomize will
+    # remove the labels of the other
     pod-security.kubernetes.io/enforce: restricted
+    prometheus.io/scrape: "true"
+    gateway.infra.services/allow-routes: "true"
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
