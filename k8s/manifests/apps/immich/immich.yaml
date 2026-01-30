@@ -71,7 +71,7 @@ spec:
           containers:
             main:
               image:
-                tag: "v2.5.0"
+                tag: "v2.5.2"
               env:
                 IMMICH_ALLOW_SETUP:
                   value: "false"
@@ -153,7 +153,7 @@ spec:
           containers:
             main:
               image:
-                tag: v2.5.0-openvino
+                tag: v2.5.2-openvino
               resources:
                 claims:
                   - name: gpu
