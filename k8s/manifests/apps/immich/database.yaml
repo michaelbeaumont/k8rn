@@ -1,3 +1,31 @@
+# CPNG will treat this as an orphan PVC due to the labels and use it to restore
+# the cluster
+# Note: This does NOT work at initial init but that's much less
+# important than it working with the existing backups and cluster recreation.
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-database-1
+  labels:
+    cnpg.io/cluster: immich-database
+    cnpg.io/instanceName: immich-database-1
+    cnpg.io/instanceRole: primary
+    cnpg.io/pvcRole: PG_DATA
+  annotations:
+    cnpg.io/nodeSerial: "1"
+spec:
+  storageClassName: openebs-single-replica
+  accessModes:
+    - ReadWriteOnce
+  dataSourceRef:
+    kind: ReplicationDestination
+    apiGroup: volsync.backube
+    name: database-restore
+  resources:
+    requests:
+      storage: 5Gi
+  volumeMode: Filesystem
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
@@ -12,16 +40,12 @@ spec:
     pvcTemplate:
       accessModes:
         - ReadWriteOnce
-      #dataSourceRef:
-      #  kind: ReplicationDestination
-      #  apiGroup: volsync.backube
-      #  name: database-restore
       resources:
         requests:
           storage: 5Gi
       storageClassName: openebs-single-replica
       volumeMode: Filesystem
-  imageName: ghcr.io/cloudnative-pg/postgresql:18.1-minimal-trixie
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.1-standard-trixie
   postgresql:
     extensions:
       - name: vchord
@@ -34,9 +58,6 @@ spec:
     shared_preload_libraries:
       - "vchord.so"
   bootstrap:
-    # TODO: until cloudnative-pg isn't gitops unfriendly this is unfortunately
-    # what we have to deal with. this should be handled by volsync, see above
-    # pvcTemplate
     initdb:
       owner: immich
       database: app
@@ -44,14 +65,6 @@ spec:
         name: immich-database-app
       postInitSQL:
         - ALTER USER immich WITH SUPERUSER;
-    #recovery:
-    #  database: app
-    #  owner: immich
-    #  volumeSnapshots:
-    #    storage:
-    #      apiGroup: snapshot.storage.k8s.io
-    #      kind: VolumeSnapshot
-    #      name: volsync-database-restore-dest-20260129090043
 ---
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
@@ -62,9 +75,9 @@ spec:
     manual: restore-once
   restic:
     moverSecurityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
+      runAsUser: 26
+      runAsGroup: 26
+      fsGroup: 26
       runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
@@ -90,9 +103,9 @@ spec:
   restic:
     pruneIntervalDays: 14
     moverSecurityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
+      runAsUser: 26
+      runAsGroup: 26
+      fsGroup: 26
       runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
