@@ -110,13 +110,17 @@ spec:
       enabled: true
       alertmanagerSpec:
         secrets:
-          - alertmanager-telegram
+          - telegram-bot
+          - watchdog-webhook
       config:
         route:
           routes:
-            - receiver: "null"
+            - receiver: watchdog-webhook
               matchers:
                 - alertname = "Watchdog"
+              group_wait: 0s
+              group_interval: 30s
+              repeat_interval: 30s
             - receiver: telegram
               matchers:
                 - severity =~ "warning|critical"
@@ -124,8 +128,11 @@ spec:
           - name: "null"
           - name: telegram
             telegram_configs:
-              - bot_token_file: "/etc/alertmanager/secrets/alertmanager-telegram/token"
+              - bot_token_file: /etc/alertmanager/secrets/telegram-bot/token
                 chat_id: 1771190175
+          - name: watchdog-webhook
+            webhook_configs:
+              - url_file: /etc/alertmanager/secrets/watchdog-webhook/url
       route:
         main:
           enabled: true

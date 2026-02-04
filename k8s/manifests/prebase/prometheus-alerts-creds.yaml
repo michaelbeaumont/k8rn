@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: telegram-bot
+    namespace: observability
+type: Opaque
+stringData:
+    token: ENC[AES256_GCM,data:EQ4i0i2ut/jdKIqcKxYLJSrvNkYAmH3DlSgl+6lhmkV5c2wIrZG4Xlo4pQ111A==,iv:6nDtZxXhRtFr1lAdcHCbtuvjgpknVYOUwRxWh4Atpe4=,tag:gNwiviKXNJUDAtr0m+YMFw==,type:str]
+sops:
+    age:
+        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtdUxBL054UEtaWllLNDV0
+            c0NKTUtOTEZ5eFIzMStJY3ArUlZXUWxlaDN3Clg3UGRvOFh4TzVZSnpsNG83YVRI
+            UFB4RlJrN3hmOFBhc2NzYWV4b3BwQ00KLS0tIFBoMEVOSXUwd1lkeXplTGdONzRy
+            UHlzWkJUdGZlSDhpNGx4WWhzeTBGZGMK/Ao91I8BaB10TtqocZufauZoTlD1vy9y
+            HkF1hpmjq2o2OAQfZoSu2Xsr9mHH5a2gfLDwWbYxEQNRwRdq+7+QAg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-02-04T19:32:00Z"
+    mac: ENC[AES256_GCM,data:J7wFTGslXJgqmRogGiCNhU7AzvCNdcomZE9C2HH1QQ08cdnD/vCswLFRVYPaxLx0uW67gt0JUcf1SgwvU7Kl8PhNk1r1Zxwi07050ZVBmu/ltfaVA927RT/It7HJz/zPaRpcriKuopbsa+sIzKmbMvtn01otQmCgUg3uxuYsb3Y=,iv:vpU0tfghfsFUbYujPUfRRcR15GTopALZ0hM2yiwEOiM=,tag:qDu5e0y0jN9WlIbfo/tGyw==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.11.0
+---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: watchdog-webhook
+    namespace: observability
+type: Opaque
+stringData:
+    url: ENC[AES256_GCM,data:+Fd3iZcNjsOQQX11059POQvcyJ+gJ6zgbiJLWnd0upRM8SrE+RCAFWmU5PqBiPqNiH8ujmB+zW0=,iv:Rqk36kU0AAnATAltU7uT2lz+WobmpoFrz5Dx6Q7WVNA=,tag:jmo0AyOx5AWV5S0AUribSw==,type:str]
+sops:
+    age:
+        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtdUxBL054UEtaWllLNDV0
+            c0NKTUtOTEZ5eFIzMStJY3ArUlZXUWxlaDN3Clg3UGRvOFh4TzVZSnpsNG83YVRI
+            UFB4RlJrN3hmOFBhc2NzYWV4b3BwQ00KLS0tIFBoMEVOSXUwd1lkeXplTGdONzRy
+            UHlzWkJUdGZlSDhpNGx4WWhzeTBGZGMK/Ao91I8BaB10TtqocZufauZoTlD1vy9y
+            HkF1hpmjq2o2OAQfZoSu2Xsr9mHH5a2gfLDwWbYxEQNRwRdq+7+QAg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-02-04T19:32:00Z"
+    mac: ENC[AES256_GCM,data:J7wFTGslXJgqmRogGiCNhU7AzvCNdcomZE9C2HH1QQ08cdnD/vCswLFRVYPaxLx0uW67gt0JUcf1SgwvU7Kl8PhNk1r1Zxwi07050ZVBmu/ltfaVA927RT/It7HJz/zPaRpcriKuopbsa+sIzKmbMvtn01otQmCgUg3uxuYsb3Y=,iv:vpU0tfghfsFUbYujPUfRRcR15GTopALZ0hM2yiwEOiM=,tag:qDu5e0y0jN9WlIbfo/tGyw==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.11.0
