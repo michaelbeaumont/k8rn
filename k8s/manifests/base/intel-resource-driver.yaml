@@ -26,10 +26,7 @@ spec:
     namespace: flux-system
   path: /deployments/gpu/overlays/nfd_labeled_nodes
   patches:
-    - target:
-        kind: Namespace
-        name: intel-gpu-resource-driver
-      patch: |-
+    - patch: |-
         apiVersion: v1
         kind: Namespace
         metadata:
@@ -38,17 +35,15 @@ spec:
             pod-security.kubernetes.io/enforce: privileged
             pod-security.kubernetes.io/audit: baseline
             pod-security.kubernetes.io/warn: baseline
-    - target:
-        kind: DaemonSet
-        name: intel-gpu-resource-driver-kubelet-plugin
-      # Talos has readOnly /etc so the default containerd directories don't work
+    - # Talos has readOnly /etc so the default containerd directories don't work
       # we elsewhere customize CRI to use writable directories
       # https://docs.siderolabs.com/talos/v1.12/configure-your-talos-cluster/images-container-runtime/containerd#set-cdi-plugin-spec-dirs-to-writable-directories
       patch: |-
         apiVersion: apps/v1
         kind: DaemonSet
         metadata:
-          name: intel-gpu-resource-sdfsdf
+          namespace: intel-gpu-resource-driver
+          name: intel-gpu-resource-driver-kubelet-plugin
         spec:
           template:
             spec:
@@ -61,6 +56,26 @@ spec:
                   hostPath:
                     path: /var/cdi/dynamic
                     type: ""
+    - # The driver Pod being killed too early leads to issues cleaning up Pods
+      patch: |-
+        apiVersion: apps/v1
+        kind: DaemonSet
+        metadata:
+          namespace: intel-gpu-resource-driver
+          name: intel-gpu-resource-driver-kubelet-plugin
+        spec:
+          template:
+            spec:
+              priorityClassName: resource-drivers
   prune: true
   timeout: 3m
   deletionPolicy: WaitForTermination
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: resource-drivers
+preemptionPolicy: PreemptLowerPriority
+value: 1000000000
+description: |
+  Used for resource driver plugins that should be running if any workloads are running, but aren't necessarily critical.

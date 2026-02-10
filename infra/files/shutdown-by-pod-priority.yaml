@@ -1,0 +1,15 @@
+machine:
+  kubelet:
+    extraConfig:
+      shutdownGracePeriod:
+      shutdownGracePeriodCriticalPods:
+      shutdownGracePeriodByPodPriority:
+        - priority: 2000000000
+          shutdownGracePeriodSeconds: 10
+        # this comes from the openebs-openebs-zfs-csi-controller-critical priority class
+        # it should include OpenEBS mayastor/zfs classes and the intel resource
+        # driver class
+        - priority: 900000000
+          shutdownGracePeriodSeconds: 10
+        - priority: 0
+          shutdownGracePeriodSeconds: 30
