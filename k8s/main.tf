@@ -62,3 +62,9 @@ variable "node_taints" {
 variable "kms_endpoint" {
   type = string
 }
+
+output "flux_ssh_public_key" {
+  description = "Public SSH key Flux uses to access Git repositories"
+  value       = data.tls_public_key.flux_ssh.public_key_openssh
+}
+
