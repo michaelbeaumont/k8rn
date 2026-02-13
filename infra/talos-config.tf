@@ -137,6 +137,7 @@ locals {
       ] : [],
       file("${path.module}/files/containerd-cri-cdi.yaml"),
       file("${path.module}/files/shutdown-by-pod-priority.yaml"),
+      file("${path.module}/files/nftables-buffer-space-fix.yaml"),
     ] if contains(keys(merge(local.control_plane_nodes, local.worker_nodes)), name)
   }
 }

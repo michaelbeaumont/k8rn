@@ -1,0 +1,8 @@
+machine:
+  sysctls:
+    # this is to work around the nftables issue:
+    # [talos] controller failed {"component": "controller-runtime", "controller": "network.NfTablesChainController", "error": "error flushing nftables: netlink receive: recvmsg: no buffer space available"}
+    # it's just twice the default max value on k8rn-core
+    # and the default is half that
+    net.core.rmem_max: 8388608
+    net.core.rmem_default: 4194304
