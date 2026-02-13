@@ -105,6 +105,8 @@ spec:
             - name: media-ng
               mountPath: /media/movies
               subPath: movies
+            - name: scripts
+              mountPath: /config/scripts
             - name: extension-videosort
               mountPath: /config/scripts/videosort
               readOnly: true
@@ -112,6 +114,12 @@ spec:
       volumes:
         - name: tmp
           emptyDir: {}
+        # This is just to satisfy SystemHealthCheck, it wants ScriptDir to be
+        # writable
+        - name: scripts
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Mi
         - name: config
           configMap:
             name: config

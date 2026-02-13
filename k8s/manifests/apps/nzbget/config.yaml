@@ -21,7 +21,7 @@ data:
     WebDir=/app/nzbget/webui
     # Directory with post-processing and other scripts.
     ScriptDir=$${MainDir}/scripts
-    LogFile=/dev/stdout
+    LogFile=
 
     Extensions=VideoSort
 
@@ -216,7 +216,7 @@ data:
     MonthlyQuota=0
     DailyQuota=0
 
-    WriteLog=append
+    WriteLog=none
 
     # How error messages must be printed (screen, log, both, none).
     ErrorTarget=both
