@@ -37,7 +37,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kube-prometheus
-      version: "81.6.7"
+      version: "81.6.9"
   valuesFrom:
     - kind: ConfigMap
       name: flux-kube-state-metrics-config
