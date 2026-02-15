@@ -65,6 +65,9 @@ spec:
         name: immich-database-app
       postInitSQL:
         - ALTER USER immich WITH SUPERUSER;
+  # corresponds to shutdownGracePeriod
+  smartShutdownTimeout: 10
+  stopDelay: 10
 ---
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
