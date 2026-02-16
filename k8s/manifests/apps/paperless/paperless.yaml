@@ -28,7 +28,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: paperless
-          image: ghcr.io/paperless-ngx/paperless-ngx:2.20.6
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.20.7
           ports:
             - containerPort: 8000
               name: http
