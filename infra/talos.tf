@@ -49,19 +49,6 @@ locals {
   )
 }
 
-// This has to be separate from post_init because this depends on workers_init
-// which depends on control_plane_post_init.
-resource "talos_machine_configuration_apply" "control_plane_extra_hosts" {
-  for_each                    = talos_machine_configuration_apply.control_plane_post_init
-  client_configuration        = each.value.client_configuration
-  machine_configuration_input = each.value.machine_configuration
-  node                        = each.value.node
-  endpoint                    = each.value.endpoint
-  config_patches = [
-    local.extra_hosts_patch,
-  ]
-}
-
 resource "talos_machine_configuration_apply" "workers_init" {
   for_each = local.worker_nodes
   client_configuration = [
@@ -104,6 +91,31 @@ data "talos_cluster_health" "this" {
   ])
   skip_kubernetes_checks = true
   endpoints              = [local.dns_loadbalancer_hostname]
+}
+
+// This has to be separate from post_init because this depends on workers_init
+// which depends on control_plane_post_init.
+resource "talos_machine_configuration_apply" "control_plane_extra_hosts" {
+  for_each                    = talos_machine_configuration_apply.control_plane_post_init
+  client_configuration        = each.value.client_configuration
+  machine_configuration_input = each.value.machine_configuration
+  node                        = each.value.node
+  endpoint                    = each.value.endpoint
+  config_patches = [
+    local.extra_hosts_patch,
+    file("${path.module}/files/kubelet-rotate-server-crts.yaml"),
+  ]
+}
+
+resource "talos_machine_configuration_apply" "workers_kubelet_csr" {
+  for_each                    = talos_machine_configuration_apply.workers_post_init
+  client_configuration        = each.value.client_configuration
+  machine_configuration_input = each.value.machine_configuration
+  node                        = each.value.node
+  endpoint                    = each.value.endpoint
+  config_patches = [
+    file("${path.module}/files/kubelet-rotate-server-crts.yaml"),
+  ]
 }
 
 resource "talos_cluster_kubeconfig" "this" {

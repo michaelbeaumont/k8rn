@@ -123,7 +123,6 @@ locals {
       contains(node.tags, "qemu") ? [
         file("${path.module}/files/qemu-exclusive-taints.yaml"),
       ] : [],
-      file("${path.module}/files/kubelet-rotate-server-crts.yaml"),
       file("${path.module}/files/user-namespaces.yaml"),
       contains(node.tags, "media-volume") ? [
         templatefile("${path.module}/files/media-volume.yaml", {
