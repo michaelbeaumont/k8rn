@@ -3,7 +3,7 @@ resource "helm_release" "cilium" {
   chart      = "cilium"
   name       = "cilium"
   namespace  = "kube-system"
-  version    = "1.19.0"
+  version    = "1.19.1"
 
   values = [
     <<-EOT
