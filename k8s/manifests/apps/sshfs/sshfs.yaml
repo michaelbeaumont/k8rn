@@ -1,0 +1,39 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sshfs
+  labels:
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: baseline
+    pod-security.kubernetes.io/audit: baseline
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sshd-config
+data:
+  sshfs.conf: |
+    PidFile none
+    PasswordAuthentication no
+    PermitRootLogin no
+    PrintMotd no
+    ForceCommand internal-sftp
+    ChrootDirectory /mnt
+    AllowAgentForwarding no
+    AllowTcpForwarding no
+    ChallengeResponseAuthentication no
+    AllowUsers user
+    LogLevel ERROR
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: deny-egress-allow-envoy-gateway
+spec:
+  endpointSelector: {}
+  egress: []
+  ingress:
+    - fromEntities:
+      - host
+      - remote-node

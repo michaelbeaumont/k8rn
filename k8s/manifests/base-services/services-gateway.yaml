@@ -51,6 +51,28 @@ spec:
             level: 1 # SOL_SOCKET
             buf_value: dGFpbHNjYWxlMA== # echo -n tailscale0 | base64
             state: STATE_PREBIND
+    - type: "type.googleapis.com/envoy.config.listener.v3.Listener"
+      name: infra/services/syncthing
+      operation:
+        op: add
+        path: "/socket_options"
+        value:
+          - description: SO_BINDTODEVICE
+            name: 25 # SO_BINDTODEVICE linux/include/asm-generic/socket.h
+            level: 1 # SOL_SOCKET
+            buf_value: dGFpbHNjYWxlMA== # echo -n tailscale0 | base64
+            state: STATE_PREBIND
+    - type: "type.googleapis.com/envoy.config.listener.v3.Listener"
+      name: infra/services/sshfs
+      operation:
+        op: add
+        path: "/socket_options"
+        value:
+          - description: SO_BINDTODEVICE
+            name: 25 # SO_BINDTODEVICE linux/include/asm-generic/socket.h
+            level: 1 # SOL_SOCKET
+            buf_value: dGFpbHNjYWxlMA== # echo -n tailscale0 | base64
+            state: STATE_PREBIND
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
@@ -101,3 +123,17 @@ spec:
           selector:
             matchLabels:
               kubernetes.io/metadata.name: syncthing
+    - name: sshfs
+      hostname: "*.sshfs.${services_hostname_suffix}"
+      protocol: TLS
+      port: 22
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: services-sshfs-tls-gateway
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: sshfs

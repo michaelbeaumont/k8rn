@@ -1,0 +1,52 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+  - includeTemplates: true
+    includeSelectors: true
+    pairs:
+      app.kubernetes.io/name: sshfs
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: sshfs
+      namespace: sshfs
+    unsetOnly: true
+    fieldSpecs:
+      - path: spec/claimRef/namespace
+        kind: PersistentVolume
+        name: sshfs-ebooks
+        create: true
+      - path: spec/claimRef/namespace
+        kind: PersistentVolume
+        name: sshfs-random-backups
+        create: true
+patches:
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1alpha2
+      kind: TLSRoute
+      metadata:
+        name: ebooks
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: ebooks.sshfs.${services_hostname_suffix}
+      spec:
+        hostnames:
+          - ebooks.sshfs.${services_hostname_suffix}
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1alpha2
+      kind: TLSRoute
+      metadata:
+        name: random-backups
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: random-backups.sshfs.${services_hostname_suffix}
+      spec:
+        hostnames:
+          - random-backups.sshfs.${services_hostname_suffix}
+resources:
+  - sshfs.yaml
+  - host-keys.yaml
+  - authorized-keys.yaml
+  - ebooks.yaml
+  - random-backups.yaml

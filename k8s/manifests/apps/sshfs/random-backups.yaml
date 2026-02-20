@@ -1,0 +1,181 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: random-backups
+  labels:
+    sshfs-volume: random-backups
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      sshfs-volume: random-backups
+  template:
+    metadata:
+      labels:
+        sshfs-volume: random-backups
+    spec:
+      automountServiceAccountToken: false
+      hostUsers: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: sshfs
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - SYS_CHROOT
+                - SETGID
+                - SETUID
+                - DAC_OVERRIDE
+            readOnlyRootFilesystem: true
+          image: ghcr.io/michaelbeaumont/sshfs-server:latest
+          ports:
+            - name: ssh
+              containerPort: 22
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: ssh
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            tcpSocket:
+              port: ssh
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - name: authorized-keys
+              mountPath: /root/.ssh/authorized_keys
+              subPath: authorized_keys
+            - name: authorized-keys
+              mountPath: /home/user/.ssh/authorized_keys
+              subPath: authorized_keys
+            - name: host-keys
+              mountPath: /etc/ssh/ssh_host_ed25519_key
+              subPath: ssh_host_ed25519_key
+            - name: host-keys
+              mountPath: /etc/ssh/ssh_host_ed25519_key.pub
+              subPath: ssh_host_ed25519_key.pub
+            - mountPath: /etc/ssh/sshd_config.d/sshfs.conf
+              name: sshd-config
+              subPath: sshfs.conf
+            - mountPath: /mnt
+              name: random-backups
+          resources: {}
+      volumes:
+        - name: authorized-keys
+          configMap:
+            name: protected-authorized-keys
+            defaultMode: 0444
+        - name: host-keys
+          secret:
+            secretName: host-keys
+            defaultMode: 0400
+        - name: sshd-config
+          configMap:
+            name: sshd-config
+        - name: random-backups
+          persistentVolumeClaim:
+            claimName: random-backups
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: random-backups
+spec:
+  selector:
+    sshfs-volume: random-backups
+  ports:
+    - port: 22
+      targetPort: ssh
+      name: ssh
+      protocol: TCP
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TLSRoute
+metadata:
+  name: random-backups
+  labels:
+    external-dns: "true"
+spec:
+  parentRefs:
+    - name: services
+      namespace: infra
+      sectionName: sshfs
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: random-backups
+          port: 22
+---
+apiVersion: zfs.openebs.io/v1
+kind: ZFSVolume
+metadata:
+  name: random-backups
+  namespace: openebs
+  finalizers:
+    - k8rn/dummy-finalizer
+spec:
+  capacity: "3985729650688"
+  fsType: zfs
+  ownerNodeID: k8rn-core
+  poolName: data
+  volumeType: DATASET
+  shared: "yes"
+status:
+  state: Ready
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sshfs-random-backups
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  claimRef:
+    name: random-backups
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: data
+    volumeHandle: random-backups
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k8rn-core
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: openebs-zfs-data
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: random-backups
+  namespace: sshfs
+spec:
+  volumeName: sshfs-random-backups
+  storageClassName: openebs-zfs-data
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

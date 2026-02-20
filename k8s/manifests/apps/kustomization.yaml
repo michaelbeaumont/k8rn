@@ -8,3 +8,4 @@ resources:
   - vaultwarden.yaml
   - syncthing.yaml
   - immich.yaml
+  - sshfs.yaml

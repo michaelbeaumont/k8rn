@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authorized-keys
+data:
+  authorized_keys: |
+    sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIM3HMMw0EiIVRU5ZnKwsWDsHuwQRtiOj9Zh5z9+RCFEOAAAABHNzaDo= mike@mike-laptop
+    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFOHLdK5o09jbQuPiyqlimNH9WRtW617qrspBjViKykH root@mike-laptop
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: protected-authorized-keys
+data:
+  authorized_keys: |
+    sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIM3HMMw0EiIVRU5ZnKwsWDsHuwQRtiOj9Zh5z9+RCFEOAAAABHNzaDo= mike@mike-laptop
