@@ -42,6 +42,8 @@ spec:
               value: Europe/Berlin
             - name: PAPERLESS_APPS
               value: allauth.socialaccount.providers.openid_connect
+            - name: PAPERLESS_FILENAME_FORMAT
+              value: "{{owner_username}}/{{created_year}}/{{created}}_{{title}}"
             - name: S6_READ_ONLY_ROOT
               value: "1"
             - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
