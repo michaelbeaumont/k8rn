@@ -82,6 +82,11 @@ resource "helm_release" "flux" {
         additionalArgs:
           - --feature-gates
           - CancelHealthCheckOnNewRevision=true
+    helmController:
+      container:
+        additionalArgs:
+          - --feature-gates
+          - CancelHealthCheckOnNewRevision=true
     EOT
   ]
 }
