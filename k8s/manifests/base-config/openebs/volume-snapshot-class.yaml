@@ -5,3 +5,10 @@ metadata:
   name: openebs-delete
 driver: io.openebs.csi-mayastor
 deletionPolicy: Delete
+---
+kind: VolumeSnapshotClass
+apiVersion: snapshot.storage.k8s.io/v1
+metadata:
+  name: openebs-zfs-localpv-delete
+driver: zfs.csi.openebs.io
+deletionPolicy: Delete

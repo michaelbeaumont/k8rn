@@ -40,3 +40,33 @@ spec:
   resources:
     requests:
       storage: 1Gi
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: docs-backup
+spec:
+  sourcePVC: docs
+  trigger:
+    schedule: "0 */1 * * *"
+  restic:
+    pruneIntervalDays: 14
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+    repository: restic-config-zfs-docs
+    retain:
+      hourly: 6
+      daily: 5
+      weekly: 4
+      monthly: 2
+      yearly: 1
+    copyMethod: Snapshot
+    storageClassName: openebs-zfs-data-delete
+    cacheStorageClassName: openebs-single-replica-delete
+    cacheCapacity: 5Gi
+    volumeSnapshotClassName: openebs-zfs-localpv-delete
