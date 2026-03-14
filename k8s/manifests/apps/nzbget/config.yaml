@@ -337,7 +337,7 @@ data:
     VideoSort:SatelliteExtensions=.srt,.sub
     VideoSort:MinSize=100
     VideoSort:MoviesFormat=%t (%y)/%t
-    VideoSort:SeriesFormat=%sn (%y)/Season %0s/%sn S%0sE%0e
+    VideoSort:SeriesFormat=%sn/Season %0s/%sn S%0sE%0e
     VideoSort:MultipleEpisodes=range
     VideoSort:EpisodeSeparator=-E
     VideoSort:SeriesYear=yes
