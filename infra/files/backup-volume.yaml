@@ -1,0 +1,20 @@
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: backup
+volumeType: disk
+provisioning:
+  diskSelector:
+    match: >-
+      disk.wwid == 'naa.500014a000000001'
+      && disk.model == 'Crucial X6 SSD'
+      && disk.transport == 'usb'
+filesystem:
+  type: xfs
+encryption:
+  provider: luks2
+  keys:
+    - kms:
+        endpoint: ${kms_endpoint}
+      slot: 0
+  options: [] # only perf here so we need to manually add allow-discards, no_read_workqueue, no_write_workqueue

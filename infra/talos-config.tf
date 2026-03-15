@@ -131,6 +131,11 @@ locals {
         file("${path.module}/files/zfs.yaml"),
         file("${path.module}/files/nfsd.yaml"),
       ] : [],
+      contains(node.tags, "backup-volume") ? [
+        templatefile("${path.module}/files/backup-volume.yaml", {
+          kms_endpoint = var.kms_endpoint
+        }),
+      ] : [],
       contains(node.tags, "xe-sriov") ? [
         templatefile("${path.module}/files/xe-sriov_numvfs.yaml", { device = "0xa780", pci_bus = 2, vfio_pci_num = 2, total_num = 3 }),
       ] : [],

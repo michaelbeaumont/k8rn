@@ -27,6 +27,7 @@ spec:
   jobTemplate:
     metadata:
       name: fstrim
+      volume: media
     spec:
       template:
         spec:
@@ -64,3 +65,52 @@ spec:
                 type: Directory
               name: media
   schedule: "0 0 * * 0"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: weekly-backup-fstrim
+  namespace: fstrim
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    metadata:
+      name: fstrim
+      volume: backup
+    spec:
+      template:
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                          - k8rn-core
+          securityContext:
+            runAsNonRoot: false
+            seccompProfile:
+              type: RuntimeDefault
+          restartPolicy: OnFailure
+          containers:
+            - image: ghcr.io/michaelbeaumont/fstrim:latest
+              name: fstrim
+              args:
+                - --verbose # note this number is kind of meaningless
+                - /mnt
+              volumeMounts:
+                - mountPath: /mnt
+                  name: backup
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
+                  add: [SYS_ADMIN]
+          volumes:
+            - hostPath:
+                path: /var/mnt/backup
+                type: Directory
+              name: backup
+  schedule: "0 3 * * 0"
