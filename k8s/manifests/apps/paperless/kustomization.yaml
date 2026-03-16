@@ -18,6 +18,10 @@ transformers:
         kind: PersistentVolume
         name: paperless-docs
         create: true
+      - path: spec/claimRef/namespace
+        kind: PersistentVolume
+        name: paperless-docs-local-backup
+        create: true
 patches:
   - patch: |-
       apiVersion: apps/v1
