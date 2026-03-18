@@ -9,9 +9,7 @@ spec:
   template:
     spec:
       automountServiceAccountToken: false
-      # TODO: this doesn't work with image volumes?
-      # https://github.com/containerd/containerd/issues/12812
-      # hostUsers: false
+      hostUsers: false
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
