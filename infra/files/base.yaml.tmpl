@@ -15,6 +15,7 @@ machine:
       validSubnets:
         - fd7a:115c:a1e0::/64
         - 100.64.0.0/10
+    image: ghcr.io/siderolabs/kubelet:v1.35.0
   time:
     servers:
       - time.cloudflare.com
@@ -37,3 +38,9 @@ cluster:
       name: none
   proxy:
     disabled: true # use cilium
+  apiServer:
+    image: registry.k8s.io/kube-apiserver:v1.35.0
+  controllerManager:
+    image: registry.k8s.io/kube-controller-manager:v1.35.0
+  scheduler:
+    image: registry.k8s.io/kube-scheduler:v1.35.0
