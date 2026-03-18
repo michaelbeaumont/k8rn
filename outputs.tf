@@ -71,8 +71,21 @@ output "talos_image" {
   sensitive   = false
 }
 
+output "talos_image_cache" {
+  description = "Image path segment to use for upgrade images if running off the local cahe"
+  value = {
+    for node, image in module.infra.talos_image : node => provider::corefunc::url_parse("https://${image}").path
+  }
+  sensitive = false
+}
+
 output "nodes" {
   description = "Nodes and their UUIDs"
   value       = module.infra.nodes
   sensitive   = false
+}
+
+output "image_cache_serve_cert" {
+  value     = module.infra.image_cache_serve_cert
+  sensitive = true
 }

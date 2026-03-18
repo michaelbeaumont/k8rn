@@ -61,6 +61,12 @@ variable "cluster_oidc_client_secret" {
   sensitive   = true
 }
 
+variable "image_cache_ip" {
+  description = "The IP address the image cache will be served on"
+  type        = string
+  default     = ""
+}
+
 variable "cloudflare_zone" {
   description = "Name of the cloudflare zone"
   type        = string

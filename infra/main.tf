@@ -47,6 +47,12 @@ variable "cluster_oidc_client_id" {
   type        = string
 }
 
+variable "image_cache_ip" {
+  description = "The IP address the image cache will be served on"
+  type        = string
+  default     = ""
+}
+
 variable "nodes" {
   description = "A description of all nodes, used to generate initial images"
   type        = map(object({ local_ip = string, disk_selector = map(any), extensions = optional(list(string), []), kernel_args = optional(list(string), []), network_devices = list(string), tags = list(string) }))

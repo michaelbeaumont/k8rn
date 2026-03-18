@@ -33,3 +33,10 @@ output "nodes" {
   value     = { for node_name, node in random_uuid.nodes : node_name => node.result }
   sensitive = false
 }
+
+output "image_cache_serve_cert" {
+  value = length(tls_self_signed_cert.image_cache_serve) > 0 ? {
+    "crt" = tls_self_signed_cert.image_cache_serve[0].cert_pem
+    "key" = tls_private_key.image_cache_serve.private_key_pem
+  } : {}
+}

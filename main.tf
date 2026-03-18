@@ -17,6 +17,10 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 5.0"
     }
+    corefunc = {
+      source  = "northwood-labs/corefunc"
+      version = "~> 2.0"
+    }
   }
 }
 
@@ -47,6 +51,8 @@ module "infra" {
 
   cluster_oidc_issuer_host = var.cluster_oidc_issuer_host
   cluster_oidc_client_id   = var.cluster_oidc_client_id
+
+  image_cache_ip = var.image_cache_ip
 
   nodes                        = var.nodes
   bootstrap_node               = var.bootstrap_node
