@@ -59,3 +59,79 @@ spec:
     requests:
       storage: 500Gi
   volumeName: immich-photos
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: photos-backup-local
+spec:
+  sourcePVC: photos
+  trigger:
+    schedule: "45 */12 * * *"
+  restic:
+    pruneIntervalDays: 14
+    moverSecurityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+      runAsUser: 1000
+      runAsGroup: 1000
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+    repository: restic-config-photos-local
+    retain:
+      hourly: 6
+      daily: 5
+      weekly: 4
+      monthly: 2
+      yearly: 1
+    copyMethod: Snapshot
+    storageClassName: openebs-zfs-data-delete
+    cacheStorageClassName: openebs-single-replica-delete
+    cacheCapacity: 5Gi
+    volumeSnapshotClassName: openebs-zfs-localpv-delete
+    moverVolumes:
+      - mountPath: local-backups
+        volumeSource:
+          persistentVolumeClaim:
+            claimName: photos-backup-local
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-photos-backup-local
+spec:
+  capacity:
+    storage: 1Ti
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: photos-backup-local
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /var/mnt/backup
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - k8rn-core
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: photos-backup-local
+spec:
+  volumeName: immich-photos-backup-local
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Ti

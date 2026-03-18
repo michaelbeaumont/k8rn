@@ -9,3 +9,12 @@ stringData:
     RESTIC_REPOSITORY: ${RESTIC_REPOSITORY_BASE}/immich/database
     AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
     AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: restic-config-photos-local
+type: Opaque
+stringData:
+    RESTIC_PASSWORD: "-"
+    RESTIC_REPOSITORY: local:/mnt/local-backups/photos
