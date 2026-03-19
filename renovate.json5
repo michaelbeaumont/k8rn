@@ -18,4 +18,11 @@
       '/\\.tf$/',
     ],
   },
+  packageRules: [
+    {
+      matchDatasources: ["helm"],
+      matchPackageNames: ["kube-prometheus-stack"],
+      schedule: ["* 0 * * 0"]
+    }
+  ],
 }
