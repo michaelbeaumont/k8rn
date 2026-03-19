@@ -89,7 +89,7 @@ spec:
             value: immich-valkey
           - name: TRANSFORMERS_CACHE
             value: /cache
-          image: ghcr.io/immich-app/immich-machine-learning:v2.6.0-openvino
+          image: ghcr.io/immich-app/immich-machine-learning:v2.6.1-openvino
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
