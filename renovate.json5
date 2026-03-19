@@ -25,4 +25,26 @@
       schedule: ["* 0 * * 0"]
     }
   ],
+  customManagers: [
+    {
+      customType: "regex",
+      description: "Update CloudNativePG Cluster image references",
+      managerFilePatterns: ["**/*.yaml"],
+      matchStrings: [
+        "kind:\\s+Cluster\\n(?:[^\\n]*\\n)*?\\s+imageName:\\s+(?<depName>[^:]+):(?<currentValue>[^\\s@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?",
+      ],
+      datasourceTemplate: "docker",
+      versioningTemplate: "docker",
+    },
+    {
+      customType: "regex",
+      description: "Update CloudNativePG Cluster image references",
+      managerFilePatterns: ["**/*.yaml"],
+      matchStrings: [
+        "kind:\\s+Cluster\\n(?:[^\\n]*\\n)*?\\s+image:\\s*\\n\\s+reference:\\s+(?<depName>[^:]+):(?<currentValue>[^\\s@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?"
+      ],
+      datasourceTemplate: "docker",
+      versioningTemplate: "regex:^pg(?<major>\\d+)-v((?<minor>\\d+))\\.((?<patch>\\d+))\\.((?<build>\\d+))$",
+    },
+  ],
 }
