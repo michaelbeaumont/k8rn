@@ -8,9 +8,15 @@ output "machine_secrets" {
   sensitive = true
 }
 
+
+output "has_control_plane" {
+  value = length(local.control_plane_nodes) > 0
+}
+
 output "kubeconfig" {
-  value     = talos_cluster_kubeconfig.this
+  value     = ephemeral.talos_cluster_kubeconfig.this
   sensitive = true
+  ephemeral = true
 }
 
 output "talos_image" {

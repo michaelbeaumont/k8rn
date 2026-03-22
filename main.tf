@@ -30,6 +30,7 @@ provider "cloudflare" {
 }
 
 locals {
+  cluster_name = "k8rn"
   pod_subnets = {
     ipv6 = "fdd2:14fe:fb0::/52", # randomly generated
     ipv4 = "10.244.0.0/16",
@@ -42,7 +43,7 @@ module "infra" {
   source = "./infra"
 
   talos_version = var.talos_version
-  cluster_name  = "k8rn"
+  cluster_name  = local.cluster_name
 
   cluster_oidc_issuer_host = var.cluster_oidc_issuer_host
   cluster_oidc_client_id   = var.cluster_oidc_client_id
@@ -67,18 +68,16 @@ module "infra" {
 }
 
 locals {
-  k8s_config = length(module.infra.kubeconfig) != 0 ? {
-    host                   = module.infra.kubeconfig[0].kubernetes_client_configuration.host
-    client_certificate     = base64decode(module.infra.kubeconfig[0].kubernetes_client_configuration.client_certificate)
-    client_key             = base64decode(module.infra.kubeconfig[0].kubernetes_client_configuration.client_key)
-    cluster_ca_certificate = base64decode(module.infra.kubeconfig[0].kubernetes_client_configuration.ca_certificate)
-    raw                    = module.infra.kubeconfig[0].kubeconfig_raw
+  k8s_config = module.infra.has_control_plane != 0 ? {
+    host                   = module.infra.kubeconfig.kubernetes_client_configuration.host
+    client_certificate     = base64decode(module.infra.kubeconfig.kubernetes_client_configuration.client_certificate)
+    client_key             = base64decode(module.infra.kubeconfig.kubernetes_client_configuration.client_key)
+    cluster_ca_certificate = base64decode(module.infra.kubeconfig.kubernetes_client_configuration.ca_certificate)
     } : {
     host                   = null
     client_certificate     = null
     client_key             = null
     cluster_ca_certificate = null
-    raw                    = null
   }
 }
 
@@ -121,7 +120,7 @@ locals {
 module "k8s" {
   source = "./k8s"
 
-  count = length(module.infra.kubeconfig) > 0 ? 1 : 0
+  count = module.infra.has_control_plane ? 1 : 0
 
   github_repo                      = var.github_repo
   lets_encrypt_email               = var.lets_encrypt_email

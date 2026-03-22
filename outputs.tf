@@ -6,8 +6,46 @@ output "talosconfig" {
 
 output "kubeconfig" {
   description = "Use with kubectl"
-  value       = local.k8s_config.raw
-  sensitive   = true
+  value = yamlencode({
+    apiVersion = "v1"
+    kind       = "Config",
+    clusters = [{
+      name = local.cluster_name,
+      cluster = {
+        certificate-authority-data = module.infra.machine_secrets.certs.k8s.cert,
+        server                     = "https://${local.cluster_name}.${var.dns_loadbalancer_domain}:6443",
+      },
+    }],
+    contexts = [{
+      context = {
+        cluster = local.cluster_name,
+        user    = var.cluster_oidc_issuer_host,
+      },
+      name = local.cluster_name,
+    }],
+    current-context = local.cluster_name,
+    users = [{
+      name = var.cluster_oidc_issuer_host,
+      user = {
+        exec = {
+          apiVersion = "client.authentication.k8s.io/v1"
+          command    = "kubectl",
+          args = [
+            "oidc-login",
+            "get-token",
+            "--oidc-issuer-url=https://${var.cluster_oidc_issuer_host}",
+            "--oidc-client-id=${var.cluster_oidc_client_id}",
+            "--oidc-extra-scope=profile",
+            "--oidc-extra-scope=groups",
+            "--oidc-pkce-method=S256",
+          ],
+          interactiveMode    = "Never",
+          provideClusterInfo = false,
+        },
+      },
+    }],
+  })
+  sensitive = true
 }
 
 output "machine_secrets" {
@@ -31,20 +69,6 @@ output "talos_image" {
   description = "URLs to use for upgrade images"
   value       = module.infra.talos_image
   sensitive   = false
-}
-
-output "cluster_oidc_issuer_host" {
-  description = "OIDC issuer hostname for cluster access"
-  value       = var.cluster_oidc_issuer_host
-}
-
-output "cluster_oidc_client_id" {
-  description = "OIDC client ID for cluster access"
-  value       = var.cluster_oidc_client_id
-}
-output "cluster_oidc_client_secret" {
-  description = "OIDC client secret for cluster access"
-  value       = var.cluster_oidc_client_secret
 }
 
 output "nodes" {
