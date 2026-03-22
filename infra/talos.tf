@@ -76,7 +76,7 @@ resource "talos_machine_configuration_apply" "workers_post_init" {
   ]
 }
 
-data "talos_cluster_health" "this" {
+ephemeral "talos_cluster_health" "this" {
   count                = length(local.control_plane_nodes) > 0 ? 1 : 0
   client_configuration = talos_machine_secrets.this.client_configuration
   control_plane_nodes = flatten([
@@ -120,7 +120,7 @@ resource "talos_machine_configuration_apply" "workers_kubelet_csr" {
 
 ephemeral "talos_cluster_kubeconfig" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
-  node                 = one(data.talos_cluster_health.this.0.control_plane_nodes)
+  node                 = one(ephemeral.talos_cluster_health.this.0.control_plane_nodes)
   // Note this is optional but the provider seems to have a bug if it's not set
-  endpoint = one(data.talos_cluster_health.this.0.control_plane_nodes)
+  endpoint = one(ephemeral.talos_cluster_health.this.0.control_plane_nodes)
 }
