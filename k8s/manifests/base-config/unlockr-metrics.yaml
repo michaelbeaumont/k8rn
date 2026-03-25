@@ -17,7 +17,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kube-prometheus
-      version: 11.9.0
+      version: 11.9.1
   values:
     config:
       modules:
