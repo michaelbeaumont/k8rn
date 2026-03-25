@@ -17,5 +17,7 @@ encryption:
   keys:
     - kms:
         endpoint: ${kms_endpoint}
+      # Note: this drive was not created by Talos, thus slot: 1
+      # A passphrase is in slot 0
       slot: 1
   options: [] # only perf here so we need to manually add allow-discards, no_read_workqueue, no_write_workqueue

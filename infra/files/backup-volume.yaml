@@ -7,7 +7,7 @@ provisioning:
   diskSelector:
     match: >-
       disk.wwid == 'naa.500014a000000001'
-      && disk.model == 'Crucial X6 SSD'
+      && disk.model == 'EX400U SURVIVOR'
       && disk.transport == 'usb'
 filesystem:
   type: xfs
