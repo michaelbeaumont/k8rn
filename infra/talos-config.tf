@@ -139,7 +139,6 @@ locals {
       contains(node.tags, "xe-sriov") ? [
         templatefile("${path.module}/files/xe-sriov_numvfs.yaml", { device = "0xa780", pci_bus = 2, vfio_pci_num = 2, total_num = 3 }),
       ] : [],
-      file("${path.module}/files/containerd-cri-cdi.yaml"),
       file("${path.module}/files/shutdown-by-pod-priority.yaml"),
       file("${path.module}/files/nftables-buffer-space-fix.yaml"),
     ] if contains(keys(merge(local.control_plane_nodes, local.worker_nodes)), name)

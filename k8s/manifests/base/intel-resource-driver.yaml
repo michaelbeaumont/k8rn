@@ -35,8 +35,7 @@ spec:
             pod-security.kubernetes.io/enforce: privileged
             pod-security.kubernetes.io/audit: baseline
             pod-security.kubernetes.io/warn: baseline
-    - # Talos has readOnly /etc so the default containerd directories don't work
-      # we elsewhere customize CRI to use writable directories
+    - # Talos has readOnly /etc so just point the static CDI volumeMount to an emptyDir
       # https://docs.siderolabs.com/talos/v1.12/configure-your-talos-cluster/images-container-runtime/containerd#set-cdi-plugin-spec-dirs-to-writable-directories
       patch: |-
         apiVersion: apps/v1
@@ -49,13 +48,9 @@ spec:
             spec:
               volumes:
                 - name: cdi
-                  hostPath:
-                    path: /var/cdi/static
-                    type: ""
-                - name: varruncdi
-                  hostPath:
-                    path: /var/cdi/dynamic
-                    type: ""
+                  emptyDir:
+                    sizeLimit: 1Mi
+                  hostPath: null
     - # The driver Pod being killed too early leads to issues cleaning up Pods
       patch: |-
         apiVersion: apps/v1
