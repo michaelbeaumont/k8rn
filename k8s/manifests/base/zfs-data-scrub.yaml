@@ -22,6 +22,11 @@ kind: CronJob
 metadata:
   name: weekly-zfs-data-scrub
   namespace: zfs-scrub
+  annotations:
+    ignore-check.kube-linter.io/privilege-escalation-container: "it has to be privileged"
+    ignore-check.kube-linter.io/privileged-container: "it has to be privileged"
+    ignore-check.kube-linter.io/run-as-non-root: "it has to be root"
+    ignore-check.kube-linter.io/latest-tag: "it's my image"
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -47,5 +52,6 @@ spec:
               args:
                 - data
               securityContext:
+                readOnlyRootFilesystem: true
                 privileged: true
   schedule: "0 0 * * 1"

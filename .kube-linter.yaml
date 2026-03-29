@@ -1,0 +1,4 @@
+checks:
+  ignorePaths:
+    - "**/.sops.yaml"
+    - "k8s/manifests/base/kubevirt/**"

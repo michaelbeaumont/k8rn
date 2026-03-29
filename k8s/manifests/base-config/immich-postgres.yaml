@@ -1,7 +1,7 @@
+---
 # Separating this is necessary for flux to understand the CRDs in the app Kustomization
 # If we ever need more than one DB in the cluster, might make sense to just do
 # a cluster wide install of cpng
----
 apiVersion: v1
 kind: Namespace
 metadata:

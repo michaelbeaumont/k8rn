@@ -22,6 +22,10 @@ kind: CronJob
 metadata:
   name: weekly-media-fstrim
   namespace: fstrim
+  annotations:
+    ignore-check.kube-linter.io/privilege-escalation-container: "it has to be privileged"
+    ignore-check.kube-linter.io/run-as-non-root: "it has to be root"
+    ignore-check.kube-linter.io/latest-tag: "it's my image"
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -56,6 +60,7 @@ spec:
                   name: media
               securityContext:
                 allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
                 capabilities:
                   drop: [ALL]
                   add: [SYS_ADMIN]
