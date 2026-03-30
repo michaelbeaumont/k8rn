@@ -58,6 +58,10 @@ transformers:
         kind: PersistentVolume
         name: syncthing-synced-data
         create: true
+      - path: spec/claimRef/namespace
+        kind: PersistentVolume
+        name: syncthing-synced-data-backup-local
+        create: true
 resources:
   - syncthing.yaml
   - config.yaml
@@ -69,3 +73,4 @@ resources:
   - servicemonitor.yaml
   - apikey.yaml
   - alerts.yaml
+  - restic.yaml

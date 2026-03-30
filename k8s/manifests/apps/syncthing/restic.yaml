@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: restic-config-synced-data-local
+type: Opaque
+stringData:
+    RESTIC_PASSWORD: "-"
+    RESTIC_REPOSITORY: local:/mnt/local-backups/shared
