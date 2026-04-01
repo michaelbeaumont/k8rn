@@ -46,11 +46,17 @@ spec:
         spec:
           template:
             spec:
+              containers:
+                - name: kubelet-plugin
+                  env:
+                    - name: CDI_ROOT
+                      value: /var/run/cdi
+                  volumeMounts:
+                    - mountPath: /etc/cdi
+                      $patch: delete
               volumes:
                 - name: cdi
-                  emptyDir:
-                    sizeLimit: 1Mi
-                  hostPath: null
+                  $patch: delete
     - # The driver Pod being killed too early leads to issues cleaning up Pods
       patch: |-
         apiVersion: apps/v1
