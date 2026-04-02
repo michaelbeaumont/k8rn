@@ -199,6 +199,7 @@ spec:
               sectionName: main
       prometheusSpec:
         externalUrl: https://prometheus.${services_hostname_suffix}
+        retentionSize: "50GiB"
         ruleSelectorNilUsesHelmValues: false
         serviceDiscoveryRole: EndpointSlice
         serviceMonitorSelectorNilUsesHelmValues: false
@@ -209,8 +210,16 @@ spec:
           - default: true
             name: cluster-relabeling
             relabelings:
-              - sourceLabels: [ __name__ ]
+              - sourceLabels: [__name__]
                 regex: (.*)
                 targetLabel: cluster
                 replacement: k8rn
                 action: replace
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: openebs-single-replica
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 53Gi
