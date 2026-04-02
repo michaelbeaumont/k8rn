@@ -119,8 +119,7 @@ resource "talos_machine_configuration_apply" "workers_kubelet_csr" {
 }
 
 ephemeral "talos_cluster_kubeconfig" "this" {
-  client_configuration = talos_machine_secrets.this.client_configuration
-  node                 = one(ephemeral.talos_cluster_health.this.0.control_plane_nodes)
-  // Note this is optional but the provider seems to have a bug if it's not set
-  endpoint = one(ephemeral.talos_cluster_health.this.0.control_plane_nodes)
+  machine_secrets = talos_machine_secrets.this.machine_secrets
+  cluster_name    = var.cluster_name
+  endpoint        = "https://${var.cluster_name}.${var.dns_loadbalancer_domain}:6443"
 }
