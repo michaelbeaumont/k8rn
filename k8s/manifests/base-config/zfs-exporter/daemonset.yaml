@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: zfs-exporter
+  annotations:
+    ignore-check.kube-linter.io/privilege-escalation-container: "it has to be privileged"
+    ignore-check.kube-linter.io/privileged-container: "it has to be privileged"
+    ignore-check.kube-linter.io/run-as-non-root: "it has to be root"
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: false
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - k8rn-core
+      containers:
+        - name: zfs-exporter
+          securityContext:
+            readOnlyRootFilesystem: true
+            privileged: true
+          image: ghcr.io/michaelbeaumont/zfs-exporter:2.3.12
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 9134
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            requests:
+              cpu: 30m
+              memory: 64Mi
+            limits:
+              memory: 64Mi

@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zfs-exporter
+spec:
+  ports:
+    - port: 9134
+      targetPort: http
+      protocol: TCP
+      name: http

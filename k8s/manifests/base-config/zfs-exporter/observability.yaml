@@ -1,0 +1,56 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: zfs-exporter
+spec:
+  endpoints:
+    - port: http
+      scheme: http
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: zfs-exporter
+spec:
+  groups:
+    - name: zfs-exporter
+      rules:
+        - alert: ZFSPoolFillingUp
+          annotations:
+            description: The ZFS pool {{ $labels.pool }}
+              {{ with $labels.cluster -}} on Cluster {{ . }} {{- end }}
+              is only {{ $value | humanizePercentage }} free.
+            summary: ZFS pool is filling up.
+          expr: |-
+            (
+              zfs_pool_free_bytes{job="zfs-exporter", namespace=~".*"}
+                /
+              zfs_pool_size_bytes{job="zfs-exporter", namespace=~".*"}
+            ) < 0.03
+            and
+            zfs_pool_allocated_bytes{job="zfs-exporter", namespace=~".*"} > 0
+          for: 1m
+          labels:
+            severity: critical
+        - alert: ZFSPoolFillingUp
+          annotations:
+            description:
+              Based on recent sampling, the ZFS pool {{ $labels.pool }}
+              {{ with $labels.cluster -}} on Cluster {{ . }} {{- end }}
+              is expected to fill up within four days.
+              Currently {{ $value | humanizePercentage }} is available.
+            summary: ZFS pool is filling up.
+          expr: |-
+            (
+              zfs_pool_free_bytes{job="zfs-exporter", namespace=~".*"}
+                /
+              zfs_pool_size_bytes{job="zfs-exporter", namespace=~".*"}
+            ) < 0.15
+            and
+            zfs_pool_allocated_bytes{job="zfs-exporter", namespace=~".*"} > 0
+            and
+            predict_linear(zfs_pool_free_bytes{job="zfs-exporter", namespace=~".*"}[6h], 4 * 24 * 3600) < 0
+          for: 1h
+          labels:
+            severity: warning

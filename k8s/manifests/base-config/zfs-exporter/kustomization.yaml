@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: observability
+labels:
+  - includeTemplates: true
+    includeSelectors: true
+    pairs:
+      app.kubernetes.io/name: zfs-exporter
+    fields:
+      - path: spec/selector/matchLabels
+        group: monitoring.coreos.com
+        kind: ServiceMonitor
+        create: true
+resources:
+  - daemonset.yaml
+  - svc.yaml
+  - observability.yaml
+  - networkpolicy.yaml
