@@ -46,5 +46,15 @@
       datasourceTemplate: "docker",
       versioningTemplate: "regex:^pg(?<major>\\d+)-v((?<minor>\\d+))\\.((?<patch>\\d+))\\.((?<build>\\d+))$",
     },
+    {
+      customType: "regex",
+      description: "Update zfs-exporter in Dockerfile",
+      managerFilePatterns: ["utils/zfs-exporter/Dockerfile"],
+      depNameTemplate: "pdf/zfs_exporter",
+      matchStrings: [
+        "ARG ZFS_EXPORTER_VERSION=(?<currentValue>.*)",
+      ],
+      datasourceTemplate: "github-releases",
+    },
   ],
 }
