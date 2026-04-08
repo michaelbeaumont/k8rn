@@ -3,32 +3,32 @@ resource "talos_machine_secrets" "this" {
 }
 
 resource "random_uuid" "nodes" {
-  for_each = toset(keys(var.nodes))
+  for_each = toset(keys({ for name, node in var.nodes : name => node if node.generate_uuid }))
 }
 
 resource "talos_image_factory_schematic" "this" {
-  for_each = random_uuid.nodes
+  for_each = var.nodes
   schematic = yamlencode(
     {
       customization = {
-        meta = [
+        meta = can(random_uuid.nodes[each.key]) ? [
           {
-            key : 15, // 0x0f
-            value : each.value.id,
+            key : 15, // 0x0f: the SystemInformation UUID
+            value : random_uuid.nodes[each.key].id,
           }
-        ]
+        ] : null
         extraKernelArgs = concat(
           [
             "sysctl.net.ipv6.conf.default.stable_secret=${var.stable_secret}",
           ],
-          var.nodes[each.key].kernel_args,
+          each.value.kernel_args,
         )
         systemExtensions = {
           officialExtensions = concat([
             "siderolabs/intel-ucode",
             "siderolabs/tailscale",
             ],
-            var.nodes[each.key].extensions,
+            each.value.extensions,
           ),
         }
       }

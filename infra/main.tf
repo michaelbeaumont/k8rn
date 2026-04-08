@@ -55,7 +55,7 @@ variable "image_cache_ip" {
 
 variable "nodes" {
   description = "A description of all nodes, used to generate initial images"
-  type        = map(object({ local_ip = string, disk_selector = map(any), extensions = optional(list(string), []), kernel_args = optional(list(string), []), network_devices = list(string), tags = list(string) }))
+  type        = map(object({ local_ip = string, disk_selector = map(any), extensions = optional(list(string), []), kernel_args = optional(list(string), []), network_devices = list(string), tags = list(string), generate_uuid = bool }))
 }
 
 variable "bootstrap_node" {
