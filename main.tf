@@ -139,7 +139,7 @@ module "k8s" {
   restic_remote_password           = var.restic_remote_password
   local_cidr = {
     ipv4 = "192.168.0.1/23"
-    ipv6 = "fd4a:f9c7:76ae:1::/64"
+    ipv6 = "fd4b:7c9f:5791:9001::/64"
   }
   pod_cidr = {
     ipv4 = local.pod_subnets.ipv4
