@@ -54,4 +54,10 @@ spec:
               securityContext:
                 readOnlyRootFilesystem: true
                 privileged: true
+              resources:
+                requests:
+                  cpu: 1m
+                  memory: 20Mi
+                limits:
+                  memory: 30Mi
   schedule: "0 0 * * 1"

@@ -43,6 +43,8 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /etc/linkding/data
+            - name: tmp
+              mountPath: /tmp
           livenessProbe:
             httpGet:
               path: /health
@@ -59,15 +61,24 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 10
             failureThreshold: 3
-          resources: {}
+          resources:
+            requests:
+              cpu: 10m
+              memory: 200Mi
+            limits:
+              memory: 300Mi
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop: [ALL]
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: data
+        - name: tmp
+          emptyDir:
+            sizeLimit: 100Mi
 ---
 apiVersion: v1
 kind: Service

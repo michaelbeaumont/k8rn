@@ -35,7 +35,7 @@ data:
     Server1.Optional=no
     Server1.Group=0
 
-    Server1.Port=5563
+    Server1.Port=563
     Server1.IpVersion=auto
     Server1.Connections=10
 
@@ -62,7 +62,7 @@ data:
     #Server2.Username=
     #Server2.Password=
 
-    Server2.Port=5563
+    Server2.Port=563
     Server2.IpVersion=auto
     Server2.Connections=10
 
@@ -78,7 +78,7 @@ data:
 
     ControlPort=6789
 
-    ControlUsername=nzbget
+    ControlUsername=
 
     ControlPassword=
 
@@ -135,7 +135,7 @@ data:
 
     FlushQueue=yes
 
-    ContinuePartial=yes
+    ContinuePartial=no
 
     # Memory limit for article cache (megabytes).
     ArticleCache=300
@@ -237,6 +237,8 @@ data:
 
     # Set screen-outputmode (loggable, colored, curses).
     OutputMode=loggable
+
+    CursesNzbName=no
 
     # Update interval for Frontend-output in console mode or remote client
     # mode (milliseconds).

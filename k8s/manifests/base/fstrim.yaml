@@ -64,6 +64,12 @@ spec:
                 capabilities:
                   drop: [ALL]
                   add: [SYS_ADMIN]
+              resources:
+                requests:
+                  cpu: 1m
+                  memory: 20Mi
+                limits:
+                  memory: 30Mi
           volumes:
             - hostPath:
                 path: /var/mnt/media

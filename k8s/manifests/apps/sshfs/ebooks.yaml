@@ -5,6 +5,10 @@ metadata:
   name: ebooks
   labels:
     sshfs-volume: ebooks
+  annotations:
+    ignore-check.kube-linter.io/ssh-port: "it's ssh"
+    ignore-check.kube-linter.io/latest-tag: "it's my image"
+    ignore-check.kube-linter.io/run-as-non-root: "hostUsers: false"
 spec:
   replicas: 1
   strategy:
@@ -72,7 +76,12 @@ spec:
               subPath: sshfs.conf
             - mountPath: /mnt
               name: ebooks
-          resources: {}
+          resources:
+            requests:
+              cpu: 50m
+              memory: 50Mi
+            limits:
+              memory: 200Mi
       volumes:
         - name: authorized-keys
           configMap:

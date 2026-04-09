@@ -118,6 +118,7 @@ spec:
             capabilities:
               drop:
                 - ALL
+            readOnlyRootFilesystem: true
           startupProbe:
             failureThreshold: 30
             httpGet:
@@ -129,6 +130,12 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: data
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 150m
+            limits:
+              memory: 3Gi
       volumes:
         - name: data
           persistentVolumeClaim:

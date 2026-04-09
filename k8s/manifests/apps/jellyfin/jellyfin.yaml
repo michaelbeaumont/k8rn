@@ -15,9 +15,9 @@ spec:
   spec:
     devices:
       requests:
-      - name: gpu
-        exactly:
-          deviceClassName: gpu.intel.com
+        - name: gpu
+          exactly:
+            deviceClassName: gpu.intel.com
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -44,6 +44,7 @@ spec:
           #    value: xxx.xxx.xxx.xxx
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop: [ALL]
           # Note: this image in particular has the OpenCL runtime
@@ -72,7 +73,12 @@ spec:
             failureThreshold: 3
           resources:
             claims:
-            - name: gpu
+              - name: gpu
+            requests:
+              cpu: 100m
+              memory: 1Gi
+            limits:
+              memory: 2Gi
           volumeMounts:
             - mountPath: /config
               name: config
@@ -85,8 +91,8 @@ spec:
               readOnly: true
               subPath: movies
       resourceClaims:
-      - name: gpu
-        resourceClaimTemplateName: intel-gpu
+        - name: gpu
+          resourceClaimTemplateName: intel-gpu
       volumes:
         - name: config
           persistentVolumeClaim:

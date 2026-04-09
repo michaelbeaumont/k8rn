@@ -1,8 +1,8 @@
+---
 # CPNG will treat this as an orphan PVC due to the labels and use it to restore
 # the cluster
 # Note: This does NOT work at initial init but that's much less
 # important than it working with the existing backups and cluster recreation.
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

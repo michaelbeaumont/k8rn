@@ -56,6 +56,7 @@ spec:
                 name: server-credentials
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop: [ALL]
           image: nzbgetcom/nzbget:v26.2
@@ -80,6 +81,8 @@ spec:
             timeoutSeconds: 10
             failureThreshold: 3
           volumeMounts:
+            - mountPath: /config
+              name: tmp
             - mountPath: /config/persistence/inter
               name: inter-downloads-and-history
               subPath: inter
@@ -108,7 +111,12 @@ spec:
             - name: extension-videosort
               mountPath: /config/scripts/videosort
               readOnly: true
-          resources: {}
+          resources:
+            requests:
+              cpu: 100m
+              memory: 150Mi
+            limits:
+              memory: 500Mi
       volumes:
         - name: tmp
           emptyDir: {}

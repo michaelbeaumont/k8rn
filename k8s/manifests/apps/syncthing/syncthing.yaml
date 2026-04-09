@@ -27,72 +27,78 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         runAsNonRoot: true
       containers:
-      - name: syncthing
-        image: syncthing/syncthing:2.1.1
-        env:
-        - name: POD_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-        args:
-          - --home=
-          - --config=/var/syncthing/config
-          - --data=/var/syncthing/data
-          - --gui-address=${POD_IP}:8384
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          capabilities:
-            drop: [ALL]
-        ports:
-        - name: tcp
-          containerPort: 22000
-          protocol: TCP
-        - name: udp
-          containerPort: 22000
-          protocol: UDP
-        - name: web
-          containerPort: 8384
-        livenessProbe:
-          httpGet:
-            path: /rest/noauth/health
-            port: web
-          initialDelaySeconds: 3
-          periodSeconds: 10
-          timeoutSeconds: 10
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /rest/noauth/health
-            port: web
-          initialDelaySeconds: 3
-          periodSeconds: 10
-          timeoutSeconds: 10
-          failureThreshold: 3
-        volumeMounts:
-         - name: config-dir
-           mountPath: /var/syncthing/config
-         - name: data-dir
-           mountPath: /var/syncthing/data
-         - name: synced-shared
-           mountPath: /var/syncthing/synced-shared
-         - name: synced-obsidian
-           mountPath: /var/syncthing/synced-obsidian
-         - name: tmp
-           mountPath: /tmp
-         # These can be generated with `syncthing generate`:
-         - name: config
-           mountPath: /var/syncthing/config/config.xml
-           subPath: config.xml
-           readOnly: true
-         - name: device-key
-           mountPath: /var/syncthing/config/cert.pem
-           subPath: tls.crt
-           readOnly: true
-         - name: device-key
-           mountPath: /var/syncthing/config/key.pem
-           subPath: tls.key
-           readOnly: true
+        - name: syncthing
+          image: syncthing/syncthing:2.1.1
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          args:
+            - --home=
+            - --config=/var/syncthing/config
+            - --data=/var/syncthing/data
+            - --gui-address=${POD_IP}:8384
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          ports:
+            - name: tcp
+              containerPort: 22000
+              protocol: TCP
+            - name: udp
+              containerPort: 22000
+              protocol: UDP
+            - name: web
+              containerPort: 8384
+          livenessProbe:
+            httpGet:
+              path: /rest/noauth/health
+              port: web
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /rest/noauth/health
+              port: web
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - name: config-dir
+              mountPath: /var/syncthing/config
+            - name: data-dir
+              mountPath: /var/syncthing/data
+            - name: synced-shared
+              mountPath: /var/syncthing/synced-shared
+            - name: synced-obsidian
+              mountPath: /var/syncthing/synced-obsidian
+            - name: tmp
+              mountPath: /tmp
+            # These can be generated with `syncthing generate`:
+            - name: config
+              mountPath: /var/syncthing/config/config.xml
+              subPath: config.xml
+              readOnly: true
+            - name: device-key
+              mountPath: /var/syncthing/config/cert.pem
+              subPath: tls.crt
+              readOnly: true
+            - name: device-key
+              mountPath: /var/syncthing/config/key.pem
+              subPath: tls.key
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              memory: 500Mi
       volumes:
         - name: config-dir
           emptyDir:

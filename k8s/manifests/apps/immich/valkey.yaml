@@ -83,6 +83,7 @@ spec:
             capabilities:
               drop:
               - ALL
+            readOnlyRootFilesystem: true
           startupProbe:
             exec:
               command:
@@ -93,9 +94,18 @@ spec:
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 5
+          resources:
+            requests:
+              cpu: 25m
+              memory: 50Mi
+            limits:
+              memory: 200Mi
           volumeMounts:
           - mountPath: /data
             name: data
+      resources:
+        requests:
+          memory: 1Gi
       volumes:
         - emptyDir: {}
           name: data
