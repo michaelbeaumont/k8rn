@@ -84,7 +84,7 @@ spec:
           # echo '{"host": "immich-valkey","family": 6}' | base64
           - name: REDIS_URL
             value: ioredis://eyJob3N0IjogImltbWljaC12YWxrZXkiLCJmYW1pbHkiOiA2fQo=
-          image: ghcr.io/immich-app/immich-server:v2.7.3
+          image: ghcr.io/immich-app/immich-server:v2.7.5
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
