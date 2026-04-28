@@ -16,5 +16,5 @@ encryption:
   keys:
     - kms:
         endpoint: ${kms_endpoint}
-      slot: 0
+      slot: 1
   options: [] # only perf here so we need to manually add allow-discards, no_read_workqueue, no_write_workqueue
