@@ -1,6 +1,6 @@
 output "talosconfig" {
   description = "Use with talosctl"
-  value       = module.infra.talosconfig
+  value       = module.infra.talos_client_configuration.talos_config
   sensitive   = true
 }
 

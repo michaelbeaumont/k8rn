@@ -1,5 +1,5 @@
-output "talosconfig" {
-  value     = data.talos_client_configuration.this.talos_config
+output "talos_client_configuration" {
+  value     = data.talos_client_configuration.this
   sensitive = true
 }
 
@@ -7,7 +7,6 @@ output "machine_secrets" {
   value     = talos_machine_secrets.this.machine_secrets
   sensitive = true
 }
-
 
 output "kubeconfig" {
   value     = ephemeral.talos_cluster_kubeconfig.this
@@ -18,6 +17,19 @@ output "kubeconfig" {
 output "talos_image" {
   value     = local.image_uri
   sensitive = false
+}
+
+output "talos_machine_configuration" {
+  value = merge(
+    {
+      for node, config in ephemeral.talos_machine_configuration.worker_nodes_final : node => config.machine_configuration
+    },
+    {
+      for node, config in ephemeral.talos_machine_configuration.control_plane_nodes_final : node => config.machine_configuration
+    },
+  )
+  sensitive = true
+  ephemeral = true
 }
 
 output "talos_url" {

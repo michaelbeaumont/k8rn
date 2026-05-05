@@ -123,6 +123,7 @@ locals {
   # in case taints need to change after node registration
   node_taints = {}
 }
+
 module "k8s" {
   source = "./k8s"
 
@@ -154,4 +155,15 @@ module "k8s" {
     : name => taints if length(taints) > 0
   }
   kms_endpoint = var.kms_endpoint
+}
+
+module "kubelet_server_certs" {
+  source = "./kubelet_server_certs"
+
+  depends_on = [module.infra.k8s]
+
+  nodes                 = toset(nonsensitive(module.infra.talos_client_configuration.nodes))
+  endpoint              = module.infra.talos_client_configuration.endpoints[0]
+  machine_configuration = module.infra.talos_machine_configuration
+  client_configuration  = module.infra.talos_client_configuration.client_configuration
 }

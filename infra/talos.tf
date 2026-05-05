@@ -35,18 +35,6 @@ resource "talos_machine_configuration_apply" "control_plane_post_init" {
   endpoint                       = local.dns_loadbalancer_hostname
 }
 
-locals {
-  extra_hosts_patch = templatefile(
-    "${path.module}/files/extra-hosts.yaml.tmpl",
-    {
-      extra_hosts = [
-        for dev in merge(data.tailscale_device.cp, data.tailscale_device.worker)
-        : { ip = dev.addresses[1], aliases = [dev.hostname] }
-      ],
-    }
-  )
-}
-
 resource "talos_machine_configuration_apply" "workers_init" {
   for_each = local.worker_nodes
   client_configuration = [
@@ -64,12 +52,9 @@ resource "talos_machine_configuration_apply" "workers_init" {
 resource "talos_machine_configuration_apply" "workers_post_init" {
   for_each                       = talos_machine_configuration_apply.workers_init
   client_configuration           = talos_machine_secrets.this.client_configuration
-  machine_configuration_input_wo = ephemeral.talos_machine_configuration.worker_nodes[each.key].machine_configuration
+  machine_configuration_input_wo = ephemeral.talos_machine_configuration.worker_nodes_final[each.key].machine_configuration
   node                           = data.tailscale_device.worker[each.key].addresses[1]
   endpoint                       = local.dns_loadbalancer_hostname
-  config_patches = [
-    local.extra_hosts_patch,
-  ]
 }
 
 ephemeral "talos_cluster_health" "this" {
@@ -94,24 +79,9 @@ ephemeral "talos_cluster_health" "this" {
 resource "talos_machine_configuration_apply" "control_plane_extra_hosts" {
   for_each                       = talos_machine_configuration_apply.control_plane_post_init
   client_configuration           = each.value.client_configuration
-  machine_configuration_input_wo = ephemeral.talos_machine_configuration.control_plane_nodes[each.key].machine_configuration
+  machine_configuration_input_wo = ephemeral.talos_machine_configuration.control_plane_nodes_final[each.key].machine_configuration
   node                           = each.value.node
   endpoint                       = each.value.endpoint
-  config_patches = [
-    local.extra_hosts_patch,
-    file("${path.module}/files/kubelet-rotate-server-crts.yaml"),
-  ]
-}
-
-resource "talos_machine_configuration_apply" "workers_kubelet_csr" {
-  for_each                    = talos_machine_configuration_apply.workers_post_init
-  client_configuration        = each.value.client_configuration
-  machine_configuration_input = each.value.machine_configuration
-  node                        = each.value.node
-  endpoint                    = each.value.endpoint
-  config_patches = [
-    file("${path.module}/files/kubelet-rotate-server-crts.yaml"),
-  ]
 }
 
 ephemeral "talos_cluster_kubeconfig" "this" {

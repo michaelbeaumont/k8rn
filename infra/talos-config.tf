@@ -197,3 +197,41 @@ ephemeral "talos_machine_configuration" "worker_nodes" {
     }),
   ])
 }
+
+locals {
+  extra_hosts_patch = templatefile(
+    "${path.module}/files/extra-hosts.yaml.tmpl",
+    {
+      extra_hosts = [
+        for dev in merge(data.tailscale_device.cp, data.tailscale_device.worker)
+        : { ip = dev.addresses[1], aliases = [dev.hostname] }
+      ],
+    }
+  )
+}
+
+ephemeral "talos_machine_configuration" "control_plane_nodes_final" {
+  for_each         = local.control_plane_nodes
+  cluster_name     = ephemeral.talos_machine_configuration.control_plane_nodes[each.key].cluster_name
+  cluster_endpoint = ephemeral.talos_machine_configuration.control_plane_nodes[each.key].cluster_endpoint
+  machine_type     = ephemeral.talos_machine_configuration.control_plane_nodes[each.key].machine_type
+  machine_secrets  = ephemeral.talos_machine_configuration.control_plane_nodes[each.key].machine_secrets
+  talos_version    = ephemeral.talos_machine_configuration.control_plane_nodes[each.key].talos_version
+  config_patches = flatten([
+    ephemeral.talos_machine_configuration.control_plane_nodes[each.key].config_patches,
+    local.extra_hosts_patch,
+  ])
+}
+
+ephemeral "talos_machine_configuration" "worker_nodes_final" {
+  for_each         = local.worker_nodes
+  cluster_name     = ephemeral.talos_machine_configuration.worker_nodes[each.key].cluster_name
+  cluster_endpoint = ephemeral.talos_machine_configuration.worker_nodes[each.key].cluster_endpoint
+  machine_type     = ephemeral.talos_machine_configuration.worker_nodes[each.key].machine_type
+  machine_secrets  = ephemeral.talos_machine_configuration.worker_nodes[each.key].machine_secrets
+  talos_version    = ephemeral.talos_machine_configuration.worker_nodes[each.key].talos_version
+  config_patches = flatten([
+    ephemeral.talos_machine_configuration.worker_nodes[each.key].config_patches,
+    local.extra_hosts_patch,
+  ])
+}
