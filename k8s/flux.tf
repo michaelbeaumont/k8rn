@@ -91,6 +91,33 @@ resource "helm_release" "flux" {
   ]
 }
 
+resource "helm_release" "flux-sync-crds" {
+  repository = "https://fluxcd-community.github.io/helm-charts"
+  chart      = "flux2-sync"
+  name       = "flux-sync-crds"
+  namespace  = helm_release.flux.namespace
+  version    = "1.14.4"
+
+  values = [
+    <<-EOT
+    gitRepository:
+      spec:
+        interval: 10m0s
+        ref:
+          branch: main
+        secretRef:
+          name: deploy-key
+        url: ssh://git@github.com/${var.github_repo}
+    kustomization:
+      spec:
+        interval: 10m0s
+        path: ./k8s/manifests/crds
+        prune: true
+        wait: true
+    EOT
+  ]
+}
+
 resource "helm_release" "flux-sync-prebase" {
   repository = "https://fluxcd-community.github.io/helm-charts"
   chart      = "flux2-sync"
@@ -114,6 +141,8 @@ resource "helm_release" "flux-sync-prebase" {
         path: ./k8s/manifests/prebase
         prune: true
         wait: true
+        dependsOn:
+          - name: ${helm_release.flux-sync-crds.name}
         decryption:
           provider: sops
           secretRef:

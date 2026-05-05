@@ -56,5 +56,14 @@
       ],
       datasourceTemplate: "github-releases",
     },
+    {
+      "customType": "regex",
+      description: "Update Github URLs in YAML",
+      "managerFilePatterns": ["/\\.ya?ml$/"],
+      "matchStrings": [
+        "https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/(?<currentValue>v?[\\d\\.]+)/"
+      ],
+      "datasourceTemplate": "github-releases"
+    },
   ],
 }

@@ -25,9 +25,9 @@ metadata:
   namespace: envoy-gateway-system
 spec:
   install:
-    crds: CreateReplace
+    crds: Skip
   upgrade:
-    crds: CreateReplace
+    crds: Skip
   interval: 10m0s
   targetNamespace: envoy-gateway-system
   chart:
