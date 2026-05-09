@@ -79,9 +79,9 @@ spec:
               - --endpoint
               - "${kms_endpoint}"
               - --slot
-              - "2"
+              - "1"
               - --device
-              - /dev/disk/by-uuid/a6afe516-1d0b-4a54-8e71-5f70ab3f8200
+              - /dev/disk/by-uuid/b711c34f-5e9f-433f-95f7-e0d2bcab491f
               - --mapped-name
               - data1
               - --only-on-node
@@ -106,9 +106,9 @@ spec:
               - --endpoint
               - "${kms_endpoint}"
               - --slot
-              - "2"
+              - "1"
               - --device
-              - /dev/disk/by-uuid/da635a66-94c6-46b2-99bc-0ee46c9c6ef1
+              - /dev/disk/by-uuid/f3afd939-7e8a-4f71-af2c-b23f4309eb2f
               - --mapped-name
               - data2
               - --only-on-node
