@@ -35,6 +35,7 @@ output "kubeconfig" {
             "get-token",
             "--oidc-issuer-url=https://${var.cluster_oidc_issuer_host}",
             "--oidc-client-id=${var.cluster_oidc_client_id}",
+            "--oidc-client-secret=${var.cluster_oidc_client_secret}",
             "--oidc-extra-scope=profile",
             "--oidc-extra-scope=groups",
             "--oidc-pkce-method=S256",
