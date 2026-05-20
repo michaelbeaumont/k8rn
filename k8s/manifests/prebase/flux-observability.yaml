@@ -284,25 +284,3 @@ data:
               #        ready: [ status, conditions, "[type=Ready]", status ]
               #        suspended: [ spec, suspend ]
               #        source_name: [ spec, sourceRef, name ]
----
-apiVersion: monitoring.coreos.com/v1
-kind: PrometheusRule
-metadata:
-  name: alerts
-  namespace: flux-system
-spec:
-  groups:
-    - name: flux
-      rules:
-        - alert: FluxResourceNotReady
-          annotations:
-            description: "{{ $labels.customresource_kind }} {{ $labels.namespace }}/{{ $labels.name }} isn't ready!"
-            summary: "A Flux resource isn't ready"
-          # OCI HelmRepository doesn't report readiness
-          expr: |-
-            (
-              gotk_resource_info{ready!="True",url!~"oci://.*"} != 0
-            )
-          for: 10m
-          labels:
-            severity: warning
