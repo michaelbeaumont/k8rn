@@ -8,6 +8,9 @@ encryption:
     - kms:
         endpoint: ${kms_endpoint}
       slot: 0
+  options:
+    - no_read_workqueue
+    - no_write_workqueue
 ---
 apiVersion: v1alpha1
 kind: VolumeConfig
@@ -21,3 +24,6 @@ encryption:
       # Not enabling this for now
       # Minor security benefit but makes each partition dependent on STATE
       #lockToSTATE: true
+  options:
+    - no_read_workqueue
+    - no_write_workqueue
