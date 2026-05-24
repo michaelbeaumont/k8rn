@@ -38,3 +38,8 @@ spec:
       version: 0.16.0
   values:
     loadBalancerClass: metallb
+    # TODO: remove after 0.16.0
+    frr-k8s:
+      prometheus:
+        serviceMonitor:
+          enabled: false
