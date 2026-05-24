@@ -96,7 +96,7 @@ resource "helm_release" "flux-sync-crds" {
   chart      = "flux2-sync"
   name       = "flux-sync-crds"
   namespace  = helm_release.flux.namespace
-  version    = "1.14.4"
+  version    = "1.14.5"
 
   values = [
     <<-EOT
