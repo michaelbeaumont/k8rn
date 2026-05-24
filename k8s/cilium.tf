@@ -14,7 +14,6 @@ resource "helm_release" "cilium" {
     ipv6NativeRoutingCIDR: "${var.pod_cidr.ipv6}"
     ipv6:
       enabled: true
-    kubeProxyReplacement: true
     envoy:
       baseID: 4244
     hubble:
@@ -77,8 +76,6 @@ resource "helm_release" "cilium" {
       autoMount:
         enabled: false
       hostRoot: /sys/fs/cgroup
-    k8sServiceHost: localhost
-    k8sServicePort: 7445
     extraInitContainers:
       - name: get-node-pod-cidr
         image: alpine/kubectl:1.34.1@sha256:bd5f9dc1ef4673686791ec669b24bf20b86befc9a0a51fb701a1e70d14cd1744
