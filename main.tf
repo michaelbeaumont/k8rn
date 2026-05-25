@@ -74,7 +74,7 @@ module "infra" {
 }
 
 locals {
-  k8s_config = module.infra.has_control_plane != 0 ? {
+  k8s_config = length(module.infra.kubeconfig) != 0 ? {
     host                   = module.infra.kubeconfig.kubernetes_client_configuration.host
     client_certificate     = base64decode(module.infra.kubeconfig.kubernetes_client_configuration.client_certificate)
     client_key             = base64decode(module.infra.kubeconfig.kubernetes_client_configuration.client_key)
@@ -126,7 +126,7 @@ locals {
 module "k8s" {
   source = "./k8s"
 
-  count = module.infra.has_control_plane ? 1 : 0
+  depends_on = [module.infra.kubeconfig]
 
   github_repo                      = var.github_repo
   lets_encrypt_email               = var.lets_encrypt_email

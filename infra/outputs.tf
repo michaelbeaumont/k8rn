@@ -9,10 +9,6 @@ output "machine_secrets" {
 }
 
 
-output "has_control_plane" {
-  value = length(local.control_plane_nodes) > 0
-}
-
 output "kubeconfig" {
   value     = ephemeral.talos_cluster_kubeconfig.this
   sensitive = true

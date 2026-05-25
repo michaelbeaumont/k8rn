@@ -17,24 +17,22 @@ resource "talos_machine_bootstrap" "this" {
 // IP with _iniy but from then on never try to use the local IP, instead using _post_init
 // which applies using the tailscale IP
 resource "talos_machine_configuration_apply" "control_plane_init" {
-  for_each                    = local.control_plane_nodes
-  client_configuration        = talos_machine_secrets.this.client_configuration
-  machine_configuration_input = data.talos_machine_configuration.control_plane_nodes[each.key].machine_configuration
-  node                        = each.value.local_ip
+  for_each                       = local.control_plane_nodes
+  client_configuration           = talos_machine_secrets.this.client_configuration
+  machine_configuration_input_wo = ephemeral.talos_machine_configuration.control_plane_nodes[each.key].machine_configuration
+  node                           = each.value.local_ip
   lifecycle {
-    ignore_changes = [
-      machine_configuration_input,
-    ]
+    ignore_changes = all
   }
   apply_mode = "reboot"
 }
 
 resource "talos_machine_configuration_apply" "control_plane_post_init" {
-  for_each                    = talos_machine_configuration_apply.control_plane_init
-  client_configuration        = talos_machine_secrets.this.client_configuration
-  machine_configuration_input = data.talos_machine_configuration.control_plane_nodes[each.key].machine_configuration
-  node                        = cloudflare_dns_record.cp_aaaa[each.key].content
-  endpoint                    = local.dns_loadbalancer_hostname
+  for_each                       = talos_machine_configuration_apply.control_plane_init
+  client_configuration           = talos_machine_secrets.this.client_configuration
+  machine_configuration_input_wo = ephemeral.talos_machine_configuration.control_plane_nodes[each.key].machine_configuration
+  node                           = cloudflare_dns_record.cp_aaaa[each.key].content
+  endpoint                       = local.dns_loadbalancer_hostname
 }
 
 locals {
@@ -55,22 +53,20 @@ resource "talos_machine_configuration_apply" "workers_init" {
     for _, apply in talos_machine_configuration_apply.control_plane_post_init
     : apply.client_configuration
   ][0]
-  machine_configuration_input = data.talos_machine_configuration.worker_nodes[each.key].machine_configuration
-  node                        = each.value.local_ip
+  machine_configuration_input_wo = ephemeral.talos_machine_configuration.worker_nodes[each.key].machine_configuration
+  node                           = each.value.local_ip
   lifecycle {
-    ignore_changes = [
-      machine_configuration_input,
-    ]
+    ignore_changes = all
   }
   apply_mode = "reboot"
 }
 
 resource "talos_machine_configuration_apply" "workers_post_init" {
-  for_each                    = talos_machine_configuration_apply.workers_init
-  client_configuration        = talos_machine_secrets.this.client_configuration
-  machine_configuration_input = data.talos_machine_configuration.worker_nodes[each.key].machine_configuration
-  node                        = data.tailscale_device.worker[each.key].addresses[1]
-  endpoint                    = local.dns_loadbalancer_hostname
+  for_each                       = talos_machine_configuration_apply.workers_init
+  client_configuration           = talos_machine_secrets.this.client_configuration
+  machine_configuration_input_wo = ephemeral.talos_machine_configuration.worker_nodes[each.key].machine_configuration
+  node                           = data.tailscale_device.worker[each.key].addresses[1]
+  endpoint                       = local.dns_loadbalancer_hostname
   config_patches = [
     local.extra_hosts_patch,
   ]
@@ -96,11 +92,11 @@ ephemeral "talos_cluster_health" "this" {
 // This has to be separate from post_init because this depends on workers_init
 // which depends on control_plane_post_init.
 resource "talos_machine_configuration_apply" "control_plane_extra_hosts" {
-  for_each                    = talos_machine_configuration_apply.control_plane_post_init
-  client_configuration        = each.value.client_configuration
-  machine_configuration_input = each.value.machine_configuration
-  node                        = each.value.node
-  endpoint                    = each.value.endpoint
+  for_each                       = talos_machine_configuration_apply.control_plane_post_init
+  client_configuration           = each.value.client_configuration
+  machine_configuration_input_wo = ephemeral.talos_machine_configuration.control_plane_nodes[each.key].machine_configuration
+  node                           = each.value.node
+  endpoint                       = each.value.endpoint
   config_patches = [
     local.extra_hosts_patch,
     file("${path.module}/files/kubelet-rotate-server-crts.yaml"),
@@ -119,6 +115,7 @@ resource "talos_machine_configuration_apply" "workers_kubelet_csr" {
 }
 
 ephemeral "talos_cluster_kubeconfig" "this" {
+  depends_on      = [ephemeral.talos_cluster_health.this]
   machine_secrets = talos_machine_secrets.this.machine_secrets
   cluster_name    = var.cluster_name
   endpoint        = "https://${var.cluster_name}.${var.dns_loadbalancer_domain}:6443"

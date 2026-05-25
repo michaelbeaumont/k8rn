@@ -148,7 +148,7 @@ locals {
   }
 }
 
-data "talos_machine_configuration" "control_plane_nodes" {
+ephemeral "talos_machine_configuration" "control_plane_nodes" {
   for_each         = local.control_plane_nodes
   cluster_name     = var.cluster_name
   cluster_endpoint = local.cluster_endpoint
@@ -183,7 +183,7 @@ data "talos_machine_configuration" "control_plane_nodes" {
   ])
 }
 
-data "talos_machine_configuration" "worker_nodes" {
+ephemeral "talos_machine_configuration" "worker_nodes" {
   for_each         = local.worker_nodes
   cluster_name     = var.cluster_name
   cluster_endpoint = local.cluster_endpoint

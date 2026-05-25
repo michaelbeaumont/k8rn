@@ -56,7 +56,7 @@ output "machine_secrets" {
 
 output "flux_ssh_public_key" {
   description = "Public SSH key Flux uses to access Git repositories"
-  value       = module.k8s[0].flux_ssh_public_key
+  value       = module.k8s.flux_ssh_public_key
 }
 
 output "talos_url" {
