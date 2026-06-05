@@ -38,6 +38,10 @@ spec:
         name: envoy-gateway
       version: 1.8.1
   values:
+    crds:
+      gatewayAPI:
+        safeUpgradePolicy:
+          enabled: false
     config:
       envoyGateway:
         extensionApis:
