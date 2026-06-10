@@ -44,7 +44,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: openebs
-      version: 4.4.0
+      version: 4.5.0
   values:
     alloy:
       enabled: false
@@ -69,9 +69,9 @@ spec:
           talos-secrets:
             secret:
               secretName: talos-api-access
+        dnsPolicy: ClusterFirstWithHostNet
         initContainers:
-          ab-data1-luks-open:
-            image: ghcr.io/michaelbeaumont/talos-kms-seals:latest
+          - image: ghcr.io/michaelbeaumont/talos-kms-seals:latest
             securityContext:
               privileged: true
             args:
@@ -97,8 +97,7 @@ spec:
                 valueFrom:
                   fieldRef:
                     fieldPath: spec.nodeName
-          ac-data2-luks-open:
-            image: ghcr.io/michaelbeaumont/talos-kms-seals:latest
+          - image: ghcr.io/michaelbeaumont/talos-kms-seals:latest
             securityContext:
               privileged: true
             args:
@@ -124,8 +123,7 @@ spec:
                 valueFrom:
                   fieldRef:
                     fieldPath: spec.nodeName
-          b-zfs-import-all:
-            image: docker.io/michaelbeaumont/zfs-part-utils:latest
+          - image: docker.io/michaelbeaumont/zfs-part-utils:latest
             securityContext:
               privileged: true
             command: ["zpool", "import", "-a"]
@@ -148,17 +146,3 @@ spec:
       storageClass:
         # we can't override reclaimPolicy so just make the classes explicit in base-config
         enabled: false
-  postRenderers:
-    - kustomize:
-        patches:
-          # TODO: can be removed on next localpv-zfs release and set in values
-          - patch: |
-              apiVersion: apps/v1
-              kind: DaemonSet
-              metadata:
-                name: openebs-openebs-zfs-localpv-node
-                namespace: openebs
-              spec:
-                template:
-                  spec:
-                    dnsPolicy: ClusterFirstWithHostNet
