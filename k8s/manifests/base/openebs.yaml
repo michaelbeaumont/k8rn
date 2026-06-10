@@ -71,7 +71,8 @@ spec:
               secretName: talos-api-access
         dnsPolicy: ClusterFirstWithHostNet
         initContainers:
-          - image: ghcr.io/michaelbeaumont/talos-kms-seals:latest
+          - name: data1-luks-open
+            image: ghcr.io/michaelbeaumont/talos-kms-seals:latest
             securityContext:
               privileged: true
             args:
@@ -97,7 +98,8 @@ spec:
                 valueFrom:
                   fieldRef:
                     fieldPath: spec.nodeName
-          - image: ghcr.io/michaelbeaumont/talos-kms-seals:latest
+          - name: data2-luks-open
+            image: ghcr.io/michaelbeaumont/talos-kms-seals:latest
             securityContext:
               privileged: true
             args:
@@ -123,7 +125,8 @@ spec:
                 valueFrom:
                   fieldRef:
                     fieldPath: spec.nodeName
-          - image: docker.io/michaelbeaumont/zfs-part-utils:latest
+          - name: zfs-import-all
+            image: ghcr.io/michaelbeaumont/zfs-scrub:latest
             securityContext:
               privileged: true
             command: ["zpool", "import", "-a"]
