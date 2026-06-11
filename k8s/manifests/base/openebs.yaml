@@ -135,6 +135,9 @@ spec:
         enabled: false
       etcd:
         replicaCount: ${openebs_etcd_replicaCount}
+        # Since we have one replica atm
+        pdb:
+          create: false
       eventing:
         enabled: false
       io_engine:
