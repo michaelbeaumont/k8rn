@@ -17,10 +17,10 @@ get-upgrade-image node:
     terraform output -json talos_image | jq -r '.["{{ node }}"]'
 
 upgrade-node node:
-    talosctl --talosconfig "{{ justfile_directory() }}/talosconfig" upgrade -n "{{ node }}" --stage --debug -i "$(just get-upgrade-image {{ node }})"
+    talosctl --talosconfig "{{ justfile_directory() }}/talosconfig" upgrade -n "{{ node }}" --wait --debug -i "$(just get-upgrade-image {{ node }})"
 
 upgrade-node-cache node image-cache-host:
-    talosctl --talosconfig "{{ justfile_directory() }}/talosconfig" upgrade -n "{{ node }}" --stage --debug -i "{{ image-cache-host }}$(terraform output -json talos_image_cache | jq -r '.["{{ node }}"]')"
+    talosctl --talosconfig "{{ justfile_directory() }}/talosconfig" upgrade -n "{{ node }}" --wait --debug -i "{{ image-cache-host }}$(terraform output -json talos_image_cache | jq -r '.["{{ node }}"]')"
 
 image-cache-serve image-cache-host:
     talosctl images cache-create --force --layout=flat --image-cache-path=/tmp/image-cache \
