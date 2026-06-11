@@ -33,6 +33,7 @@ metadata:
   name: immich-database
 spec:
   instances: 1
+  enablePDB: false
   managed:
     services:
       disabledDefaultServices: ["ro", "r"]
