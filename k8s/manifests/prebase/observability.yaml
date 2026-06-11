@@ -77,6 +77,13 @@ spec:
           enabled: true
           labels:
             external-dns: "true"
+          annotations:
+            gethomepage.dev/enabled: "true"
+            gethomepage.dev/name: Grafana
+            gethomepage.dev/group: Monitoring
+            gethomepage.dev/icon: grafana
+            gethomepage.dev/pod-selector: app.kubernetes.io/name=grafana
+            gethomepage.dev/weight: "10"
           hostnames:
             - grafana.${services_hostname_suffix}
           parentRefs:
@@ -138,6 +145,13 @@ spec:
           enabled: true
           labels:
             external-dns: "true"
+          annotations:
+            gethomepage.dev/enabled: "true"
+            gethomepage.dev/name: Alerts
+            gethomepage.dev/group: Monitoring
+            gethomepage.dev/icon: alertmanager
+            gethomepage.dev/pod-selector: app.kubernetes.io/name=alertmanager
+            gethomepage.dev/weight: "30"
           hostnames:
             - alertmanager.${services_hostname_suffix}
           parentRefs:
@@ -191,6 +205,13 @@ spec:
           enabled: true
           labels:
             external-dns: "true"
+          annotations:
+            gethomepage.dev/enabled: "true"
+            gethomepage.dev/name: Prometheus
+            gethomepage.dev/group: Monitoring
+            gethomepage.dev/icon: prometheus
+            gethomepage.dev/pod-selector: app.kubernetes.io/name=prometheus
+            gethomepage.dev/weight: "20"
           hostnames:
             - prometheus.${services_hostname_suffix}
           parentRefs:

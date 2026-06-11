@@ -57,33 +57,33 @@ spec:
       hostUsers: false
       containers:
         - env:
-          - name: DB_DATABASE_NAME
-            value: app
-          - name: DB_HOSTNAME
-            value: immich-database-rw
-          - name: DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: password
-                name: immich-database-app
-          - name: DB_USERNAME
-            valueFrom:
-              secretKeyRef:
-                key: username
-                name: immich-database-app
-          - name: IMMICH_ALLOW_SETUP
-            value: "false"
-          - name: IMMICH_MACHINE_LEARNING_URL
-            value: http://immich-machine-learning:3003
-          - name: IMMICH_TELEMETRY_INCLUDE
-            value: all
-          - name: REDIS_HOSTNAME
-            value: immich-valkey
-          # total madness to enable IPv6 functionality for redis
-          # https://github.com/immich-app/immich/issues/10397
-          # echo '{"host": "immich-valkey","family": 6}' | base64
-          - name: REDIS_URL
-            value: ioredis://eyJob3N0IjogImltbWljaC12YWxrZXkiLCJmYW1pbHkiOiA2fQo=
+            - name: DB_DATABASE_NAME
+              value: app
+            - name: DB_HOSTNAME
+              value: immich-database-rw
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: immich-database-app
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: immich-database-app
+            - name: IMMICH_ALLOW_SETUP
+              value: "false"
+            - name: IMMICH_MACHINE_LEARNING_URL
+              value: http://immich-machine-learning:3003
+            - name: IMMICH_TELEMETRY_INCLUDE
+              value: all
+            - name: REDIS_HOSTNAME
+              value: immich-valkey
+            # total madness to enable IPv6 functionality for redis
+            # https://github.com/immich-app/immich/issues/10397
+            # echo '{"host": "immich-valkey","family": 6}' | base64
+            - name: REDIS_URL
+              value: ioredis://eyJob3N0IjogImltbWljaC12YWxrZXkiLCJmYW1pbHkiOiA2fQo=
           image: ghcr.io/immich-app/immich-server:v2.7.5
           imagePullPolicy: IfNotPresent
           livenessProbe:
@@ -96,15 +96,15 @@ spec:
             timeoutSeconds: 1
           name: main
           ports:
-          - containerPort: 2283
-            name: http
-            protocol: TCP
-          - containerPort: 8081
-            name: metrics-api
-            protocol: TCP
-          - containerPort: 8082
-            name: metrics-ms
-            protocol: TCP
+            - containerPort: 2283
+              name: http
+              protocol: TCP
+            - containerPort: 8081
+              name: metrics-api
+              protocol: TCP
+            - containerPort: 8082
+              name: metrics-ms
+              protocol: TCP
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -117,7 +117,7 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop:
-              - ALL
+                - ALL
           startupProbe:
             failureThreshold: 30
             httpGet:
@@ -127,8 +127,8 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 1
           volumeMounts:
-          - mountPath: /data
-            name: data
+            - mountPath: /data
+              name: data
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -142,6 +142,12 @@ metadata:
   labels:
     app.kubernetes.io/component: server
     external-dns: "true"
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Photos
+    gethomepage.dev/icon: immich
+    gethomepage.dev/group: Apps
+    gethomepage.dev/pod-selector: app.kubernetes.io/name=immich
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
@@ -151,11 +157,11 @@ spec:
       sectionName: "main"
   rules:
     - backendRefs:
-      - group: ""
-        kind: Service
-        name: immich-server
-        port: 2283
-        weight: 1
+        - group: ""
+          kind: Service
+          name: immich-server
+          port: 2283
+          weight: 1
 ---
 # Source: immich/templates/server.yaml
 apiVersion: monitoring.coreos.com/v1

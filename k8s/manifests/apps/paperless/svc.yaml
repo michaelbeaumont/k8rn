@@ -17,6 +17,12 @@ metadata:
   name: docs
   labels:
     external-dns: "true"
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Docs
+    gethomepage.dev/icon: paperless
+    gethomepage.dev/group: Apps
+    gethomepage.dev/pod-selector: app.kubernetes.io/name=paperless
 spec:
   parentRefs:
     - name: services

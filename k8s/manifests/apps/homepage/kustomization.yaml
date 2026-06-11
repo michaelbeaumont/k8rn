@@ -1,0 +1,41 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: homepage
+labels:
+  - includeTemplates: true
+    includeSelectors: true
+    pairs:
+      app.kubernetes.io/name: homepage
+patches:
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        name: homepage
+      spec:
+        hostnames:
+          - go.${services_hostname_suffix}
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: homepage
+      spec:
+        template:
+          spec:
+            containers:
+              - name: homepage
+                env:
+                  - name: MY_POD_IP
+                    valueFrom:
+                      fieldRef:
+                        fieldPath: status.podIP
+                  - name: HOMEPAGE_ALLOWED_HOSTS
+                    # We know it's IPv6 but this sucks
+                    value: "go.${services_hostname_suffix},[$(MY_POD_IP)]:3000"
+resources:
+  - namespace.yaml
+  - roles.yaml
+  - config.yaml
+  - homepage.yaml

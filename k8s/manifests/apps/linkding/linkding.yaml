@@ -90,6 +90,12 @@ metadata:
   name: links
   labels:
     external-dns: "true"
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Links
+    gethomepage.dev/icon: linkding
+    gethomepage.dev/group: Apps
+    gethomepage.dev/pod-selector: app.kubernetes.io/name=linkding
 spec:
   parentRefs:
     - name: services

@@ -116,6 +116,12 @@ metadata:
   name: media
   labels:
     external-dns: "true"
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Jellyfin
+    gethomepage.dev/icon: jellyfin
+    gethomepage.dev/group: Apps
+    gethomepage.dev/pod-selector: app.kubernetes.io/name=jellyfin
 spec:
   parentRefs:
     - name: services

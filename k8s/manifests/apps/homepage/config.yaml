@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage
+data:
+  kubernetes.yaml: |
+    mode: cluster
+    gateway: true
+    ingress: false
+  settings.yaml: |
+    layout:
+      Apps:
+        style: row
+        columns: 4
+      Monitoring:
+        style: row
+        columns: 4
+  services.yaml: |
+  widgets.yaml: |
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: "cluster"
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+    - resources:
+        backend: kubernetes
+        expanded: true
+    - search:
+        provider: duckduckgo
+        target: _blank
+  bookmarks.yaml: ""
+  empty-file: ""
