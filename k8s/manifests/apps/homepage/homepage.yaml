@@ -15,7 +15,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: homepage
-          image: ghcr.io/gethomepage/homepage:v1.13.1
+          image: ghcr.io/gethomepage/homepage:v1.13.2
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
