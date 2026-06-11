@@ -144,6 +144,7 @@ locals {
       length(tls_self_signed_cert.image_cache_serve) > 0 ? [templatefile("${path.module}/files/image-cache-ca.yaml.tmpl", {
         ca = tls_self_signed_cert.image_cache_serve[0].cert_pem,
       })] : [],
+      file("${path.module}/files/image-verification.yaml"),
     ] if contains(keys(merge(local.control_plane_nodes, local.worker_nodes)), name)
   }
 }
