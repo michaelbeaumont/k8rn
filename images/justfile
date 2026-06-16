@@ -1,0 +1,21 @@
+melange-keygen:
+    melange keygen
+
+melange-build package:
+    melange build \
+      --out-dir packages/out \
+      --source-dir "packages/{{ package }}/files" \
+      --signing-key melange.rsa \
+      "packages/{{ package }}/melange.yaml"
+
+melange-build-all:
+    for f in packages/*/melange.yaml; do \
+        subpath="${f#packages/}"; \
+        just melange-build "${subpath%/melange.yaml}"; \
+    done
+
+apko-build image: melange-build-all
+    apko build {{ image }}.yaml latest {{ image }}.tar --sbom=false
+
+apko-publish image tag:
+    apko publish {{ image }}.yaml ghcr.io/michaelbeaumont/{{ image }}:{{ tag }}

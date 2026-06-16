@@ -47,14 +47,25 @@
       versioningTemplate: "regex:^pg(?<major>\\d+)-v((?<minor>\\d+))\\.((?<patch>\\d+))\\.((?<build>\\d+))$",
     },
     {
-      customType: "regex",
-      description: "Update zfs-exporter in Dockerfile",
-      managerFilePatterns: ["utils/zfs-exporter/Dockerfile"],
-      depNameTemplate: "pdf/zfs_exporter",
-      matchStrings: [
-        "ARG ZFS_EXPORTER_VERSION=(?<currentValue>.*)",
+      "customType": "jsonata",
+      "description": "Update versioned apko packages via Repology",
+      "fileFormat": "yaml",
+      "managerFilePatterns": ["/\\.ya?ml$/"],
+      "matchStrings": [
+         "(contents.packages.{ 'depName': 'alpine_' & $replace($match($$.contents.repositories[0], /alpine\\/v(\\d+\\.\\d+)/)[0].groups[0], '.', '_') & '/' & $substringBefore($, '='), 'currentValue': $substringAfter($, '=') }[currentValue != depName])",
       ],
-      datasourceTemplate: "github-releases",
+      "datasourceTemplate": "repology",
+      "versioningTemplate": "loose"
+    },
+    {
+      "customType": "jsonata",
+      "description": "Update melange versions when using GH releases",
+      "fileFormat": "yaml",
+      "managerFilePatterns": ["/\\.ya?ml$/"],
+      "matchStrings": [
+         "pipeline[uses = 'fetch'].with[$contains(uri, 'https://github.com') and $contains(uri, '/releases/download/v${{package.version}}')].{'depName': $match(uri, /https:\\/\\/github\\.com\\/([^\\/]+\\/[^\\/]+)\\//).groups[0], 'currentValue': $$.package.version}",
+      ],
+      "datasourceTemplate": "github-releases"
     },
     {
       "customType": "regex",

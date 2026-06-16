@@ -1,2 +1,0 @@
-push-image tag:
-    docker build . --push -t ghcr.io/michaelbeaumont/zfs-scrub:{{ tag }}

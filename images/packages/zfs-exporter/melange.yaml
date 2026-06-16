@@ -1,0 +1,28 @@
+package:
+  name: zfs-exporter
+  version: 2.3.12
+  epoch: 0
+  description: ZFS metrics exporter for Prometheus
+  target-architecture:
+    - x86_64
+  copyright:
+    - license: MIT
+
+environment:
+  contents:
+    repositories:
+      - https://dl-cdn.alpinelinux.org/alpine/v3.24/main
+    packages:
+      - bash
+      - ca-certificates-bundle
+
+pipeline:
+  - uses: fetch
+    with:
+      uri: https://github.com/pdf/zfs_exporter/releases/download/v${{package.version}}/zfs_exporter-${{package.version}}.linux-amd64.tar.gz
+      expected-sha256: 7f2c953967bfcbd5ddd4931fb9d74122c45fa36df72be78d1025ab2371514a2d
+      delete: true
+      strip-components: 1
+
+  - runs: |
+      install -Dm755 zfs_exporter "${{targets.destdir}}/usr/bin/zfs_exporter"

@@ -1,0 +1,20 @@
+contents:
+  keyring:
+    - ./melange.rsa.pub
+  repositories:
+    - https://dl-cdn.alpinelinux.org/alpine/v3.24/main
+    - "@local packages"
+  packages:
+    - alpine-baselayout-data=3.7.2-r1
+    - alpine-release=3.24.1-r0
+    - zfs=2.4.3-r0
+    - zfs-exporter@local
+
+entrypoint:
+  command: /usr/bin/zfs_exporter
+
+annotations:
+  org.opencontainers.image.source: "https://github.com/michaelbeaumont/k8rn"
+
+archs:
+  - x86_64

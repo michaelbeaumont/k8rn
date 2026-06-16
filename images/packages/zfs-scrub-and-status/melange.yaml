@@ -1,0 +1,18 @@
+package:
+  name: zfs-scrub-and-status
+  version: 0.0.1
+  epoch: 0
+  description: Run zfs scrub and output status
+  target-architecture:
+    - x86_64
+
+environment:
+  contents:
+    repositories:
+      - https://dl-cdn.alpinelinux.org/alpine/v3.24/main
+    packages:
+      - bash
+
+pipeline:
+  - runs: |
+      install -Dm755 zfs-scrub-and-status.sh "${{targets.destdir}}/usr/bin/zfs-scrub-and-status.sh"
