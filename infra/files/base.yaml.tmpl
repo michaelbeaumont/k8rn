@@ -15,7 +15,7 @@ machine:
       validSubnets:
         - fd7a:115c:a1e0::/64
         - 100.64.0.0/10
-    image: ghcr.io/siderolabs/kubelet:v1.36.1
+    image: ghcr.io/siderolabs/kubelet:v1.36.2
   time:
     servers:
       - time.cloudflare.com
@@ -37,10 +37,10 @@ cluster:
     cni:
       name: none
   apiServer:
-    image: registry.k8s.io/kube-apiserver:v1.36.1
+    image: registry.k8s.io/kube-apiserver:v1.36.2
   controllerManager:
-    image: registry.k8s.io/kube-controller-manager:v1.36.1
+    image: registry.k8s.io/kube-controller-manager:v1.36.2
   scheduler:
-    image: registry.k8s.io/kube-scheduler:v1.36.1
+    image: registry.k8s.io/kube-scheduler:v1.36.2
   proxy:
-    image: registry.k8s.io/kube-proxy:v1.36.1
+    image: registry.k8s.io/kube-proxy:v1.36.2
