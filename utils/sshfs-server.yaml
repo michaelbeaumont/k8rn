@@ -1,0 +1,35 @@
+contents:
+  repositories:
+    - https://dl-cdn.alpinelinux.org/alpine/v3.24/main
+  packages:
+    - alpine-baselayout-data=3.7.2-r1
+    - alpine-release=3.24.1-r0
+    - openssh-server-pam=10.3_p1-r0
+
+accounts:
+  users:
+    - username: user
+      uid: 1000
+      gid: 1000
+      shell: /bin/sh
+
+paths:
+  - path: /home/user
+    type: directory
+    uid: 1000
+    gid: 1000
+    permissions: 0o755
+  - path: /var/empty
+    type: directory
+    uid: 0
+    gid: 0
+    permissions: 0o755
+
+archs:
+  - x86_64
+
+annotations:
+  org.opencontainers.image.source: https://github.com/michaelbeaumont/k8rn
+
+entrypoint:
+  command: /usr/sbin/sshd.pam -D -e

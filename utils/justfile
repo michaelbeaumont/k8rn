@@ -1,0 +1,14 @@
+melange-keygen:
+    melange keygen
+
+melange-build:
+    melange build \
+      --out-dir packages \
+      --signing-key melange.rsa \
+      *.melange.yaml
+
+apko-build image: melange-build
+    apko build {{ image }}.yaml latest {{ image }}.tar --sbom=false
+
+apko-publish image tag:
+    apko publish {{ image }}.yaml ghcr.io/michaelbeaumont/{{ image }}:{{ tag }}
