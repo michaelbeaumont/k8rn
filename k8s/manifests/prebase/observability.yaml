@@ -99,8 +99,10 @@ spec:
           token_url: https://${cluster_oidc_issuer_host}/api/oidc/token
           api_url: https://${cluster_oidc_issuer_host}/api/oidc/userinfo
           auto_login: true
-          client_id: "$__file{/var/run/secrets/client_id}"
-          client_secret: "$__file{/var/run/secrets/client_secret}"
+          client_id: "3b6f6d70-0414-4947-801a-138045695399"
+          client_authentication: workload_identity
+          workload_identity_token_file: /var/run/secrets/service-account/oidc-token
+          federated_credential_audience: "https://${cluster_oidc_issuer_host}"
           use_pkce: true
           scopes: openid profile email groups
           use_refresh_token: true
@@ -108,11 +110,16 @@ spec:
           role_attribute_path: contains(groups[*], 'admins') && 'GrafanaAdmin' || 'Viewer'
           allow_assign_grafana_admin: true
       extraSecretMounts:
-        - name: prometheus-oauth
-          secretName: prometheus-oauth
-          defaultMode: 0440
-          mountPath: /var/run/secrets
+        - name: oidc-token
+          mountPath: /var/run/secrets/service-account
           readOnly: true
+          projected:
+            defaultMode: 0420
+            sources:
+            - serviceAccountToken:
+                audience: "https://${cluster_oidc_issuer_host}"
+                expirationSeconds: 3600
+                path: oidc-token
     alertmanager:
       enabled: true
       alertmanagerSpec:
