@@ -22,59 +22,62 @@
     {
       matchDatasources: ["helm"],
       matchPackageNames: ["kube-prometheus-stack"],
-      schedule: ["* 0 * * 0"]
+      schedule: ["* 0 * * 0"],
     }
   ],
   customManagers: [
     {
-      customType: "regex",
+      customType: "jsonata",
       description: "Update CloudNativePG Cluster image references",
-      managerFilePatterns: ["**/*.yaml"],
+      fileFormat: "yaml",
+      managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-        "kind:\\s+Cluster\\n(?:[^\\n]*\\n)*?\\s+imageName:\\s+(?<depName>[^:]+):(?<currentValue>[^\\s@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?",
+        "$[kind = 'Cluster'].spec.imageName.($match($, /^([^:]+):([^\\s@]+)(?:@(sha256:[a-f0-9]+))?/)[0].groups{ 'depName': $[0], 'currentValue': $[1], 'currentDigest': $[2] })",
       ],
       datasourceTemplate: "docker",
       versioningTemplate: "docker",
     },
     {
-      customType: "regex",
+      customType: "jsonata",
       description: "Update CloudNativePG Cluster image references",
-      managerFilePatterns: ["**/*.yaml"],
+      fileFormat: "yaml",
+      managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-        "kind:\\s+Cluster\\n(?:[^\\n]*\\n)*?\\s+image:\\s*\\n\\s+reference:\\s+(?<depName>[^:]+):(?<currentValue>[^\\s@]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?"
+        "$[kind = 'Cluster'].spec.postgresql.extensions.image.reference.($match($, /^([^:]+):([^\\s@]+)(?:@(sha256:[a-f0-9]+))?/)[0].groups{ 'depName': $[0], 'currentValue': $[1], 'currentDigest': $[2] })",
       ],
       datasourceTemplate: "docker",
       versioningTemplate: "regex:^pg(?<major>\\d+)-v((?<minor>\\d+))\\.((?<patch>\\d+))\\.((?<build>\\d+))$",
     },
     {
-      "customType": "jsonata",
-      "description": "Update versioned apko packages via Repology",
-      "fileFormat": "yaml",
-      "managerFilePatterns": ["/\\.ya?ml$/"],
-      "matchStrings": [
+      customType: "jsonata",
+      description: "Update versioned apko packages via Repology",
+      fileFormat: "yaml",
+      managerFilePatterns: ["/\\.ya?ml$/"],
+      matchStrings: [
          "(contents.packages.{ 'depName': 'alpine_' & $replace($match($$.contents.repositories[0], /alpine\\/v(\\d+\\.\\d+)/)[0].groups[0], '.', '_') & '/' & $substringBefore($, '='), 'currentValue': $substringAfter($, '=') }[currentValue != depName])",
       ],
-      "datasourceTemplate": "repology",
-      "versioningTemplate": "loose"
+      datasourceTemplate: "repology",
+      versioningTemplate: "loose",
     },
     {
-      "customType": "jsonata",
-      "description": "Update melange versions when using GH releases",
-      "fileFormat": "yaml",
-      "managerFilePatterns": ["/\\.ya?ml$/"],
-      "matchStrings": [
+      customType: "jsonata",
+      description: "Update melange versions when using GH releases",
+      fileFormat: "yaml",
+      managerFilePatterns: ["/\\.ya?ml$/"],
+      matchStrings: [
          "pipeline[uses = 'fetch'].with[$contains(uri, 'https://github.com') and $contains(uri, '/releases/download/v${{package.version}}')].{'depName': $match(uri, /https:\\/\\/github\\.com\\/([^\\/]+\\/[^\\/]+)\\//).groups[0], 'currentValue': $$.package.version}",
       ],
-      "datasourceTemplate": "github-releases"
+      datasourceTemplate: "github-releases",
     },
     {
-      "customType": "regex",
-      description: "Update Github URLs in YAML",
-      "managerFilePatterns": ["/\\.ya?ml$/"],
-      "matchStrings": [
-        "https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/(?<currentValue>v?[\\d\\.]+)/"
+      customType: "jsonata",
+      description: "Update Github URLs in Kustomizations",
+      fileFormat: "yaml",
+      managerFilePatterns: ["/\\.ya?ml$/"],
+      matchStrings: [
+        "$[kind = 'Kustomization'].resources.($match($, /^https:\\/\\/github\\.com\\/([^/]+/[^/]+)\\/releases\\/download\\/(v?[\\d\\.]+)/)[0].groups{ 'depName': $[0], 'currentValue': $[1] })",
       ],
-      "datasourceTemplate": "github-releases"
+      datasourceTemplate: "github-releases",
     },
   ],
 }
