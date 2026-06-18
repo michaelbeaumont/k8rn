@@ -45,6 +45,7 @@ spec:
         externalSecret:
           enabled: true
           name: oidc
+          hasScopes: true
     volumeMounts:
       - mountPath: /headlamp/plugins/flux
         name: flux-plugin
