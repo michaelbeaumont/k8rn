@@ -3,7 +3,7 @@ contents:
     - ./melange.rsa.pub
   repositories:
     - https://dl-cdn.alpinelinux.org/alpine/v3.24/main
-    - "@local packages"
+    - "@local packages/out"
   packages:
     - alpine-baselayout-data=3.7.2-r1
     - alpine-release=3.24.1-r0
