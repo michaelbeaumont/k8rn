@@ -35,9 +35,6 @@ spec:
             - name: http
               containerPort: 9090
               protocol: TCP
-          env:
-            - name: TZ
-              value: Europe/Berlin
           envFrom:
             - configMapRef:
                 name: oidc-config

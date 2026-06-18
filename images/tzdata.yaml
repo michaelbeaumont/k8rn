@@ -1,0 +1,11 @@
+contents:
+  repositories:
+    - https://dl-cdn.alpinelinux.org/alpine/v3.24/main
+  packages:
+    - tzdata=2026b-r0
+
+annotations:
+  org.opencontainers.image.source: "https://github.com/michaelbeaumont/k8rn"
+
+archs:
+  - x86_64

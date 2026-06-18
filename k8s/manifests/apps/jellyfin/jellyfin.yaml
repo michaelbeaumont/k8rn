@@ -39,11 +39,9 @@ spec:
           type: RuntimeDefault
         runAsNonRoot: true
       containers:
-        - env:
-            #- name: JELLYFIN_PublishedServerUrl # DLNA
-            #  value: xxx.xxx.xxx.xxx
-            - name: TZ
-              value: Europe/Berlin
+        - #env:
+          #  - name: JELLYFIN_PublishedServerUrl # DLNA
+          #    value: xxx.xxx.xxx.xxx
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
