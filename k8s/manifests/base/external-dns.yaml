@@ -6,19 +6,19 @@ metadata:
         pod-security.kubernetes.io/enforce: restricted
 sops:
     age:
-        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjSUxzblZ6eW9IQmZJYnBO
-            VG9CeDd5Y0RvcDJHc3V4RTd5aEdpbUo5aGo4Cmh5RE1GTzJockRtK0s4OXFOSkVh
-            S1cyWkZCUDR2WVMyMDVEMTI5SmUwNzgKLS0tIGpreklmZ1ZMYkN2enA5S0FvMXVG
-            UTFPSEZVTzVseHhCQ2EwUFppUWVDaEkKImc0+qoBPzDQqAE21AXjwvTMaRalFGrz
-            oxC540vkyttoiA/SB4wQe7r3YombgGncaN3cFJuEs9LouMHr0LZaig==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiS2NyYnJmTmJONFMwUlhX
+            SmliMUM2Y0tiaHBsV2ZhQXRZV1pLckJGZEQwCkhPZ29Ed2s1QUxlVU8rdWxiVjVF
+            eEVZMi9FM216MmRuTTkxYVR0VHRGMjAKLS0tIERJQy8vRVdmczZJVXB5WHlIRjRo
+            SnI0NlNRY2FGdUIzL1BGMm1GMndVQjQKO4ApvR/ccqw8hmp8p6vEFz90abZFfZ6E
+            J92Jg5NDHxehc3YCOxI0Hrlf8wciNS3CBgX8KSjpnsWbpv6AN+NVMg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-12-12T19:48:43Z"
-    mac: ENC[AES256_GCM,data:KWjoPbXnASWhtVU2DUdhqKHoHmK8ZG2SlxFLFWeJlkERO6X2cdN+8eg77dQ3W/DQgsDuW8G1uWUSz2ydDay0edDqpDel8R6ZdSslujByuYYY1MLxLciS8lZw19lftZ7GW288px9djbRe10HZjaQvuCO3AclRQ6jmFVysv6AEa3g=,iv:0EyGqQlrOrW63Xpx4D4X8T3ve2WdpO3Gqtt3F03AqYI=,tag:DrrBoYWB/kWAYqy7GJn5Rw==,type:str]
+    lastmodified: "2026-04-28T18:53:13Z"
+    mac: ENC[AES256_GCM,data:2l8XZtUzFqhdSNoUFFjo8BNXgbCuxxLAM5sZtrGTxU+tEiCqrHlI350Koy68gRSSCfcvfWg15uCvSwtLxI6IGQgAbjYsIIAF8Qx1/BUT6FoOjfS3AuUfMHbNlIPFdFaoEaXtiYK+PtQ6KWwOJHMBp0VDzGM+IKWupQvwbQBaTDk=,iv:A7HyyGRq1t4qyWS3RVuaFXscGTMN7XE7lrQ5kFn0Gl8=,tag:K5n48ME/F6sRc6Oeu7j5PA==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.11.0
+    version: 3.12.2
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
@@ -30,19 +30,19 @@ spec:
     url: https://kubernetes-sigs.github.io/external-dns
 sops:
     age:
-        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjSUxzblZ6eW9IQmZJYnBO
-            VG9CeDd5Y0RvcDJHc3V4RTd5aEdpbUo5aGo4Cmh5RE1GTzJockRtK0s4OXFOSkVh
-            S1cyWkZCUDR2WVMyMDVEMTI5SmUwNzgKLS0tIGpreklmZ1ZMYkN2enA5S0FvMXVG
-            UTFPSEZVTzVseHhCQ2EwUFppUWVDaEkKImc0+qoBPzDQqAE21AXjwvTMaRalFGrz
-            oxC540vkyttoiA/SB4wQe7r3YombgGncaN3cFJuEs9LouMHr0LZaig==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiS2NyYnJmTmJONFMwUlhX
+            SmliMUM2Y0tiaHBsV2ZhQXRZV1pLckJGZEQwCkhPZ29Ed2s1QUxlVU8rdWxiVjVF
+            eEVZMi9FM216MmRuTTkxYVR0VHRGMjAKLS0tIERJQy8vRVdmczZJVXB5WHlIRjRo
+            SnI0NlNRY2FGdUIzL1BGMm1GMndVQjQKO4ApvR/ccqw8hmp8p6vEFz90abZFfZ6E
+            J92Jg5NDHxehc3YCOxI0Hrlf8wciNS3CBgX8KSjpnsWbpv6AN+NVMg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-12-12T19:48:43Z"
-    mac: ENC[AES256_GCM,data:KWjoPbXnASWhtVU2DUdhqKHoHmK8ZG2SlxFLFWeJlkERO6X2cdN+8eg77dQ3W/DQgsDuW8G1uWUSz2ydDay0edDqpDel8R6ZdSslujByuYYY1MLxLciS8lZw19lftZ7GW288px9djbRe10HZjaQvuCO3AclRQ6jmFVysv6AEa3g=,iv:0EyGqQlrOrW63Xpx4D4X8T3ve2WdpO3Gqtt3F03AqYI=,tag:DrrBoYWB/kWAYqy7GJn5Rw==,type:str]
+    lastmodified: "2026-04-28T18:53:13Z"
+    mac: ENC[AES256_GCM,data:2l8XZtUzFqhdSNoUFFjo8BNXgbCuxxLAM5sZtrGTxU+tEiCqrHlI350Koy68gRSSCfcvfWg15uCvSwtLxI6IGQgAbjYsIIAF8Qx1/BUT6FoOjfS3AuUfMHbNlIPFdFaoEaXtiYK+PtQ6KWwOJHMBp0VDzGM+IKWupQvwbQBaTDk=,iv:A7HyyGRq1t4qyWS3RVuaFXscGTMN7XE7lrQ5kFn0Gl8=,tag:K5n48ME/F6sRc6Oeu7j5PA==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.11.0
+    version: 3.12.2
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -85,19 +85,19 @@ spec:
             enabled: true
             mountPath: /cloudflare
             data:
-                token: ENC[AES256_GCM,data:w4WAIxeQJ/Felpb+plnsjzWmtXxvjD3Ee9t9DogexEix6xMij58Lew==,iv:U0jFxKYfATMkjHIIN+y9p6cWPb2t3dofzn2BTd1709s=,tag:Ix/kZTtEOeVNsJcMQvowJg==,type:str]
+                token: ENC[AES256_GCM,data:ZBb19h9jqhPB/eEO9aI+VsYWW3GiVdGyT1AcwHQAvSs2IbZH8yi0RA==,iv:U0jFxKYfATMkjHIIN+y9p6cWPb2t3dofzn2BTd1709s=,tag:3/Mklu7RxYwh5y8I1uznWw==,type:str]
 sops:
     age:
-        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjSUxzblZ6eW9IQmZJYnBO
-            VG9CeDd5Y0RvcDJHc3V4RTd5aEdpbUo5aGo4Cmh5RE1GTzJockRtK0s4OXFOSkVh
-            S1cyWkZCUDR2WVMyMDVEMTI5SmUwNzgKLS0tIGpreklmZ1ZMYkN2enA5S0FvMXVG
-            UTFPSEZVTzVseHhCQ2EwUFppUWVDaEkKImc0+qoBPzDQqAE21AXjwvTMaRalFGrz
-            oxC540vkyttoiA/SB4wQe7r3YombgGncaN3cFJuEs9LouMHr0LZaig==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiS2NyYnJmTmJONFMwUlhX
+            SmliMUM2Y0tiaHBsV2ZhQXRZV1pLckJGZEQwCkhPZ29Ed2s1QUxlVU8rdWxiVjVF
+            eEVZMi9FM216MmRuTTkxYVR0VHRGMjAKLS0tIERJQy8vRVdmczZJVXB5WHlIRjRo
+            SnI0NlNRY2FGdUIzL1BGMm1GMndVQjQKO4ApvR/ccqw8hmp8p6vEFz90abZFfZ6E
+            J92Jg5NDHxehc3YCOxI0Hrlf8wciNS3CBgX8KSjpnsWbpv6AN+NVMg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-12-12T19:48:43Z"
-    mac: ENC[AES256_GCM,data:KWjoPbXnASWhtVU2DUdhqKHoHmK8ZG2SlxFLFWeJlkERO6X2cdN+8eg77dQ3W/DQgsDuW8G1uWUSz2ydDay0edDqpDel8R6ZdSslujByuYYY1MLxLciS8lZw19lftZ7GW288px9djbRe10HZjaQvuCO3AclRQ6jmFVysv6AEa3g=,iv:0EyGqQlrOrW63Xpx4D4X8T3ve2WdpO3Gqtt3F03AqYI=,tag:DrrBoYWB/kWAYqy7GJn5Rw==,type:str]
+    lastmodified: "2026-04-28T18:53:13Z"
+    mac: ENC[AES256_GCM,data:2l8XZtUzFqhdSNoUFFjo8BNXgbCuxxLAM5sZtrGTxU+tEiCqrHlI350Koy68gRSSCfcvfWg15uCvSwtLxI6IGQgAbjYsIIAF8Qx1/BUT6FoOjfS3AuUfMHbNlIPFdFaoEaXtiYK+PtQ6KWwOJHMBp0VDzGM+IKWupQvwbQBaTDk=,iv:A7HyyGRq1t4qyWS3RVuaFXscGTMN7XE7lrQ5kFn0Gl8=,tag:K5n48ME/F6sRc6Oeu7j5PA==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.11.0
+    version: 3.12.2

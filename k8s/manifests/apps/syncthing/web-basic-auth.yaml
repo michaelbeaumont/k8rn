@@ -4,19 +4,19 @@ metadata:
     name: basic-auth
 type: Opaque
 stringData:
-    credential: ENC[AES256_GCM,data:9K5olYGGrvLV+5sS1zpK18CqIlFn9Muf5+w=,iv:DJzloxuQsRNSvGm2ZI4f1LSshjNS+Ivz4kgKwV/2+qc=,tag:lvoXx4wxCat83oZd9NgOTQ==,type:str]
+    credential: ENC[AES256_GCM,data:dqNO94GN0dsIlWDhUFAs0cce1GVjmjny1H8=,iv:DJzloxuQsRNSvGm2ZI4f1LSshjNS+Ivz4kgKwV/2+qc=,tag:GrdrN+u1FBgykCU5sHIoAA==,type:str]
 sops:
     age:
-        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBnb0NoSndNNWtyb1krWCtP
-            cFZkRzgxUFNPd1JrQzlqVUo2UGlaRHdNNTFNCnJQUUtGMThIZXYvMHQzY3JCVTdL
-            MzVWbU9ZQ2gxYWxuMUlodnNxVkN1aGcKLS0tIDZlNkRnUys1bWFTdjNsVW1CaHZO
-            VCtRT1FOamRsamtFY2l1c1pLWnhSR00KyNUrvGEO2kTIYYN6bZpNXIY8rA11qH5Q
-            K2LwcL0RzQXmVrgjf0bd/BlXsHT+VzOai3IoUpBUpZKS9YjTUUE0LA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBRRkhDdnplM2hGNFpWb1F1
+            TGYwSll1VFozV0N2OEpUd3kxN2NoWVpEcEdFCmRQYVN3NTZydUE0c2NOT3JnY2RW
+            bm14bmFnWnJ3Wm5UY0h1V2p5TEhaV2MKLS0tIEQ1TzZwbzBuSm5tTm1Wcml4NlJi
+            QTdLNVBjMjkzbml2alJjZmlYUm11bzQKQf1ebZVUQmw6Ns/akegZyDACt92m9S9R
+            Y5ca2fLzRXFNYkFjSHIBXabDhICrz3eEBb9w3OhK3DpkaUr5c5d5kw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-08-01T22:20:41Z"
-    mac: ENC[AES256_GCM,data:XISrn344LYlphTIOG19zeSZOzH2kmjObA+R21tT/U655b82ewaZt250FuKpbo0DJ2G6hlUH0m88jlp5n7yUvi5HbxRkCTKelmqCFNJGMvwlhkBLlhGk9JxfGG5zWzgTOwDTmyMo7fbwjq/YSLwCferld0eyEN6y3swrlXohl9WQ=,iv:Mn3h0rdXP7ZxVrLJtBtILF//c1vAfkt0IppVQ8CEDJY=,tag:SLOVeULAas86ZohCu+D2mg==,type:str]
+    lastmodified: "2026-04-28T18:48:19Z"
+    mac: ENC[AES256_GCM,data:oterg8DSqYZe+OuUNxpprFDYtA0QRoG2kW4ZC0qNEnmDEwBVlEK62dFlcocnZIOdOHIwA3UxvQQbJs976YGDMDz9cY0eJCqYbDM/On24Irn16s25S139jUevz+bPOTxgvH8R5Rbw7Sm9WOUSE1HWEjI4GVkc8BGvKO4ENoc15po=,iv:hBbd7gpip44IayklS4W74Qo1cG9KlcX5ofZyR/1ChwA=,tag:lo15n9ITUK1eKOs4Sf2cCA==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.10.2

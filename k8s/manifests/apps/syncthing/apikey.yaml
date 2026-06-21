@@ -4,19 +4,19 @@ metadata:
     name: api-key
 type: Opaque
 stringData:
-    apikey: ENC[AES256_GCM,data:y04/oQrPxm/bkdj2umYumC3MEa8IvJgLT2ZOFZSMZRY=,iv:dz1NuJhmc5w+aIZE9/T9J4cZPFEj+lnXMTmcZjldNkA=,tag:MYAVtnHqiEEuncBsY+nrcw==,type:str]
+    apikey: ENC[AES256_GCM,data:KOwjMsd+VJyhrlbH5E5ue3vZ85N1P1x+TgtL/5DXl+A=,iv:dz1NuJhmc5w+aIZE9/T9J4cZPFEj+lnXMTmcZjldNkA=,tag:1DZuGLyy78WhEeuzu9OJ/g==,type:str]
 sops:
     age:
-        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSekpDaHRuYm1RNTVWcmlr
-            Zno2Y2pxdk9YTjlmUmp0cElqVkZjaG9zREdjCjVKUWIya3RaNlkwWmlhc2pXQk5H
-            elVqYTVjVldadzZJdmdBY0lzSVgxUjQKLS0tIGZWd01QdUNwWWtUWjcvRTNrd0FI
-            YXBRbTRnb2RsWTR0MEx2U3RqcEdyczAKjZMVcXMGQD0QDsiyhZeYkGqZBM7KPupj
-            1KEvebLBidYwNl5Rp61BsKkgmmE6G/jn+mUZFHe3Jm1gSP2yyLfPQA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBVTU5xekg2b3hGRXAvemhO
+            RFlzMWJIQzZ3RUpJSyszMFJ4T1Y3OGlkWFdnClZrcUFqc1I5VGR5cElzM3NTRDF1
+            bzh3d2hwMm4rMEQ3ZUd2ZlFuTW5pZ2cKLS0tIEZ6QnRJOC9pWjh3RXlyUHRkb0hB
+            TmdTS1ZhUlFSMG1IYjFIZW0zbVMwdzgK5BHHotJAiCqAUriJ4CqIoBdvDB7t4KIf
+            Lbyi+Iw06Sr4m/XKYbz0pp7Kvp8ysqZf+sL5w9dx/f7YF48OpccUbw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-12-28T20:42:36Z"
-    mac: ENC[AES256_GCM,data:WcSvorjfjOm7rBm0YCXv2ceWrDcciNpRTZCn9Y4/D7VSPlb9aZCK/WBxfOV5XZdxIclhqVFyymtqBxhBRLTWRoI68diujaG8G79ydaxrDM3GAmJGq9JxubR5tbcna2yyH1qBDVzVyshYo52FLzwZ8Et/UnuyRj4vDY5ZTuE35So=,iv:m5IySV1DNyR8H43VfBgJE+bErt+ZCP8kxqeHyDCC0bE=,tag:2upYXbFfWcBor8P8PH2PAg==,type:str]
+    lastmodified: "2026-04-28T18:48:19Z"
+    mac: ENC[AES256_GCM,data:kQR0DMCYpnbRIeEWyiiRB1hjGKcaPC9Z1EzixvGH950FOxaDRcixRbWknQUp2O3IOki5AbA3qyZS5uHuxqzuQa7g0uttrOHHei1e0m7Nqu0CMaOizZbYbmYmv5pKu8nDt1lzPHdAZEOKzQYoJZi2mq4ZFm64n2SrTq326TMJSug=,iv:KGl8wiW8PMEV9p8HgOAZqxr4/y4zw3z6VDkNXFRS9fc=,tag:/CgoLmEsoJ4QBh9JdQJWqQ==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.11.0

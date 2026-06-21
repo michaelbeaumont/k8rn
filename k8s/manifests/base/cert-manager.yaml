@@ -6,19 +6,19 @@ metadata:
         pod-security.kubernetes.io/enforce: restricted
 sops:
     age:
-        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBwMkJiQ0lOaktiYnlmMURq
-            OHgxWE5janhWUGh1cVpFaVhmSWwxbjF0QkJVCnUydGxyeEVjSEhmbXBkNlNCNkN6
-            UnNxWW4zY3BTb3BmNEE1dllXUEdRMmMKLS0tIHRnQlFNOUZKNlYvL25zeStySXk5
-            OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
-            1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBTK3VpVDd4TVJOZWw4L0hN
+            UVR0RXZZaWVjcVNKTVVWU3FjM1VxT2JGT1FNCk5zT0dqR0p6bDhJSFhCaWd1NmVH
+            cG10cWlKMytleHU4RVZsNCt1Y2tvaUEKLS0tIEx0cEFGditNbkxNY1czYkFpdXJm
+            a2FWYVcyemN6aEd5bmdialkrT0h0YVUKFT8j8pxyK/JyS/dsEdbupUTk+7D/kuT4
+            A5B47MMc9wwl9W7jB+v3mV9YfFMIcVd8dg6Jnwt8dudXTaB61UgDxg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-12-12T19:47:45Z"
-    mac: ENC[AES256_GCM,data:OhvyY4fun+Lma80ZWx1PYTjzaFD5WeXAIskHm6UCqYkyGtoLO6HLrB5YY7Vd0NQp5E762MvNAUInO2g/gEY0Le1mKG5GKmEkRhXDYSMKYc64YvFvl3Bja0DETPJ0S0P6Vr0VV5Y4Mb6HOHGoRvty7q7ExXPvLgPPd2nY2YD6ylc=,iv:Nb5K0cU5q4K3wa9po3lKuN9UEOI/WYnK3d4jecDgNAo=,tag:NKJ9egGHfJAgwtS0jd4hMw==,type:str]
+    lastmodified: "2026-04-28T18:53:13Z"
+    mac: ENC[AES256_GCM,data:PCoPmy+3gINAloG8ZcxBDDNjBzxkJNuMvVjBitrawVHQx0GWY+RjWxvhLIE9QacefQJBZzfS3w44lv8sXgYxgD1dfpUmd76M/12mns/BhcOWhdhnP4905kmKhSpS6BM5+bh0ddIW72MvuMqDjOwdB7rjRhboKU19YJN4c5fcMuM=,iv:OjYU7+NjiRGlu1BGxr62mjWlmUjSXHsq4Xoimc7FnXo=,tag:HaEmWwsKHfURcQfkT1jdeQ==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.11.0
+    version: 3.12.2
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
@@ -30,19 +30,19 @@ spec:
     url: https://charts.jetstack.io
 sops:
     age:
-        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBwMkJiQ0lOaktiYnlmMURq
-            OHgxWE5janhWUGh1cVpFaVhmSWwxbjF0QkJVCnUydGxyeEVjSEhmbXBkNlNCNkN6
-            UnNxWW4zY3BTb3BmNEE1dllXUEdRMmMKLS0tIHRnQlFNOUZKNlYvL25zeStySXk5
-            OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
-            1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBTK3VpVDd4TVJOZWw4L0hN
+            UVR0RXZZaWVjcVNKTVVWU3FjM1VxT2JGT1FNCk5zT0dqR0p6bDhJSFhCaWd1NmVH
+            cG10cWlKMytleHU4RVZsNCt1Y2tvaUEKLS0tIEx0cEFGditNbkxNY1czYkFpdXJm
+            a2FWYVcyemN6aEd5bmdialkrT0h0YVUKFT8j8pxyK/JyS/dsEdbupUTk+7D/kuT4
+            A5B47MMc9wwl9W7jB+v3mV9YfFMIcVd8dg6Jnwt8dudXTaB61UgDxg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-12-12T19:47:45Z"
-    mac: ENC[AES256_GCM,data:OhvyY4fun+Lma80ZWx1PYTjzaFD5WeXAIskHm6UCqYkyGtoLO6HLrB5YY7Vd0NQp5E762MvNAUInO2g/gEY0Le1mKG5GKmEkRhXDYSMKYc64YvFvl3Bja0DETPJ0S0P6Vr0VV5Y4Mb6HOHGoRvty7q7ExXPvLgPPd2nY2YD6ylc=,iv:Nb5K0cU5q4K3wa9po3lKuN9UEOI/WYnK3d4jecDgNAo=,tag:NKJ9egGHfJAgwtS0jd4hMw==,type:str]
+    lastmodified: "2026-04-28T18:53:13Z"
+    mac: ENC[AES256_GCM,data:PCoPmy+3gINAloG8ZcxBDDNjBzxkJNuMvVjBitrawVHQx0GWY+RjWxvhLIE9QacefQJBZzfS3w44lv8sXgYxgD1dfpUmd76M/12mns/BhcOWhdhnP4905kmKhSpS6BM5+bh0ddIW72MvuMqDjOwdB7rjRhboKU19YJN4c5fcMuM=,iv:OjYU7+NjiRGlu1BGxr62mjWlmUjSXHsq4Xoimc7FnXo=,tag:HaEmWwsKHfURcQfkT1jdeQ==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.11.0
+    version: 3.12.2
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -73,19 +73,19 @@ spec:
             enableGatewayAPI: true
 sops:
     age:
-        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBwMkJiQ0lOaktiYnlmMURq
-            OHgxWE5janhWUGh1cVpFaVhmSWwxbjF0QkJVCnUydGxyeEVjSEhmbXBkNlNCNkN6
-            UnNxWW4zY3BTb3BmNEE1dllXUEdRMmMKLS0tIHRnQlFNOUZKNlYvL25zeStySXk5
-            OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
-            1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBTK3VpVDd4TVJOZWw4L0hN
+            UVR0RXZZaWVjcVNKTVVWU3FjM1VxT2JGT1FNCk5zT0dqR0p6bDhJSFhCaWd1NmVH
+            cG10cWlKMytleHU4RVZsNCt1Y2tvaUEKLS0tIEx0cEFGditNbkxNY1czYkFpdXJm
+            a2FWYVcyemN6aEd5bmdialkrT0h0YVUKFT8j8pxyK/JyS/dsEdbupUTk+7D/kuT4
+            A5B47MMc9wwl9W7jB+v3mV9YfFMIcVd8dg6Jnwt8dudXTaB61UgDxg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-12-12T19:47:45Z"
-    mac: ENC[AES256_GCM,data:OhvyY4fun+Lma80ZWx1PYTjzaFD5WeXAIskHm6UCqYkyGtoLO6HLrB5YY7Vd0NQp5E762MvNAUInO2g/gEY0Le1mKG5GKmEkRhXDYSMKYc64YvFvl3Bja0DETPJ0S0P6Vr0VV5Y4Mb6HOHGoRvty7q7ExXPvLgPPd2nY2YD6ylc=,iv:Nb5K0cU5q4K3wa9po3lKuN9UEOI/WYnK3d4jecDgNAo=,tag:NKJ9egGHfJAgwtS0jd4hMw==,type:str]
+    lastmodified: "2026-04-28T18:53:13Z"
+    mac: ENC[AES256_GCM,data:PCoPmy+3gINAloG8ZcxBDDNjBzxkJNuMvVjBitrawVHQx0GWY+RjWxvhLIE9QacefQJBZzfS3w44lv8sXgYxgD1dfpUmd76M/12mns/BhcOWhdhnP4905kmKhSpS6BM5+bh0ddIW72MvuMqDjOwdB7rjRhboKU19YJN4c5fcMuM=,iv:OjYU7+NjiRGlu1BGxr62mjWlmUjSXHsq4Xoimc7FnXo=,tag:HaEmWwsKHfURcQfkT1jdeQ==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.11.0
+    version: 3.12.2
 ---
 apiVersion: v1
 kind: Secret
@@ -93,19 +93,19 @@ metadata:
     name: cloudflare-token
     namespace: cert-manager
 stringData:
-    token: ENC[AES256_GCM,data:B8foB19U2wec9/F812kQj7JkPpDnEUTlbYkqc6eKl5OJKSKqy5OQFg==,iv:c0trlBIw7HgE+HAKXyObhFH5pfbnSmWrs0DPl54mCS4=,tag:XgmIWtBF+jJsdxZ1iid05Q==,type:str]
+    token: ENC[AES256_GCM,data:2Yr0AS29lNstsguvECH+77+VXEoaZpeYw59NMq4hJdUs6GnlgieiRw==,iv:c0trlBIw7HgE+HAKXyObhFH5pfbnSmWrs0DPl54mCS4=,tag:mt3tN/GJcKq9OanL4OhUWw==,type:str]
 sops:
     age:
-        - recipient: age1mc6573986ak84qcs9slsel3rahaw8gjseh5f085gyr6zhz6yuu7qqhluwx
+        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBwMkJiQ0lOaktiYnlmMURq
-            OHgxWE5janhWUGh1cVpFaVhmSWwxbjF0QkJVCnUydGxyeEVjSEhmbXBkNlNCNkN6
-            UnNxWW4zY3BTb3BmNEE1dllXUEdRMmMKLS0tIHRnQlFNOUZKNlYvL25zeStySXk5
-            OVBxTnQ0Uno2d09YblBxRlcxL2J0blUKI7rJVWIVyJSCDOOmJIfjyl6qkLj2HK1T
-            1ibrwjWV24QY3iCdh77SRYR+Gr/ky/sdnroIypjMheU3gEzJENPxDg==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBTK3VpVDd4TVJOZWw4L0hN
+            UVR0RXZZaWVjcVNKTVVWU3FjM1VxT2JGT1FNCk5zT0dqR0p6bDhJSFhCaWd1NmVH
+            cG10cWlKMytleHU4RVZsNCt1Y2tvaUEKLS0tIEx0cEFGditNbkxNY1czYkFpdXJm
+            a2FWYVcyemN6aEd5bmdialkrT0h0YVUKFT8j8pxyK/JyS/dsEdbupUTk+7D/kuT4
+            A5B47MMc9wwl9W7jB+v3mV9YfFMIcVd8dg6Jnwt8dudXTaB61UgDxg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-12-12T19:47:45Z"
-    mac: ENC[AES256_GCM,data:OhvyY4fun+Lma80ZWx1PYTjzaFD5WeXAIskHm6UCqYkyGtoLO6HLrB5YY7Vd0NQp5E762MvNAUInO2g/gEY0Le1mKG5GKmEkRhXDYSMKYc64YvFvl3Bja0DETPJ0S0P6Vr0VV5Y4Mb6HOHGoRvty7q7ExXPvLgPPd2nY2YD6ylc=,iv:Nb5K0cU5q4K3wa9po3lKuN9UEOI/WYnK3d4jecDgNAo=,tag:NKJ9egGHfJAgwtS0jd4hMw==,type:str]
+    lastmodified: "2026-04-28T18:53:13Z"
+    mac: ENC[AES256_GCM,data:PCoPmy+3gINAloG8ZcxBDDNjBzxkJNuMvVjBitrawVHQx0GWY+RjWxvhLIE9QacefQJBZzfS3w44lv8sXgYxgD1dfpUmd76M/12mns/BhcOWhdhnP4905kmKhSpS6BM5+bh0ddIW72MvuMqDjOwdB7rjRhboKU19YJN4c5fcMuM=,iv:OjYU7+NjiRGlu1BGxr62mjWlmUjSXHsq4Xoimc7FnXo=,tag:HaEmWwsKHfURcQfkT1jdeQ==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.11.0
+    version: 3.12.2
