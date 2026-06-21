@@ -4,7 +4,7 @@ contents:
   packages:
     - alpine-baselayout-data=3.7.2-r1
     - alpine-release=3.24.1-r0
-    - fstrim=2.42-r0
+    - fstrim=2.42.1-r0
 
 entrypoint:
   command: /sbin/fstrim
