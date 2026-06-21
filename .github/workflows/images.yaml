@@ -1,0 +1,74 @@
+name: Publish signed and attested container images
+
+on:
+  push: {}
+
+env:
+  registry: ghcr.io/${{ github.actor }}
+
+jobs:
+  find-images:
+    runs-on: ubuntu-latest
+    name: Find changed image configs
+    steps:
+      - uses: actions/checkout@v7.0.0
+        with:
+          fetch-depth: 0
+      - name: Generate matrix
+        id: matrix
+        uses: hellofresh/action-changed-files@v4.0.0
+        with:
+          pattern: images/(?P<image>.+)\.yaml
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+  publish:
+    runs-on: ubuntu-latest
+    needs: [find-images]
+    if: ${{ fromJson(needs.find-images.outputs.matrix).include[0] }}
+    strategy:
+      matrix: ${{ fromJson(needs.find-images.outputs.matrix) }}
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+    steps:
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v4.1.2
+      - name: Checkout
+        uses: actions/checkout@v7.0.0
+      - name: Publish image
+        uses: chainguard-images/actions/apko-publish@main
+        id: publish
+        with:
+          config: images/${{ matrix.image }}.yaml
+          tag: ${{ env.registry }}/${{ matrix.image }}:latest
+          sbom-path: .
+      - name: Sign the image
+        run: |
+          cosign sign --yes ${{ steps.publish.outputs.digest }}
+      - name: Normalize outputs
+        id: normalized
+        run: |
+          RAW="${{ steps.publish.outputs.digest }}"
+          echo "name=${RAW%@*}" >> "$GITHUB_OUTPUT"
+          echo "digest=${RAW#*@}" >> "$GITHUB_OUTPUT"
+      - name: Attest provenance
+        uses: actions/attest@v4
+        with:
+          subject-name: ${{ env.registry }}/${{ matrix.image }}
+          subject-digest: ${{ steps.normalized.outputs.digest }}
+          push-to-registry: true
+      - name: Attest SBOM
+        uses: actions/attest@v4
+        with:
+          subject-name: ${{ env.registry }}/${{ matrix.image }}
+          subject-digest: ${{ steps.normalized.outputs.digest }}
+          sbom-path: sbom-index.spdx.json
+          push-to-registry: true
