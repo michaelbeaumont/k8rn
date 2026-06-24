@@ -54,7 +54,7 @@
       fileFormat: "yaml",
       managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-         "(contents.packages.{ 'depName': 'alpine_' & $replace($match($$.contents.repositories[0], /alpine\\/v(\\d+\\.\\d+)/)[0].groups[0], '.', '_') & '/' & $substringBefore($, '='), 'currentValue': $substringAfter($, '=') }[currentValue != depName])",
+         "(contents.packages[$not($contains($, /@local$/))].{ 'depName': 'alpine_' & $replace($match($$.contents.repositories[0], /alpine\\/v(\\d+\\.\\d+)/)[0].groups[0], '.', '_') & '/' & $substringBefore($, '='), 'currentValue': $substringAfter($, '=') }[currentValue != depName])",
       ],
       datasourceTemplate: "repology",
       versioningTemplate: "loose",
