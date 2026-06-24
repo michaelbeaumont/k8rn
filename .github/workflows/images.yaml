@@ -55,12 +55,17 @@ jobs:
         uses: sigstore/cosign-installer@v4.1.2
       - name: Checkout
         uses: actions/checkout@v7.0.0
+      - name: Get version
+        id: get-version
+        run: |
+          package_version=$(yq '.contents.packages[-1] | capture("=(?P<ver>[^-r]+)").ver' images/${{ matrix.image }}.yaml)
+          echo "version=${package_version:-latest}" >> "$GITHUB_OUTPUT"
       - name: Publish image
         uses: chainguard-images/actions/apko-publish@main
         id: publish
         with:
           config: images/${{ matrix.image }}.yaml
-          tag: ${{ env.registry }}/${{ matrix.image }}:latest
+          tag: ${{ env.registry }}/${{ matrix.image }}:${{ steps.get-version.outputs.version }}
           sbom-path: .
       - name: Sign the image
         run: |
