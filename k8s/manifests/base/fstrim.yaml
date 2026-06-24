@@ -25,7 +25,6 @@ metadata:
   annotations:
     ignore-check.kube-linter.io/privilege-escalation-container: "it has to be privileged"
     ignore-check.kube-linter.io/run-as-non-root: "it has to be root"
-    ignore-check.kube-linter.io/latest-tag: "it's my image"
 spec:
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -50,7 +49,7 @@ spec:
               type: RuntimeDefault
           restartPolicy: OnFailure
           containers:
-            - image: ghcr.io/michaelbeaumont/fstrim:latest
+            - image: ghcr.io/michaelbeaumont/fstrim:2.42.1
               name: fstrim
               args:
                 - --verbose # note this number is kind of meaningless

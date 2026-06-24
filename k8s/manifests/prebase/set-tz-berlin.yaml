@@ -44,7 +44,7 @@ spec:
                   Object.spec.volumes{
                     name: "tz-data",
                     image: Object.spec.volumes.image{
-                      reference: "ghcr.io/michaelbeaumont/tzdata:2026b-r0",
+                      reference: "ghcr.io/michaelbeaumont/tzdata:2026b",
                     },
                   },
                 ] : [],

@@ -7,7 +7,6 @@ metadata:
     sshfs-volume: ebooks
   annotations:
     ignore-check.kube-linter.io/ssh-port: "it's ssh"
-    ignore-check.kube-linter.io/latest-tag: "it's my image"
     ignore-check.kube-linter.io/run-as-non-root: "hostUsers: false"
 spec:
   replicas: 1
@@ -39,7 +38,7 @@ spec:
                 - SETUID
                 - DAC_OVERRIDE
             readOnlyRootFilesystem: true
-          image: ghcr.io/michaelbeaumont/sshfs-server:latest
+          image: ghcr.io/michaelbeaumont/sshfs-server:10.3_p1
           ports:
             - name: ssh
               containerPort: 22
