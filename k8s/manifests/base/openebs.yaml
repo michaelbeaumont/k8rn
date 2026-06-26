@@ -126,7 +126,7 @@ spec:
                   fieldRef:
                     fieldPath: spec.nodeName
           - name: zfs-import-all
-            image: ghcr.io/michaelbeaumont/zfs-scrub:latest
+            image: ghcr.io/michaelbeaumont/zfs-scrub:0.0.1
             securityContext:
               privileged: true
             command: ["zpool", "import", "-a"]
