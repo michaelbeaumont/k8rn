@@ -72,7 +72,7 @@ jobs:
       - name: Get version
         id: get-version
         run: |
-          package_version=$(yq '.contents.packages[-1] | capture("=(?P<ver>[^-r@]+)").ver' images/${{ matrix.image }}.yaml)
+          package_version=$(yq '.contents.packages[-1] | capture("=(?P<ver>[^-r@]*)").ver' images/${{ matrix.image }}.yaml)
           echo "version=${package_version:-latest}" >> "$GITHUB_OUTPUT"
       - name: Publish image
         uses: chainguard-images/actions/apko-publish@main
