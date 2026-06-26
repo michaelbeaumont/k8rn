@@ -1,9 +1,39 @@
 ---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: injecttzs.k8rn.${services_hostname_suffix}
+spec:
+  group: k8rn.${services_hostname_suffix}
+  names:
+    kind: InjectTZ
+    plural: injecttzs
+    singular: injecttz
+  scope: Cluster
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                tz:
+                  type: string
+                zoneinfoImageRef:
+                  type: string
+---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingAdmissionPolicy
 metadata:
   name: inject-berlin-tz
 spec:
+  paramKind:
+    apiVersion: k8rn.${services_hostname_suffix}/v1
+    kind: InjectTZ
   failurePolicy: Fail
   reinvocationPolicy: IfNeeded
   matchConstraints:
@@ -25,7 +55,7 @@ spec:
                     [
                       Object.spec.containers.env{
                         name: "TZ",
-                        value: "Europe/Berlin",
+                        value: params.spec.tz,
                       },
                     ] : [],
                   volumeMounts: (!has(c.volumeMounts) || !c.volumeMounts.exists(v, v.name == "tz-data")) ?
@@ -44,12 +74,20 @@ spec:
                   Object.spec.volumes{
                     name: "tz-data",
                     image: Object.spec.volumes.image{
-                      reference: "ghcr.io/michaelbeaumont/tzdata:2026b",
+                      reference: params.spec.zoneinfoImageRef,
                     },
                   },
                 ] : [],
             },
           }
+---
+apiVersion: k8rn.${services_hostname_suffix}/v1
+kind: InjectTZ
+metadata:
+  name: inject-berlin-tz
+spec:
+  tz: Europe/Berlin
+  zoneinfoImageRef: ghcr.io/michaelbeaumont/tzdata:2026b
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingAdmissionPolicyBinding
@@ -58,3 +96,6 @@ metadata:
 spec:
   policyName: inject-berlin-tz
   matchResources: {}
+  paramRef:
+    name: inject-berlin-tz
+    parameterNotFoundAction: Deny

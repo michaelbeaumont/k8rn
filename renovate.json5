@@ -100,6 +100,17 @@
       ],
       datasourceTemplate: "github-releases",
     },
+    {
+      customType: "jsonata",
+      description: "Update my CRD InjectTZ image references",
+      fileFormat: "yaml",
+      managerFilePatterns: ["/\\.ya?ml$/"],
+      matchStrings: [
+        "$[kind = 'InjectTZ'].spec.zoneinfoImageRef.($match($, /^([^:]+):([^\\s@]+)(?:@(sha256:[a-f0-9]+))?/)[0].groups{ 'depName': $[0], 'currentValue': $string($[1]), 'currentDigest': $[2] })",
+      ],
+      datasourceTemplate: "docker",
+      versioningTemplate: "loose",
+    },
   ],
   customDatasources: {
     melange: {
