@@ -1,0 +1,27 @@
+package:
+  name: nzbgetcom-extension-videosort
+  version: 10.6
+  epoch: 0
+  description: nzbgetcom extension VideoSort
+  target-architecture:
+    - x86_64
+  checks:
+    disabled:
+      - usrmerge
+
+environment:
+  contents:
+    repositories:
+      - https://dl-cdn.alpinelinux.org/alpine/v3.24/main
+    packages:
+      - bash
+      - ca-certificates-bundle
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/nzbgetcom/Extension-VideoSort
+      tag: v${{package.version}}
+
+  - runs: |
+      mv lib main.py manifest.json "${{targets.destdir}}/"

@@ -72,11 +72,21 @@
     },
     {
       customType: "jsonata",
-      description: "Update melange versions when using GH releases",
+      description: "Update melange versions when fetching GH release artifacts",
       fileFormat: "yaml",
       managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
          "pipeline[uses = 'fetch'].with[$contains(uri, 'https://github.com') and $contains(uri, '/releases/download/v${{package.version}}')].{'depName': $match(uri, /https:\\/\\/github\\.com\\/([^\\/]+\\/[^\\/]+)\\//).groups[0], 'currentValue': $$.package.version}",
+      ],
+      datasourceTemplate: "github-releases",
+    },
+    {
+      customType: "jsonata",
+      description: "Update melange versions when using git-checkout",
+      fileFormat: "yaml",
+      managerFilePatterns: ["/\\.ya?ml$/"],
+      matchStrings: [
+        "pipeline[uses = 'git-checkout'].with[$contains(repository, 'https://github.com') and $contains(tag, 'v${{package.version}}')].{'depName': $match(repository, /https:\\/\\/github\\.com\\/([^\\/]+\\/[^\\/]+)$/).groups[0], 'currentValue': $$.package.version}",
       ],
       datasourceTemplate: "github-releases",
     },
