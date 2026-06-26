@@ -1,7 +1,9 @@
 name: Publish signed and attested container images
 
 on:
-  push: {}
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       image:
