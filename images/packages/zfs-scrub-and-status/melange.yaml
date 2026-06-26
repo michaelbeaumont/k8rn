@@ -15,4 +15,4 @@ environment:
 
 pipeline:
   - runs: |
-      install -Dm755 zfs-scrub-and-status.sh "${{targets.destdir}}/usr/bin/zfs-scrub-and-status.sh"
+      install -Dm755 files/zfs-scrub-and-status.sh "${{targets.destdir}}/usr/bin/zfs-scrub-and-status.sh"

@@ -55,6 +55,20 @@ jobs:
         uses: sigstore/cosign-installer@v4.1.2
       - name: Checkout
         uses: actions/checkout@v7.0.0
+      - name: Get APK dependency
+        id: get-apk-dep
+        run: |
+          echo "dep=$(yq '.contents.packages[] | capture("(?P<pkg>[^=]+)=?[^@]*@local").pkg' images/${{ matrix.image }}.yaml)" >> "$GITHUB_OUTPUT"
+          mkdir images/packages/out
+      - name: Build APK packages
+        uses: michaelbeaumont/actions/melange-build@main
+        if: steps.get-apk-dep.outputs.dep
+        with:
+          workdir: "${{ github.workspace }}/images"
+          sign-with-temporary-key: true
+          config: "packages/${{ steps.get-apk-dep.outputs.dep }}/melange.yaml"
+          repository-path: "packages/out"
+          source-dir: "packages/${{ steps.get-apk-dep.outputs.dep }}"
       - name: Get version
         id: get-version
         run: |
