@@ -91,9 +91,7 @@ locals {
         node_ips = local.tailscale_cidrs,
       }),
       file("${path.module}/files/services-ingress.yaml"),
-      !contains(node.tags, "qemu") ? [
-        file("${path.module}/files/watchdog.yaml")
-      ] : [],
+      file("${path.module}/files/watchdog.yaml"),
       templatefile("${path.module}/files/mayastor-rules.yaml.tmpl", {
         node_ips    = local.tailscale_cidrs,
         pod_subnets = var.pod_subnets,
@@ -120,9 +118,6 @@ locals {
       [for device in node.network_devices : templatefile("${path.module}/files/eth-tailscale-optimizations.yaml.tmpl", {
         device = device
       })],
-      contains(node.tags, "qemu") ? [
-        file("${path.module}/files/qemu-exclusive-taints.yaml"),
-      ] : [],
       file("${path.module}/files/user-namespaces.yaml"),
       contains(node.tags, "media-volume") ? [
         templatefile("${path.module}/files/media-volume.yaml", {

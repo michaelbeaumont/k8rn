@@ -116,7 +116,6 @@ locals {
     for name, node in local.active_nodes
     : name => merge(
       contains(node.tags, "worker") ? { "node-role.kubernetes.io/worker" : "" } : {},
-      contains(node.tags, "qemu") ? { "node-role.kubernetes.io/kubevirt" : "" } : {},
     )
   }
   # Just use `registerWithTaints` but leaving this functionality

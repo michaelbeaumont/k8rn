@@ -1,7 +1,0 @@
-machine:
-  kubelet:
-    extraConfig:
-      registerWithTaints:
-        - key: k8rn.beaumont.network/qemu
-          value: exclusive
-          effect: PreferNoSchedule
