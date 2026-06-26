@@ -18,7 +18,9 @@ rules:
       issuer: https://token.actions.githubusercontent.com
       subjectRegex: '^https://github\.com/fluxcd/.*$'
   - image: ghcr.io/michaelbeaumont/talos-kms-seals
-    skip: true
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: '^https://github\.com/michaelbeaumont/talos-kms-seals/.*$'
   - image: ghcr.io/michaelbeaumont/*
     keyless:
       issuer: https://token.actions.githubusercontent.com
