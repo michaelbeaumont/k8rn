@@ -1,6 +1,6 @@
 package:
   name: nzbgetcom-extension-videosort
-  version: 10.6
+  version: "10.6"
   epoch: 0
   description: nzbgetcom extension VideoSort
   target-architecture:

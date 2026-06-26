@@ -32,7 +32,7 @@
       fileFormat: "yaml",
       managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-        "$[kind = 'Cluster'].spec.imageName.($match($, /^([^:]+):([^\\s@]+)(?:@(sha256:[a-f0-9]+))?/)[0].groups{ 'depName': $[0], 'currentValue': $[1], 'currentDigest': $[2] })",
+        "$[kind = 'Cluster'].spec.imageName.($match($, /^([^:]+):([^\\s@]+)(?:@(sha256:[a-f0-9]+))?/)[0].groups{ 'depName': $[0], 'currentValue': $string($[1]), 'currentDigest': $[2] })",
       ],
       datasourceTemplate: "docker",
       versioningTemplate: "docker",
@@ -43,7 +43,7 @@
       fileFormat: "yaml",
       managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-        "$[kind = 'Cluster'].spec.postgresql.extensions.image.reference.($match($, /^([^:]+):([^\\s@]+)(?:@(sha256:[a-f0-9]+))?/)[0].groups{ 'depName': $[0], 'currentValue': $[1], 'currentDigest': $[2] })",
+        "$[kind = 'Cluster'].spec.postgresql.extensions.image.reference.($match($, /^([^:]+):([^\\s@]+)(?:@(sha256:[a-f0-9]+))?/)[0].groups{ 'depName': $[0], 'currentValue': $string($[1]), 'currentDigest': $[2] })",
       ],
       datasourceTemplate: "docker",
       versioningTemplate: "regex:^pg(?<major>\\d+)-v((?<minor>\\d+))\\.((?<patch>\\d+))\\.((?<build>\\d+))$",
@@ -54,7 +54,7 @@
       fileFormat: "yaml",
       managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-         "contents.packages[$not($contains($, /@local$/))].{ 'depName': 'alpine_' & $replace($match($$.contents.repositories[0], /alpine\\/v(\\d+\\.\\d+)/)[0].groups[0], '.', '_') & '/' & $substringBefore($, '='), 'currentValue': $substringAfter($, '=') }[currentValue != depName]",
+         "contents.packages[$not($contains($, /@local$/))].{ 'depName': 'alpine_' & $replace($match($$.contents.repositories[0], /alpine\\/v(\\d+\\.\\d+)/)[0].groups[0], '.', '_') & '/' & $substringBefore($, '='), 'currentValue': $string($substringAfter($, '=')) }[currentValue != depName]",
       ],
       datasourceTemplate: "repology",
       versioningTemplate: "loose",
@@ -65,7 +65,7 @@
       fileFormat: "yaml",
       managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-         "contents.packages[$contains($, /@local$/)].{ 'depName': $substringBefore($, '='), 'currentValue': $match($substringAfter($, '='), /(.+)@local/)[0].groups[0] }[currentValue != depName]",
+         "contents.packages[$contains($, /@local$/)].{ 'depName': $substringBefore($, '='), 'currentValue': $string($match($substringAfter($, '='), /(.+)@local/)[0].groups[0]) }[currentValue != depName]",
       ],
       datasourceTemplate: "custom.melange",
       versioningTemplate: "loose",
@@ -76,7 +76,7 @@
       fileFormat: "yaml",
       managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-         "pipeline[uses = 'fetch'].with[$contains(uri, 'https://github.com') and $contains(uri, '/releases/download/v${{package.version}}')].{'depName': $match(uri, /https:\\/\\/github\\.com\\/([^\\/]+\\/[^\\/]+)\\//).groups[0], 'currentValue': $$.package.version}",
+         "pipeline[uses = 'fetch'].with[$contains(uri, 'https://github.com') and $contains(uri, '/releases/download/v${{package.version}}')].{'depName': $match(uri, /https:\\/\\/github\\.com\\/([^\\/]+\\/[^\\/]+)\\//).groups[0], 'currentValue': $string($$.package.version) }",
       ],
       datasourceTemplate: "github-releases",
     },
@@ -86,7 +86,7 @@
       fileFormat: "yaml",
       managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-        "pipeline[uses = 'git-checkout'].with[$contains(repository, 'https://github.com') and $contains(tag, 'v${{package.version}}')].{'depName': $match(repository, /https:\\/\\/github\\.com\\/([^\\/]+\\/[^\\/]+)$/).groups[0], 'currentValue': $$.package.version}",
+        "pipeline[uses = 'git-checkout'].with[$contains(repository, 'https://github.com') and $contains(tag, 'v${{package.version}}')].{'depName': $match(repository, /https:\\/\\/github\\.com\\/([^\\/]+\\/[^\\/]+)$/).groups[0], 'currentValue': $string($$.package.version) }",
       ],
       datasourceTemplate: "github-releases",
     },
@@ -96,7 +96,7 @@
       fileFormat: "yaml",
       managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-        "$[kind = 'Kustomization'].resources.($match($, /^https:\\/\\/github\\.com\\/([^/]+/[^/]+)\\/releases\\/download\\/(v?[\\d\\.]+)/)[0].groups{ 'depName': $[0], 'currentValue': $[1] })",
+        "$[kind = 'Kustomization'].resources.($match($, /^https:\\/\\/github\\.com\\/([^/]+/[^/]+)\\/releases\\/download\\/(v?[\\d\\.]+)/)[0].groups{ 'depName': $[0], 'currentValue': $string($[1]) })",
       ],
       datasourceTemplate: "github-releases",
     },
