@@ -54,9 +54,20 @@
       fileFormat: "yaml",
       managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-         "(contents.packages[$not($contains($, /@local$/))].{ 'depName': 'alpine_' & $replace($match($$.contents.repositories[0], /alpine\\/v(\\d+\\.\\d+)/)[0].groups[0], '.', '_') & '/' & $substringBefore($, '='), 'currentValue': $substringAfter($, '=') }[currentValue != depName])",
+         "contents.packages[$not($contains($, /@local$/))].{ 'depName': 'alpine_' & $replace($match($$.contents.repositories[0], /alpine\\/v(\\d+\\.\\d+)/)[0].groups[0], '.', '_') & '/' & $substringBefore($, '='), 'currentValue': $substringAfter($, '=') }[currentValue != depName]",
       ],
       datasourceTemplate: "repology",
+      versioningTemplate: "loose",
+    },
+    {
+      customType: "jsonata",
+      description: "Update local apko packages via custom datasource",
+      fileFormat: "yaml",
+      managerFilePatterns: ["/\\.ya?ml$/"],
+      matchStrings: [
+         "contents.packages[$contains($, /@local$/)].{ 'depName': $substringBefore($, '='), 'currentValue': $match($substringAfter($, '='), /(.+)@local/)[0].groups[0] }[currentValue != depName]",
+      ],
+      datasourceTemplate: "custom.melange",
       versioningTemplate: "loose",
     },
     {
@@ -80,4 +91,13 @@
       datasourceTemplate: "github-releases",
     },
   ],
+  customDatasources: {
+    melange: {
+      defaultRegistryUrlTemplate: "file://images/packages/{{packageName}}/melange.yaml",
+      format: "yaml",
+      transformTemplates: [
+        "{ \"releases\": [ { \"version\": $.package.version } ] }",
+      ],
+    },
+  },
 }
