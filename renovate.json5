@@ -52,7 +52,7 @@
       customType: "jsonata",
       description: "Update versioned apko packages via Repology",
       fileFormat: "yaml",
-      managerFilePatterns: ["/\\.ya?ml$/"],
+      managerFilePatterns: ["/^images/[^/]+\\.ya?ml$/"],
       matchStrings: [
          "contents.packages[$not($contains($, /@local$/))].{ 'depName': 'alpine_' & $replace($match($$.contents.repositories[0], /alpine\\/v(\\d+\\.\\d+)/)[0].groups[0], '.', '_') & '/' & $substringBefore($, '='), 'currentValue': $string($substringAfter($, '=')) }[currentValue != depName]",
       ],
@@ -63,7 +63,7 @@
       customType: "jsonata",
       description: "Update local apko packages via custom datasource",
       fileFormat: "yaml",
-      managerFilePatterns: ["/\\.ya?ml$/"],
+      managerFilePatterns: ["/^images/[^/]+\\.ya?ml$/"],
       matchStrings: [
          "contents.packages[$contains($, /@local$/)].{ 'depName': $substringBefore($, '='), 'currentValue': $string($match($substringAfter($, '='), /(.+)@local/)[0].groups[0]) }[currentValue != depName]",
       ],
@@ -74,7 +74,7 @@
       customType: "jsonata",
       description: "Update melange versions when fetching GH release artifacts",
       fileFormat: "yaml",
-      managerFilePatterns: ["/\\.ya?ml$/"],
+      managerFilePatterns: ["/^images/packages/[^/]+/melange\\.ya?ml$/"],
       matchStrings: [
          "pipeline[uses = 'fetch'].with[$contains(uri, 'https://github.com') and $contains(uri, '/releases/download/v${{package.version}}')].{'depName': $match(uri, /https:\\/\\/github\\.com\\/([^\\/]+\\/[^\\/]+)\\//).groups[0], 'currentValue': $string($$.package.version) }",
       ],
@@ -84,7 +84,7 @@
       customType: "jsonata",
       description: "Update melange versions when using git-checkout",
       fileFormat: "yaml",
-      managerFilePatterns: ["/\\.ya?ml$/"],
+      managerFilePatterns: ["/^images/packages/[^/]+/melange\\.ya?ml$/"],
       matchStrings: [
         "pipeline[uses = 'git-checkout'].with[$contains(repository, 'https://github.com') and $contains(tag, 'v${{package.version}}')].{'depName': $match(repository, /https:\\/\\/github\\.com\\/([^\\/]+\\/[^\\/]+)$/).groups[0], 'currentValue': $string($$.package.version) }",
       ],
