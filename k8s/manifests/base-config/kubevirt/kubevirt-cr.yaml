@@ -20,3 +20,7 @@ spec:
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
   workloadUpdateStrategy: {}
+  # Node affinity prevents more than one from running anyway
+  # and this effectively disables the PDB
+  infra:
+    replicas: 1
