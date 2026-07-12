@@ -29,3 +29,7 @@ rules:
     keyless:
       issuer: https://token.actions.githubusercontent.com
       subjectRegex: '^https://github\.com/michaelbeaumont/k8rn/.*$'
+  - image: quay.io/cilium/*
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: '^https://github\.com/cilium/cilium/.*$'
