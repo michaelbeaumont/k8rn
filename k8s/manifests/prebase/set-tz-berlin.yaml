@@ -87,7 +87,7 @@ metadata:
   name: inject-berlin-tz
 spec:
   tz: Europe/Berlin
-  zoneinfoImageRef: ghcr.io/michaelbeaumont/tzdata:2026b
+  zoneinfoImageRef: ghcr.io/michaelbeaumont/tzdata:2026c
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingAdmissionPolicyBinding
