@@ -4,10 +4,22 @@ kind: NetworkRuleConfig
 name: services-ingress
 portSelector:
   ports:
+    - 22 # sshfs
+    - 53 # DNS
     - 443 # services
     - 22000 # syncthing
-    - 22 # sshfs
   protocol: tcp
+ingress:
+  - subnet: 100.64.0.0/10
+  - subnet: fd7a:115c:a1e0::/48
+---
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: services-ingress-udp
+portSelector:
+  ports:
+    - 53 # DNS
+  protocol: udp
 ingress:
   - subnet: 100.64.0.0/10
   - subnet: fd7a:115c:a1e0::/48

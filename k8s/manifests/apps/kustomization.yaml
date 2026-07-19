@@ -11,3 +11,4 @@ resources:
   - sshfs.yaml
   - headlamp
   - homepage.yaml
+  - dnscrypt-proxy/

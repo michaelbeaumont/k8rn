@@ -1,0 +1,169 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dnscrypt-proxy
+  # Unfortunately it's not easy to get envoy gateway to listen on a "dynamic"
+  # address so we use dnscrypt-proxy directly in hostNetwork mode
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  dnscrypt-proxy.toml: |
+    listen_addresses = [__LISTEN__]
+    log_level = 2
+
+    ipv4_servers = true
+    ipv6_servers = true
+    dnscrypt_servers = true
+    doh_servers = false
+    odoh_servers = false
+    # With EDNS client-subnet
+    bootstrap_resolvers = ['[2620:fe::11]:53']
+    # Without EDNS client-subnet
+    # bootstrap_resolvers = ['[2620:fe::9]:53']
+    http3 = true
+
+    netprobe_address = '[2620:fe::11]:53'
+
+    require_nolog = true
+    require_nofilter = true
+
+    ignore_system_dns = true
+
+    [sources]
+      [sources.public-resolvers]
+      urls = [
+        'https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md',
+        'https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md',
+        'https://cdn.jsdelivr.net/gh/DNSCrypt/dnscrypt-resolvers@master/v3/public-resolvers.md'
+      ]
+      cache_file = '/var/cache/dnscrypt-proxy/public-resolvers.md'
+      minisign_key = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
+      refresh_delay = 73
+      prefix = ''
+
+      [sources.relays]
+      urls = [
+        'https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/relays.md',
+        'https://download.dnscrypt.info/resolvers-list/v3/relays.md',
+        'https://cdn.jsdelivr.net/gh/DNSCrypt/dnscrypt-resolvers@master/v3/relays.md'
+      ]
+      cache_file = '/var/cache/dnscrypt-proxy/relays.md'
+      minisign_key = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
+      refresh_delay = 73
+      prefix = ''
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dnscrypt-proxy
+spec:
+  replicas: 1
+  template:
+    spec:
+      automountServiceAccountToken: false
+      hostNetwork: true
+      securityContext:
+        runAsGroup: 65532
+        runAsNonRoot: true
+        runAsUser: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        # This silliness is due to dnscrypt-proxy not having a proper
+        # configuration system
+        - name: render-config
+          image: ghcr.io/michaelbeaumont/jq@sha256:fb099c96e7607fa4eb02e55be75ec34c356c3e335150fcc38b2867d867a4c555
+          env:
+            - name: POD_IPS
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIPs
+          command: ["sh", "-c"]
+          args:
+            - |
+              set -eu
+              LISTEN=$(jq -rn '
+                env.POD_IPS
+                | split(",")
+                | map(select(length > 0))
+                | map(if test(":") then "\"[" + . + "]:53\"" else "\"" + . + ":53\"" end)
+                | join(", ")')
+              sed "s|__LISTEN__|$${LISTEN}|" /template/dnscrypt-proxy.toml > /shared/dnscrypt-proxy.toml
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /template
+              readOnly: true
+              name: template-config
+            - mountPath: /shared
+              name: shared-config
+      containers:
+        - name: main
+          image: ghcr.io/michaelbeaumont/dnscrypt-proxy:2.1.18
+          ports:
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+            - name: dns-udp
+              containerPort: 53
+              protocol: UDP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          startupProbe:
+            tcpSocket:
+              port: 53
+            failureThreshold: 30
+          livenessProbe:
+            tcpSocket:
+              port: 53
+          volumeMounts:
+            - mountPath: /dnscrypt-proxy.toml
+              subPath: dnscrypt-proxy.toml
+              name: shared-config
+            - mountPath: /var/cache/dnscrypt-proxy
+              name: cache
+          resources:
+            requests:
+              cpu: 100m
+              memory: 150Mi
+            limits:
+              memory: 500Mi
+      volumes:
+        - name: template-config
+          configMap:
+            name: config
+        - name: shared-config
+          emptyDir:
+            sizeLimit: 2Mi
+        - name: cache
+          emptyDir:
+            sizeLimit: 20Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dnscrypt-proxy
+spec:
+  ports:
+    - port: 53
+      targetPort: dns-tcp
+      protocol: TCP
+      name: dns-tcp
+    - port: 53
+      targetPort: dns-udp
+      protocol: UDP
+      name: dns-udp
