@@ -1,0 +1,18 @@
+contents:
+  repositories:
+    - https://dl-cdn.alpinelinux.org/alpine/edge/main
+    - https://dl-cdn.alpinelinux.org/alpine/edge/community
+  packages:
+    - alpine-baselayout-data=3.7.2-r1
+    - alpine-release=3.24.0-r0
+    - ca-certificates-bundle
+    - dnscrypt-proxy=2.1.18-r0
+
+entrypoint:
+  command: /usr/bin/dnscrypt-proxy
+
+annotations:
+  org.opencontainers.image.source: "https://github.com/michaelbeaumont/k8rn"
+
+archs:
+  - x86_64
