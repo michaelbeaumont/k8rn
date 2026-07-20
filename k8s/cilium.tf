@@ -15,6 +15,7 @@ resource "helm_release" "cilium" {
     ipv6:
       enabled: true
     envoy:
+      enabled: false
       baseID: 4244
     hubble:
       relay:
