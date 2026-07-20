@@ -107,7 +107,7 @@ resource "helm_release" "cilium" {
           - mountPath: /mnt/share-pod-cidr
             name: share-pod-cidr
       - name: concat-pod-cidrs
-        image: docker.io/alpine/xml:1.8.0@sha256:3ac0a6c5dc1c68d9b66094eb1812fc84b8df87de36a101a9b581259ad2389332
+        image: ghcr.io/michaelbeaumont/jq@sha256:fb099c96e7607fa4eb02e55be75ec34c356c3e335150fcc38b2867d867a4c555
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -122,7 +122,7 @@ resource "helm_release" "cilium" {
         args:
           - |
             set -e
-            jq -r '.spec.podCIDRs | join(",")' /mnt/share-pod-cidr/node_json  > /mnt/share-pod-cidr/out
+            jq -r '.spec.podCIDRs | join(",")' /mnt/share-pod-cidr/node_json > /mnt/share-pod-cidr/out
         volumeMounts:
           - mountPath: /mnt/share-pod-cidr
             name: share-pod-cidr
