@@ -1,0 +1,17 @@
+contents:
+  repositories:
+    - https://dl-cdn.alpinelinux.org/alpine/edge/main
+  packages:
+    - alpine-baselayout-data=3.7.2-r1
+    - alpine-release=3.24.0-r0
+    - bash=5.3.9-r1
+    - jq=1.8.2-r0
+
+entrypoint:
+  command: /usr/bin/jq
+
+annotations:
+  org.opencontainers.t image.source: "https://github.com/michaelbeaumont/k8rn"
+
+archs:
+  - x86_64
