@@ -38,7 +38,7 @@ spec:
             - --home=
             - --config=/var/syncthing/config
             - --data=/var/syncthing/data
-            - --gui-address=${POD_IP}:8384
+            - --gui-address=[$(POD_IP)]:8384
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
