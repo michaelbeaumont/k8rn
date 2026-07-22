@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: oidc-issuer-config-sync
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: push
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          automountServiceAccountToken: true
+          hostUsers: false
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+            runAsNonRoot: true
+          containers:
+            - name: push
+              image: ghcr.io/michaelbeaumont/oidc-issuer-config-sync/push:latest
+              volumeMounts:
+                - name: dht-private-key
+                  readOnly: true
+                  mountPath: /var/run/secrets/oidc-issuer-config-sync
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: [ALL]
+          volumes:
+            - name: dht-private-key
+              secret:
+                secretName: dht-private-key

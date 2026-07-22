@@ -12,3 +12,4 @@ resources:
   - headlamp
   - homepage.yaml
   - dnscrypt-proxy/
+  - oidc-issuer-config-sync/
