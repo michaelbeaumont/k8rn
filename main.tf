@@ -49,6 +49,8 @@ module "infra" {
   talos_version = var.talos_version
   cluster_name  = local.cluster_name
 
+  cluster_service_account_issuer = var.cluster_service_account_issuer
+
   cluster_oidc_issuer_host = var.cluster_oidc_issuer_host
   cluster_oidc_client_id   = var.cluster_oidc_client_id
 

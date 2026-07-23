@@ -108,6 +108,11 @@ variable "openebs_diskpool_volume_name" {
   type        = string
 }
 
+variable "cluster_service_account_issuer" {
+  description = "Issuer URL to put in service account tokens for workload identity"
+  type        = string
+}
+
 // port must match localAPIServerPort
 locals {
   hostnames = merge({

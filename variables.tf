@@ -18,6 +18,11 @@ variable "bootstrap_node" {
   type        = string
 }
 
+variable "cluster_service_account_issuer" {
+  description = "Issuer URL to put in service account tokens for workload identity"
+  type        = string
+}
+
 variable "mayastor_io_engine_nodes" {
   description = "The local IPs of nodes that should be marked for mayastor io-engine"
   type        = list(string)

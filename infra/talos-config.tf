@@ -154,11 +154,12 @@ ephemeral "talos_machine_configuration" "control_plane_nodes" {
   config_patches = flatten([
     local.common_patches_by_node[each.key],
     file("${path.module}/files/cp-config.yaml"),
-    file("${path.module}/files/anonymous-auth.yaml"),
+    templatefile("${path.module}/files/service-account-issuer.yaml.tmpl", {
+      issuer = var.cluster_service_account_issuer,
+    }),
     templatefile("${path.module}/files/inline-manifests.yaml.tmpl", {
       manifests = {
-        "oidc-cluster-admin"    = file("${path.module}/files/oidc-cluster-admin.yaml"),
-        "anonymous-oidc-issuer" = file("${path.module}/files/anonymous-oidc-issuer.yaml"),
+        "oidc-cluster-admin" = file("${path.module}/files/oidc-cluster-admin.yaml"),
       }
     }),
     file("${path.module}/files/permissive-admission.yaml"),
