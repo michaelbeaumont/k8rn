@@ -25,6 +25,10 @@ rules:
     keyless:
       issuer: https://token.actions.githubusercontent.com
       subjectRegex: '^https://github\.com/michaelbeaumont/talos-kms-seals/.*$'
+  - image: ghcr.io/michaelbeaumont/oidc-issuer-config-sync/*
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: '^https://github\.com/michaelbeaumont/oidc-issuer-config-sync/.*$'
   - image: ghcr.io/michaelbeaumont/*
     keyless:
       issuer: https://token.actions.githubusercontent.com
