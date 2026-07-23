@@ -1,5 +1,5 @@
 /terraform.tfstate*
-/*.tfvars
+/*.tfvars.*
 /.terraform*
 /kubeconfig
 /talosconfig

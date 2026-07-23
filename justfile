@@ -28,3 +28,6 @@ image-cache-serve image-cache-host:
     talosctl image cache-serve --image-cache-path=/tmp/image-cache --address={{ image-cache-host }} \
         --tls-cert-file=<(terraform output -json image_cache_serve_cert | jq -r '.crt') \
         --tls-key-file=<(terraform output -json image_cache_serve_cert | jq -r '.key')
+
+terraform-with-secrets action:
+    sops exec-file --filename terraform.secrets.json terraform.secrets.auto.tfvars.enc.json "terraform {{ action }} -var-file={}"
