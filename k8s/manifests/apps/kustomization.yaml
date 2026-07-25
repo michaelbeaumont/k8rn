@@ -13,3 +13,4 @@ resources:
   - homepage.yaml
   - dnscrypt-proxy/
   - oidc-issuer-config-sync/
+  - mealie.yaml

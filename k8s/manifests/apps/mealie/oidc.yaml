@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: oidc-client
+type: Opaque
+stringData:
+    client_id: ENC[AES256_GCM,data:mBlhUcfZ++J+8na+rGIAcZeFlT3wulLLZ0NWBsAQxsBUGFKB,iv:QHo/diGwmy7NrtJFEktnHjIb0hom+UZiR8XVEdSgkts=,tag:rrmQ3rsuSzEnT+FoxOUzGA==,type:str]
+    client_secret: ENC[AES256_GCM,data:NLUD02XSVwdcNtsJF3ulpj6p7wsupPlUxN004kMxZlg=,iv:75duU1xDfZlCjFdVvYiYVBODScNQ4ajW3jATxrH1CHA=,tag:zN34Ai8iT8S/DZ9vD8lwUg==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBNYjJkbW9Uc1d3L1JxcTZB
+            Qlg4S1NUUkEvTkg0MUgyemxrRjB3TFQwL0g0CmZWT2xBdXdlSXI4dFRoQjBlWHRR
+            NjVNeWlFZ0VNS1pFUUxkdHJVUG94NXMKLS0tIFRnNXV6UkdqckJxeGtCUGRXamgx
+            aUNmQ296TFlyUXlWWHNnWFlpYys0djQKnVyyDoWlkgvKdfG9qEXtPGYHkUJptdDX
+            lwtxuVFUY7ccLxNNCXLSgtx85WECtt8QpE3AWRju91hS4vk86qnqqg==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
+    encrypted_regex: ^(data|stringData)$
+    lastmodified: "2026-07-26T10:28:11Z"
+    mac: ENC[AES256_GCM,data:BcIpay9G4HhnkhSVRsskpIzVHkg8Fr1W5b0IZeclYZM3CjgMQZn18VoVChvwh7kblP+jbpPDB9Mje/DQ3H7rnem05CrHVgyTO/ROHMjPdi5ZXSLkw5jyxBqMkXR3Vz9OZoxLPbWQ6PDouRV31KGqXqId+R5P9p3juUFnBOy0Tfo=,iv:hMrJD9oM/gqnKE+F9XFIjF1+pZ+jXhJ+qd67JiiVJfE=,tag:h+MVN6ZIHLYKykqU9Er1cg==,type:str]
+    version: 3.13.2

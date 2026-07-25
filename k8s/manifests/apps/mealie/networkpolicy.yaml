@@ -1,0 +1,13 @@
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: ingress
+spec:
+  endpointSelector:
+    matchLabels: {}
+  ingress:
+    # Envoy gateway is running on hostNetwork
+    - fromEntities:
+        - host
+        - remote-node

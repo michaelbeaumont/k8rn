@@ -1,0 +1,44 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: mealie
+labels:
+  - includeTemplates: true
+    includeSelectors: true
+    pairs:
+      app.kubernetes.io/name: mealie
+patches:
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        name: recipes
+      spec:
+        hostnames:
+          - recipes.${services_hostname_suffix}
+  - patch: |-
+      apiVersion: apps/v1
+      kind: StatefulSet
+      metadata:
+        name: mealie
+      spec:
+        template:
+          spec:
+            containers:
+              - name: main
+                env:
+                  - name: BASE_URL
+                    value: https://recipes.${services_hostname_suffix}
+  - patch: |-
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: config
+      data:
+          OIDC_CONFIGURATION_URL: https://id.${services_hostname_suffix}/.well-known/openid-configuration
+resources:
+  - config.yaml
+  - pvc-data.yaml
+  - restic-secret.yaml
+  - networkpolicy.yaml
+  - oidc.yaml
+  - mealie.yaml
