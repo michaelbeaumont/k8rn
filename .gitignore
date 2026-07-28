@@ -1,5 +1,6 @@
+/.sops.yaml
 /terraform.tfstate*
-/*.tfvars.*
+/*.tfvars*
 /.terraform*
 /kubeconfig
 /talosconfig
