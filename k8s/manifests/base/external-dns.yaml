@@ -6,18 +6,37 @@ metadata:
         pod-security.kubernetes.io/enforce: restricted
 sops:
     age:
-        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
-          enc: |
+        - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiS2NyYnJmTmJONFMwUlhX
-            SmliMUM2Y0tiaHBsV2ZhQXRZV1pLckJGZEQwCkhPZ29Ed2s1QUxlVU8rdWxiVjVF
-            eEVZMi9FM216MmRuTTkxYVR0VHRGMjAKLS0tIERJQy8vRVdmczZJVXB5WHlIRjRo
-            SnI0NlNRY2FGdUIzL1BGMm1GMndVQjQKO4ApvR/ccqw8hmp8p6vEFz90abZFfZ6E
-            J92Jg5NDHxehc3YCOxI0Hrlf8wciNS3CBgX8KSjpnsWbpv6AN+NVMg==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA2MnNTMk5mbmxZV2V0M3da
+            YnhDbFlNZG9ieXBzeHM1M0JGdVA3K3R5V1E4CkVPSnlEQ3ZjTE11Zkw1Mk5waUtR
+            WERPaldrM05xcy9RakpIcElxTWMwWE0KLS0tIEh0dzRHc0xLeDIxeWRDcnBNb0VT
+            Rm5vYy9YU0JSMzNUdk1nK1FaZlZDTTAKdoQYPKxrYe+bIKXL7aBGp9NehLaxMdsI
+            qmPrIc8xpVF6dyBUzJdo09om2ESv/8/XuA3J1K7ETa1cQucATaeoog==
             -----END AGE ENCRYPTED FILE-----
+          recipient: age1zeu46ksgr0upauaf4dd7ftftvxzxz4n32j8k89m484rezq575q2sqkdpsz
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBGYWpxV1lKdk1GcHB0VWJD
+            UEF1b0xQNC9ZUWE2REVTd0R5NTZGQWJhS0NNCituOXdlS0x2RS9BQkMvVnFHbFdo
+            d1BBSzdxcHJUekI1NWZTSUJpQW9NaWcKLS0tIG5YMlJ6OW9JaitkTHAxc3hsWU9I
+            N1VOMWlhTmtLN3FzT0J5ZUI0NEtoZmMK5FGVmaQGMUphdtJwqCag/vHdtNaf3PfZ
+            C5xGiPzLUnKtHNYS2s7LuKyCil/CoNsFa8x/1qEUMtDRulEfWSf/TQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHBpdi1wMjU2IHNYVTJ3ZyBBdUVRYUR6
+            UWF5WEFEaGZaMWZWU1NNSmpuRlZ0NWFMZUJiMjZ2UkFXZEovcAoranZJWS9JbUl5
+            aHkvd1pyRjBjdkJubnhEQXhkdmYzSGh5TnNPWDd4ZVZVCi0tLSBIQ3krQmdWMlVZ
+            ZllhQVJKRmE2L3BwUGtBRkh6Q2tWVExnVWxFZmVvU3RjCqzK7xKQQgVgPYPZbw9c
+            Mul5Bj5rGbONMJrIiq+wvT6/K/76srloNcmAkRc+lWuHHfs1mDy8KMXwQopA2sOT
+            jBk=
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1yubikey1q2agt4tz997s7q79vthfvu7gnd0yjmhgvvl7hmeqw8g8nd7fcxafxpr0vh6
+    encrypted_regex: ^(data|stringData)$
     lastmodified: "2026-04-28T18:53:13Z"
     mac: ENC[AES256_GCM,data:2l8XZtUzFqhdSNoUFFjo8BNXgbCuxxLAM5sZtrGTxU+tEiCqrHlI350Koy68gRSSCfcvfWg15uCvSwtLxI6IGQgAbjYsIIAF8Qx1/BUT6FoOjfS3AuUfMHbNlIPFdFaoEaXtiYK+PtQ6KWwOJHMBp0VDzGM+IKWupQvwbQBaTDk=,iv:A7HyyGRq1t4qyWS3RVuaFXscGTMN7XE7lrQ5kFn0Gl8=,tag:K5n48ME/F6sRc6Oeu7j5PA==,type:str]
-    encrypted_regex: ^(data|stringData)$
     version: 3.12.2
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
@@ -30,18 +49,37 @@ spec:
     url: https://kubernetes-sigs.github.io/external-dns
 sops:
     age:
-        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
-          enc: |
+        - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiS2NyYnJmTmJONFMwUlhX
-            SmliMUM2Y0tiaHBsV2ZhQXRZV1pLckJGZEQwCkhPZ29Ed2s1QUxlVU8rdWxiVjVF
-            eEVZMi9FM216MmRuTTkxYVR0VHRGMjAKLS0tIERJQy8vRVdmczZJVXB5WHlIRjRo
-            SnI0NlNRY2FGdUIzL1BGMm1GMndVQjQKO4ApvR/ccqw8hmp8p6vEFz90abZFfZ6E
-            J92Jg5NDHxehc3YCOxI0Hrlf8wciNS3CBgX8KSjpnsWbpv6AN+NVMg==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA2MnNTMk5mbmxZV2V0M3da
+            YnhDbFlNZG9ieXBzeHM1M0JGdVA3K3R5V1E4CkVPSnlEQ3ZjTE11Zkw1Mk5waUtR
+            WERPaldrM05xcy9RakpIcElxTWMwWE0KLS0tIEh0dzRHc0xLeDIxeWRDcnBNb0VT
+            Rm5vYy9YU0JSMzNUdk1nK1FaZlZDTTAKdoQYPKxrYe+bIKXL7aBGp9NehLaxMdsI
+            qmPrIc8xpVF6dyBUzJdo09om2ESv/8/XuA3J1K7ETa1cQucATaeoog==
             -----END AGE ENCRYPTED FILE-----
+          recipient: age1zeu46ksgr0upauaf4dd7ftftvxzxz4n32j8k89m484rezq575q2sqkdpsz
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBGYWpxV1lKdk1GcHB0VWJD
+            UEF1b0xQNC9ZUWE2REVTd0R5NTZGQWJhS0NNCituOXdlS0x2RS9BQkMvVnFHbFdo
+            d1BBSzdxcHJUekI1NWZTSUJpQW9NaWcKLS0tIG5YMlJ6OW9JaitkTHAxc3hsWU9I
+            N1VOMWlhTmtLN3FzT0J5ZUI0NEtoZmMK5FGVmaQGMUphdtJwqCag/vHdtNaf3PfZ
+            C5xGiPzLUnKtHNYS2s7LuKyCil/CoNsFa8x/1qEUMtDRulEfWSf/TQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHBpdi1wMjU2IHNYVTJ3ZyBBdUVRYUR6
+            UWF5WEFEaGZaMWZWU1NNSmpuRlZ0NWFMZUJiMjZ2UkFXZEovcAoranZJWS9JbUl5
+            aHkvd1pyRjBjdkJubnhEQXhkdmYzSGh5TnNPWDd4ZVZVCi0tLSBIQ3krQmdWMlVZ
+            ZllhQVJKRmE2L3BwUGtBRkh6Q2tWVExnVWxFZmVvU3RjCqzK7xKQQgVgPYPZbw9c
+            Mul5Bj5rGbONMJrIiq+wvT6/K/76srloNcmAkRc+lWuHHfs1mDy8KMXwQopA2sOT
+            jBk=
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1yubikey1q2agt4tz997s7q79vthfvu7gnd0yjmhgvvl7hmeqw8g8nd7fcxafxpr0vh6
+    encrypted_regex: ^(data|stringData)$
     lastmodified: "2026-04-28T18:53:13Z"
     mac: ENC[AES256_GCM,data:2l8XZtUzFqhdSNoUFFjo8BNXgbCuxxLAM5sZtrGTxU+tEiCqrHlI350Koy68gRSSCfcvfWg15uCvSwtLxI6IGQgAbjYsIIAF8Qx1/BUT6FoOjfS3AuUfMHbNlIPFdFaoEaXtiYK+PtQ6KWwOJHMBp0VDzGM+IKWupQvwbQBaTDk=,iv:A7HyyGRq1t4qyWS3RVuaFXscGTMN7XE7lrQ5kFn0Gl8=,tag:K5n48ME/F6sRc6Oeu7j5PA==,type:str]
-    encrypted_regex: ^(data|stringData)$
     version: 3.12.2
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -88,16 +126,35 @@ spec:
                 token: ENC[AES256_GCM,data:ZBb19h9jqhPB/eEO9aI+VsYWW3GiVdGyT1AcwHQAvSs2IbZH8yi0RA==,iv:U0jFxKYfATMkjHIIN+y9p6cWPb2t3dofzn2BTd1709s=,tag:3/Mklu7RxYwh5y8I1uznWw==,type:str]
 sops:
     age:
-        - recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
-          enc: |
+        - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBiS2NyYnJmTmJONFMwUlhX
-            SmliMUM2Y0tiaHBsV2ZhQXRZV1pLckJGZEQwCkhPZ29Ed2s1QUxlVU8rdWxiVjVF
-            eEVZMi9FM216MmRuTTkxYVR0VHRGMjAKLS0tIERJQy8vRVdmczZJVXB5WHlIRjRo
-            SnI0NlNRY2FGdUIzL1BGMm1GMndVQjQKO4ApvR/ccqw8hmp8p6vEFz90abZFfZ6E
-            J92Jg5NDHxehc3YCOxI0Hrlf8wciNS3CBgX8KSjpnsWbpv6AN+NVMg==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA2MnNTMk5mbmxZV2V0M3da
+            YnhDbFlNZG9ieXBzeHM1M0JGdVA3K3R5V1E4CkVPSnlEQ3ZjTE11Zkw1Mk5waUtR
+            WERPaldrM05xcy9RakpIcElxTWMwWE0KLS0tIEh0dzRHc0xLeDIxeWRDcnBNb0VT
+            Rm5vYy9YU0JSMzNUdk1nK1FaZlZDTTAKdoQYPKxrYe+bIKXL7aBGp9NehLaxMdsI
+            qmPrIc8xpVF6dyBUzJdo09om2ESv/8/XuA3J1K7ETa1cQucATaeoog==
             -----END AGE ENCRYPTED FILE-----
+          recipient: age1zeu46ksgr0upauaf4dd7ftftvxzxz4n32j8k89m484rezq575q2sqkdpsz
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBGYWpxV1lKdk1GcHB0VWJD
+            UEF1b0xQNC9ZUWE2REVTd0R5NTZGQWJhS0NNCituOXdlS0x2RS9BQkMvVnFHbFdo
+            d1BBSzdxcHJUekI1NWZTSUJpQW9NaWcKLS0tIG5YMlJ6OW9JaitkTHAxc3hsWU9I
+            N1VOMWlhTmtLN3FzT0J5ZUI0NEtoZmMK5FGVmaQGMUphdtJwqCag/vHdtNaf3PfZ
+            C5xGiPzLUnKtHNYS2s7LuKyCil/CoNsFa8x/1qEUMtDRulEfWSf/TQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1e09aexflt8pshjftfrvzenx7n0wux84wxxc2fdmu970yxz0jauzqyglyp7
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHBpdi1wMjU2IHNYVTJ3ZyBBdUVRYUR6
+            UWF5WEFEaGZaMWZWU1NNSmpuRlZ0NWFMZUJiMjZ2UkFXZEovcAoranZJWS9JbUl5
+            aHkvd1pyRjBjdkJubnhEQXhkdmYzSGh5TnNPWDd4ZVZVCi0tLSBIQ3krQmdWMlVZ
+            ZllhQVJKRmE2L3BwUGtBRkh6Q2tWVExnVWxFZmVvU3RjCqzK7xKQQgVgPYPZbw9c
+            Mul5Bj5rGbONMJrIiq+wvT6/K/76srloNcmAkRc+lWuHHfs1mDy8KMXwQopA2sOT
+            jBk=
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1yubikey1q2agt4tz997s7q79vthfvu7gnd0yjmhgvvl7hmeqw8g8nd7fcxafxpr0vh6
+    encrypted_regex: ^(data|stringData)$
     lastmodified: "2026-04-28T18:53:13Z"
     mac: ENC[AES256_GCM,data:2l8XZtUzFqhdSNoUFFjo8BNXgbCuxxLAM5sZtrGTxU+tEiCqrHlI350Koy68gRSSCfcvfWg15uCvSwtLxI6IGQgAbjYsIIAF8Qx1/BUT6FoOjfS3AuUfMHbNlIPFdFaoEaXtiYK+PtQ6KWwOJHMBp0VDzGM+IKWupQvwbQBaTDk=,iv:A7HyyGRq1t4qyWS3RVuaFXscGTMN7XE7lrQ5kFn0Gl8=,tag:K5n48ME/F6sRc6Oeu7j5PA==,type:str]
-    encrypted_regex: ^(data|stringData)$
     version: 3.12.2
