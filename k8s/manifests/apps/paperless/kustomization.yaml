@@ -51,4 +51,4 @@ resources:
   - restic-secret.yaml
   - svc.yaml
   - networkpolicy.yaml
-  - oidc.yaml
+  - secrets.yaml

@@ -51,6 +51,8 @@ spec:
           envFrom:
             - secretRef:
                 name: oidc-client
+            - secretRef:
+                name: config
           volumeMounts:
             - name: data
               mountPath: /usr/src/paperless/data
