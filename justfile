@@ -5,7 +5,7 @@ write-kubeconfig outfile:
     terraform output -raw kubeconfig > {{ outfile }}
 
 write-secrets-yaml outfile:
-    terraform output -raw machine_secrets > {{ outfile }}
+    terraform output -raw machine_secrets | sops encrypt --filename-override secrets.yaml --output {{ outfile }}
 
 generate-iso-urls:
     terraform apply -target module.infra.data.talos_image_factory_urls.this
