@@ -7,6 +7,7 @@ metadata:
   # address so we use dnscrypt-proxy directly in hostNetwork mode
   labels:
     pod-security.kubernetes.io/enforce: privileged
+    gateway.infra.services/allow-routes: "true"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -57,6 +58,14 @@ data:
       minisign_key = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
       refresh_delay = 73
       prefix = ''
+
+    [monitoring_ui]
+    enabled = true
+    # Note this is hostNetwork
+    listen_address = "__UI_LISTEN_IP__:12280"
+    username = ""
+    privacy_level = 2
+    prometheus_enabled = true
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -88,13 +97,21 @@ spec:
           args:
             - |
               set -eu
+              cp /template/dnscrypt-proxy.toml /shared/dnscrypt-proxy.toml
               LISTEN=$(jq -rn '
                 env.POD_IPS
                 | split(",")
                 | map(select(length > 0))
                 | map(if test(":") then "\"[" + . + "]:53\"" else "\"" + . + ":53\"" end)
                 | join(", ")')
-              sed "s|__LISTEN__|$${LISTEN}|" /template/dnscrypt-proxy.toml > /shared/dnscrypt-proxy.toml
+              UI_LISTEN_IP=$(jq -rn '
+                env.POD_IPS
+                | split(",")
+                | map(select(length > 0))
+                | first
+                | if test(":") then "[" + . + "]" else . end')
+              sed "s|__LISTEN__|$${LISTEN}|" -i /shared/dnscrypt-proxy.toml
+              sed "s|__UI_LISTEN_IP__|$${UI_LISTEN_IP}|" -i /shared/dnscrypt-proxy.toml
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -117,6 +134,9 @@ spec:
             - name: dns-udp
               containerPort: 53
               protocol: UDP
+            - name: monitoring-ui
+              containerPort: 12280
+              protocol: TCP
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -167,3 +187,39 @@ spec:
       targetPort: dns-udp
       protocol: UDP
       name: dns-udp
+    - port: 80
+      targetPort: monitoring-ui
+      protocol: TCP
+      name: monitoring-ui
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: monitoring-ui
+  labels:
+    external-dns: "true"
+spec:
+  parentRefs:
+    - name: services
+      namespace: infra
+      sectionName: main
+  hostnames: []
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: dnscrypt-proxy
+          port: 80
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: gateway-ingress
+spec:
+  endpointSelector:
+    matchLabels: {}
+  ingress:
+    # Envoy gateway is running on hostNetwork
+    - fromEntities:
+        - host
+        - remote-node

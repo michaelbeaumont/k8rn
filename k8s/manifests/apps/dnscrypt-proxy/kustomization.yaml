@@ -6,5 +6,14 @@ labels:
     includeSelectors: true
     pairs:
       app.kubernetes.io/name: dnscrypt-proxy
+patches:
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        name: monitoring-ui
+      spec:
+        hostnames:
+          - dns-stats.${services_hostname_suffix}
 resources:
   - dnscrypt-proxy.yaml
