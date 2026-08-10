@@ -36,6 +36,8 @@ data:
 
     ignore_system_dns = true
 
+    __INCLUDE_SERVERS__
+
     [sources]
       [sources.public-resolvers]
       urls = [
@@ -112,6 +114,7 @@ spec:
                 | if test(":") then "[" + . + "]" else . end')
               sed "s|__LISTEN__|$${LISTEN}|" -i /shared/dnscrypt-proxy.toml
               sed "s|__UI_LISTEN_IP__|$${UI_LISTEN_IP}|" -i /shared/dnscrypt-proxy.toml
+              sed -e '/__INCLUDE_SERVERS__/{r /template/servers.toml' -e 'd}' -i /shared/dnscrypt-proxy.toml
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -119,9 +122,14 @@ spec:
                 - ALL
             readOnlyRootFilesystem: true
           volumeMounts:
-            - mountPath: /template
+            - mountPath: /template/dnscrypt-proxy.toml
               readOnly: true
               name: template-config
+              subPath: dnscrypt-proxy.toml
+            - mountPath: /template/servers.toml
+              readOnly: true
+              name: servers-config
+              subPath: servers.toml
             - mountPath: /shared
               name: shared-config
       containers:
@@ -166,6 +174,9 @@ spec:
         - name: template-config
           configMap:
             name: config
+        - name: servers-config
+          secret:
+            secretName: servers-config
         - name: shared-config
           emptyDir:
             sizeLimit: 2Mi

@@ -17,3 +17,4 @@ patches:
           - dns-stats.${services_hostname_suffix}
 resources:
   - dnscrypt-proxy.yaml
+  - dnscrypt-config-private.yaml

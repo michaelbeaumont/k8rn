@@ -140,6 +140,10 @@ locals {
         ca = tls_self_signed_cert.image_cache_serve[0].cert_pem,
       })] : [],
       file("${path.module}/files/image-verification.yaml"),
+      # Once dnscrypt-proxy is no longer hostNetwork this can be removed
+      templatefile("${path.module}/files/dnscrypt-ui.yaml.tmpl", {
+        node_ips = local.tailscale_cidrs,
+      }),
     ] if contains(keys(merge(local.control_plane_nodes, local.worker_nodes)), name)
   }
 }
