@@ -8,6 +8,15 @@
       '/k8s/manifests/.+\\.yaml$/',
     ],
   },
+  hostRules: [
+    {
+      matchHost: "repology.org",
+      abortOnError: false,
+      maxRequestsPerSecond: 1,
+      concurrentRequestLimit: 1,
+      timeout: 180000,
+    }
+  ],
   flux: {
     managerFilePatterns: [
       '/k8s/manifests/.+\\.yaml$/',
