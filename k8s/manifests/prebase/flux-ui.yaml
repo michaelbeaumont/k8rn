@@ -1,0 +1,74 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: controlplaneio-fluxcd
+  namespace: flux-system
+spec:
+  type: oci
+  interval: 10m0s
+  url: oci://ghcr.io/controlplaneio-fluxcd/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: flux-web
+  namespace: flux-system
+spec:
+  install:
+    crds: Skip
+  upgrade:
+    crds: Skip
+  interval: 10m0s
+  targetNamespace: flux-system
+  chart:
+    spec:
+      chart: flux-operator
+      sourceRef:
+        kind: HelmRepository
+        name: controlplaneio-fluxcd
+      version: 0.58.0
+  values:
+    fullnameOverride: flux-web
+    installCRDs: true
+    web:
+      serverOnly: true
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: flux-web
+  namespace: flux-system
+  labels:
+    external-dns: "true"
+spec:
+  parentRefs:
+    - name: services
+      namespace: infra
+      sectionName: main
+  hostnames:
+    - "flux.${services_hostname_suffix}"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: flux-web
+          port: 9080
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: flux-web-host-network-ingress
+  namespace: flux-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: flux-system-flux-web
+      app.kubernetes.io/name: flux-operator
+  ingress:
+    # Envoy gateway is running on hostNetwork
+    - fromEntities:
+        - host
+        - remote-node

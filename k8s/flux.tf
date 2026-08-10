@@ -27,7 +27,8 @@ resource "kubernetes_namespace_v1" "flux-system" {
   metadata {
     name = "flux-system"
     labels = {
-      "pod-security.kubernetes.io/enforce" = "restricted"
+      "pod-security.kubernetes.io/enforce"  = "restricted"
+      "gateway.infra.services/allow-routes" = "true"
     }
   }
   wait_for_default_service_account = false
