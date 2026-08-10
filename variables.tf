@@ -87,6 +87,11 @@ variable "tailnet_name" {
   type        = string
 }
 
+variable "pgp_commit_keys" {
+  description = "PGP keys for verifying source commits"
+  type        = string
+}
+
 variable "flux_ssh_private_key" {
   description = "Key used by Flux to access the repo"
   type        = string

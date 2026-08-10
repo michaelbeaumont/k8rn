@@ -156,6 +156,7 @@ module "k8s" {
     : name => taints if length(taints) > 0
   }
   kms_endpoint = var.kms_endpoint
+  pgp_commit_keys = var.pgp_commit_keys
 }
 
 module "kubelet_server_certs" {
