@@ -20,7 +20,7 @@ pipeline:
   - uses: fetch
     with:
       uri: https://github.com/pdf/zfs_exporter/releases/download/v${{package.version}}/zfs_exporter-${{package.version}}.linux-amd64.tar.gz
-      expected-sha256: 7f2c953967bfcbd5ddd4931fb9d74122c45fa36df72be78d1025ab2371514a2d
+      expected-sha256: d384ae8f5efdcf6e4e288933acb5336bf3d14c6a422f161756c9a321d20be945
       delete: true
       strip-components: 1
 
