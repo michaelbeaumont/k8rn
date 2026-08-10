@@ -25,7 +25,7 @@ spec:
           securityContext:
             readOnlyRootFilesystem: true
             privileged: true
-          image: ghcr.io/michaelbeaumont/zfs-exporter:2.3.12
+          image: ghcr.io/michaelbeaumont/zfs-exporter:2.4.1
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
