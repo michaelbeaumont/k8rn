@@ -70,5 +70,5 @@ spec:
     copyMethod: Snapshot # Clone would be the best
     storageClassName: openebs-single-replica-delete
     cacheStorageClassName: openebs-single-replica-delete
-    cacheCapacity: 5Gi
+    cacheCapacity: 10Gi
     volumeSnapshotClassName: openebs-delete
