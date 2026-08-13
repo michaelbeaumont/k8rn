@@ -46,7 +46,7 @@ spec:
           storage: 5Gi
       storageClassName: openebs-single-replica
       volumeMode: Filesystem
-  imageName: ghcr.io/cloudnative-pg/postgresql:18.4-standard-trixie
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.6-standard-trixie
   postgresql:
     extensions:
       - name: vchord
