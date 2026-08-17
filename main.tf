@@ -157,6 +157,7 @@ module "k8s" {
   }
   kms_endpoint = var.kms_endpoint
   pgp_commit_keys = var.pgp_commit_keys
+  ssh_commit_keys = var.ssh_commit_keys
 }
 
 module "kubelet_server_certs" {

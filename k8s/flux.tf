@@ -23,6 +23,11 @@ variable "pgp_commit_keys" {
   type        = string
 }
 
+variable "ssh_commit_keys" {
+  description = "SSH keys for verifying source commits"
+  type        = string
+}
+
 resource "kubernetes_namespace_v1" "flux-system" {
   metadata {
     name = "flux-system"
@@ -76,7 +81,8 @@ resource "kubernetes_secret_v1" "git-commit-keys" {
   wait_for_service_account_token = false
 
   data = {
-    "keys.asc" = var.pgp_commit_keys
+    "keys.asc"    = var.pgp_commit_keys
+    "keys.sshpub" = var.ssh_commit_keys
   }
 }
 

@@ -92,6 +92,11 @@ variable "pgp_commit_keys" {
   type        = string
 }
 
+variable "ssh_commit_keys" {
+  description = "SSH keys for verifying source commits"
+  type        = string
+}
+
 variable "flux_ssh_private_key" {
   description = "Key used by Flux to access the repo"
   type        = string
