@@ -28,7 +28,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: main
-          image: ghcr.io/mealie-recipes/mealie:v3.22.0
+          image: ghcr.io/mealie-recipes/mealie:v3.23.1
           ports:
             - name: http
               containerPort: 9000
