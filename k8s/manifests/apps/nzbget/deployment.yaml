@@ -59,7 +59,7 @@ spec:
             readOnlyRootFilesystem: true
             capabilities:
               drop: [ALL]
-          image: nzbgetcom/nzbget:v26.2
+          image: nzbgetcom/nzbget:v26.3
           ports:
             - name: http
               containerPort: 6789
