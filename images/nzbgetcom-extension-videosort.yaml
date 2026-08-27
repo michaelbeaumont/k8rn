@@ -4,7 +4,7 @@ contents:
   repositories:
     - "@local images/packages/out"
   packages:
-    - nzbgetcom-extension-videosort=10.6@local
+    - nzbgetcom-extension-videosort=10.7@local
 
 annotations:
   org.opencontainers.image.source: "https://github.com/michaelbeaumont/k8rn"
