@@ -137,7 +137,7 @@ spec:
             claimName: downloads
         - name: extension-videosort
           image:
-            reference: ghcr.io/michaelbeaumont/nzbgetcom-extension-videosort:10.6
+            reference: ghcr.io/michaelbeaumont/nzbgetcom-extension-videosort:10.7
             pullPolicy: IfNotPresent
         - name: media-ng
           persistentVolumeClaim:
