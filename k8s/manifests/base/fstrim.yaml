@@ -49,7 +49,7 @@ spec:
               type: RuntimeDefault
           restartPolicy: OnFailure
           containers:
-            - image: ghcr.io/michaelbeaumont/fstrim:2.42.1
+            - image: ghcr.io/michaelbeaumont/fstrim:2.42.3
               name: fstrim
               args:
                 - --verbose # note this number is kind of meaningless
