@@ -3,7 +3,7 @@ contents:
     - https://dl-cdn.alpinelinux.org/alpine/v3.24/main
   packages:
     - alpine-base=3.24.1-r0
-    - zfs=2.4.3-r0
+    - zfs=2.4.4-r0
     - gptfdisk
     - sgdisk
     - bash
