@@ -34,7 +34,7 @@ patches:
       metadata:
         name: ebooks
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: ebooks.sshfs.${services_hostname_suffix}
+          external-dns.kubernetes.io/hostname: ebooks.sshfs.${services_hostname_suffix}
       spec:
         hostnames:
           - ebooks.sshfs.${services_hostname_suffix}
@@ -44,7 +44,7 @@ patches:
       metadata:
         name: random-backups
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: random-backups.sshfs.${services_hostname_suffix}
+          external-dns.kubernetes.io/hostname: random-backups.sshfs.${services_hostname_suffix}
       spec:
         hostnames:
           - random-backups.sshfs.${services_hostname_suffix}

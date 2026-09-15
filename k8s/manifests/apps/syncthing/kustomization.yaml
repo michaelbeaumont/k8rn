@@ -15,7 +15,7 @@ patches:
       metadata:
         name: syncthing
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: syncthing.${services_hostname_suffix}
+          external-dns.kubernetes.io/hostname: syncthing.${services_hostname_suffix}
   - patch: |-
       apiVersion: gateway.networking.k8s.io/v1
       kind: HTTPRoute
