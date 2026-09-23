@@ -31,3 +31,6 @@ image-cache-serve image-cache-host:
 
 terraform-with-secrets action:
     sops exec-file --filename terraform.secrets.json terraform.secrets.auto.tfvars.enc.json "terraform {{ action }} -var-file={}"
+
+restic-unlock repo-url:
+    sops exec-env backblaze/config.yaml 'restic -r s3:{{ repo-url }} unlock'
