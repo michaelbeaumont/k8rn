@@ -6,7 +6,7 @@ contents:
     - "@local images/packages/out"
   packages:
     - alpine-baselayout-data=3.7.2-r1
-    - alpine-release=3.24.1-r0
+    - alpine-release=3.24.2-r0
     - zfs=2.4.3-r0
     - bash
     - zfs-scrub-and-status=0.0.1@local
