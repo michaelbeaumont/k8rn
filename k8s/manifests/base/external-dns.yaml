@@ -100,7 +100,7 @@ spec:
             sourceRef:
                 kind: HelmRepository
                 name: external-dns
-            version: 1.22.0
+            version: 1.23.0
     values:
         policy: sync
         txtOwnerId: k8rn
