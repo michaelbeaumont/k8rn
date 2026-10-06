@@ -34,7 +34,7 @@ spec:
             readOnlyRootFilesystem: true
             capabilities:
               drop: [ALL]
-          image: docker.io/vaultwarden/server:1.37.3
+          image: docker.io/vaultwarden/server:1.37.4
           ports:
             - containerPort: 8080
               name: http
