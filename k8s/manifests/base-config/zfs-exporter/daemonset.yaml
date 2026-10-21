@@ -25,7 +25,7 @@ spec:
           securityContext:
             readOnlyRootFilesystem: true
             privileged: true
-          image: ghcr.io/michaelbeaumont/zfs-exporter:2.4.1
+          image: ghcr.io/pdf/zfs_exporter:v2.5.1
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -44,3 +44,13 @@ spec:
               memory: 64Mi
             limits:
               memory: 64Mi
+          volumeMounts:
+            - name: host-root
+              mountPath: /host
+              readOnly: true
+              recursiveReadOnly: Enabled
+      volumes:
+        - name: host-root
+          hostPath:
+            path: /
+            type: Directory
