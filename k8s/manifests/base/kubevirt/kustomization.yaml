@@ -4,13 +4,13 @@ kind: Kustomization
 resources:
   - https://github.com/kubevirt/kubevirt/releases/download/v1.9.1/kubevirt-operator.yaml
   - https://github.com/kubevirt/kubevirt/releases/download/v1.9.1/kubevirt-network-policies.yaml
-  - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.66.1/cdi-operator.yaml
-  - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.66.1/cdi-cr.yaml
+  # - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.66.1/cdi-operator.yaml
+  # - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.66.1/cdi-cr.yaml
 patches:
-  - patch: |-
-      apiVersion: v1
-      kind: Namespace
-      metadata:
-        name: cdi
-        labels:
-          prometheus.io/scrape: "true"
+  #- patch: |-
+  #    apiVersion: v1
+  #    kind: Namespace
+  #    metadata:
+  #      name: cdi
+  #      labels:
+  #        prometheus.io/scrape: "true"
