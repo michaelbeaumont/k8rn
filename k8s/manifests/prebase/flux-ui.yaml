@@ -27,7 +27,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: controlplaneio-fluxcd
-      version: 0.61.0
+      version: 0.62.1
   values:
     fullnameOverride: flux-web
     installCRDs: true
