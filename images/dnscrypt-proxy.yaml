@@ -4,7 +4,7 @@ contents:
     - https://dl-cdn.alpinelinux.org/alpine/edge/community
   packages:
     - alpine-baselayout-data=3.7.2-r1
-    - alpine-release=3.24.0-r0
+    - alpine-release=3.25.0_alpha20260805-r0
     - ca-certificates-bundle
     - dnscrypt-proxy=2.1.20-r0
 

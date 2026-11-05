@@ -3,8 +3,8 @@ contents:
     - https://dl-cdn.alpinelinux.org/alpine/edge/main
   packages:
     - alpine-baselayout-data=3.7.2-r1
-    - alpine-release=3.24.0-r0
-    - bash=5.3.9-r1
+    - alpine-release=3.25.0_alpha20260805-r0
+    - bash=5.3.9-r2
     - jq=1.8.2-r0
 
 entrypoint:
