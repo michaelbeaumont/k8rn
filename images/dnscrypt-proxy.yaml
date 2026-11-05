@@ -6,7 +6,7 @@ contents:
     - alpine-baselayout-data=3.7.2-r1
     - alpine-release=3.24.0-r0
     - ca-certificates-bundle
-    - dnscrypt-proxy=2.1.18-r0
+    - dnscrypt-proxy=2.1.20-r0
 
 entrypoint:
   command: /usr/bin/dnscrypt-proxy
