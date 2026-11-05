@@ -134,7 +134,7 @@ spec:
               name: shared-config
       containers:
         - name: main
-          image: ghcr.io/michaelbeaumont/dnscrypt-proxy:2.1.18
+          image: ghcr.io/michaelbeaumont/dnscrypt-proxy:2.1.20
           ports:
             - name: dns-tcp
               containerPort: 53
