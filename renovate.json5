@@ -63,7 +63,7 @@
       fileFormat: "yaml",
       managerFilePatterns: ["/^images/[^/]+\\.ya?ml$/"],
       matchStrings: [
-         "contents.packages[$not($contains($, /@local$/))].{ 'depName': 'alpine_' & $replace($match($$.contents.repositories[0], /alpine\\/v(\\d+\\.\\d+)/)[0].groups[0], '.', '_') & '/' & $substringBefore($, '='), 'currentValue': $string($substringAfter($, '=')) }[currentValue != depName]",
+         "contents.packages[$not($contains($, /@local$/))].{ 'depName': 'alpine_' & $replace($match($$.contents.repositories[0], /alpine\\/(v\\d+\\.\\d+|edge)/)[0].groups[0], '.', '_') & '/' & $substringBefore($, '='), 'currentValue': $string($substringAfter($, '=')) }[currentValue != depName]",
       ],
       datasourceTemplate: "repology",
       versioningTemplate: "loose",
