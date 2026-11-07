@@ -36,7 +36,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: envoy-gateway
-      version: 1.9.3
+      version: 1.10.0
   values:
     crds:
       gatewayAPI:
