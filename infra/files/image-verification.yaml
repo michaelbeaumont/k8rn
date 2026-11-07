@@ -45,3 +45,7 @@ rules:
     keyless:
       issuer: https://token.actions.githubusercontent.com
       subjectRegex: '^https://github\.com/cilium/cilium/.*$'
+  - image: docker.io/envoyproxy/gateway
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: '^https://github\.com/envoyproxy/gateway/\.github/workflows/release\.yaml@refs/tags/.*$'
