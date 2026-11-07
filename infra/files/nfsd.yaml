@@ -1,4 +1,4 @@
-machine:
-  kernel:
-    modules:
-      - name: nfsd
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: nfsd

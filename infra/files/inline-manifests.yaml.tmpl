@@ -1,7 +1,8 @@
-cluster:
-  inlineManifests:
-    %{for name, manifest in manifests}
-    - name: ${name}
-      contents: |
-        ${indent(8, manifest)}
-    %{endfor}
+%{for name, manifest in manifests}
+---
+apiVersion: v1alpha1
+kind: KubeInlineManifestConfig
+name: ${name}
+manifest: |-
+  ${indent(8, manifest)}
+%{endfor}

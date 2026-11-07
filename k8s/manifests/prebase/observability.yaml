@@ -116,10 +116,10 @@ spec:
           projected:
             defaultMode: 0420
             sources:
-            - serviceAccountToken:
-                audience: "https://${cluster_oidc_issuer_host}"
-                expirationSeconds: 3600
-                path: oidc-token
+              - serviceAccountToken:
+                  audience: "https://${cluster_oidc_issuer_host}"
+                  expirationSeconds: 3600
+                  path: oidc-token
     alertmanager:
       enabled: true
       alertmanagerSpec:

@@ -1,5 +1,10 @@
-machine:
-  sysctls:
-    vm.nr_hugepages: "1024"
-  nodeLabels:
-    openebs.io/engine: mayastor
+---
+apiVersion: v1alpha1
+kind: SysctlConfig
+params:
+  vm.nr_hugepages: "1024"
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  openebs.io/engine: mayastor

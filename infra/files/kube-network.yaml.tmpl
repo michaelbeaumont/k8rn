@@ -1,0 +1,11 @@
+---
+apiVersion: v1alpha1
+kind: KubeNetworkConfig
+podSubnets:
+%{ for subnet in pod_subnets }
+  - "${subnet}"
+%{ endfor }
+serviceSubnets:
+%{ for subnet in service_subnets }
+  - "${subnet}"
+%{ endfor }

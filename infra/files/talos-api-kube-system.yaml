@@ -1,9 +1,8 @@
-machine:
-  features:
-    kubernetesTalosAPIAccess:
-      enabled: true
-      allowedRoles:
-        - os:reader
-      allowedKubernetesNamespaces:
-        - kube-system
-        - openebs
+---
+apiVersion: v1alpha1
+kind: KubeTalosAPIAccessConfig
+allowedRoles:
+  - os:reader
+allowedKubernetesNamespaces:
+  - kube-system
+  - openebs

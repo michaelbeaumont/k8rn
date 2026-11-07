@@ -1,0 +1,8 @@
+---
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+installer:
+    image: ${image}
+provisioning:
+    diskSelector:
+        match: ${disk_selector}

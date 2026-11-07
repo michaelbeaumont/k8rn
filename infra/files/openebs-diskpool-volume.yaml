@@ -13,3 +13,4 @@ encryption:
     - kms:
         endpoint: ${kms_endpoint}
       slot: 0
+  allowDiscards: true

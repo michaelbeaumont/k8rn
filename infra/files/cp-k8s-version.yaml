@@ -1,0 +1,16 @@
+---
+apiVersion: v1alpha1
+kind: KubeAPIServerConfig
+image: registry.k8s.io/kube-apiserver:${version}
+---
+apiVersion: v1alpha1
+kind: KubeControllerManagerConfig
+image: registry.k8s.io/kube-controller-manager:${version}
+---
+apiVersion: v1alpha1
+kind: KubeSchedulerConfig
+image: registry.k8s.io/kube-scheduler:${version}
+---
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+image: registry.k8s.io/kube-proxy:${version}

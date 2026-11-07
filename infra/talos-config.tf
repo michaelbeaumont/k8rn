@@ -62,27 +62,32 @@ locals {
       templatefile(
         "${path.module}/files/base.yaml.tmpl",
         {
-          image_uri                 = local.image_uri[name]
           dns_loadbalancer_hostname = local.dns_loadbalancer_hostname
           hostname                  = local.hostnames[name]
           tailscale_fqdn            = "${local.hostnames[name]}.${var.tailnet_name}"
-          disk_selector             = jsonencode(node.disk_selector)
-          cluster_endpoint_host     = local.dns_loadbalancer_hostname
-          pod_subnets               = var.pod_subnets
-          service_subnets           = var.service_subnets
         }
       ),
+      file("${path.module}/files/node-ips.yaml.tmpl"),
       templatefile("${path.module}/files/hostname.yaml.tmpl", {
         hostname = local.hostnames[name]
       }),
       file("${path.module}/files/nameservers.yaml"),
+      templatefile("${path.module}/files/kube-network.yaml.tmpl", {
+        pod_subnets     = var.pod_subnets,
+        service_subnets = var.service_subnets,
+      }),
+      file("${path.module}/files/no-discovery.yaml"),
+      file("${path.module}/files/no-cni.yaml"),
+      templatefile("${path.module}/files/install.yaml.tmpl", {
+        image         = local.image_uri[name]
+        disk_selector = join(" && ", [for prop, value in node.disk_selector : "disk.${prop} == '${value}'"]),
+      }),
       templatefile("${path.module}/files/tailscale.yaml.tmpl", {
         tailscale_key = contains(keys(local.control_plane_nodes), name) ? tailscale_tailnet_key.unsigned-cp[name].key : tailscale_tailnet_key.unsigned-worker[name].key
       }),
       templatefile("${path.module}/files/encrypt-kms.patch.yaml.tmpl", {
         kms_endpoint = var.kms_endpoint
       }),
-      file("${path.module}/files/openebs.patch.yaml"),
       templatefile("${path.module}/files/hubble-peer-rules.yaml.tmpl", {
         pod_subnets = var.pod_subnets,
         node_ips    = local.tailscale_cidrs,
@@ -102,6 +107,7 @@ locals {
           node_ips    = local.tailscale_cidrs,
           pod_subnets = var.pod_subnets,
         }),
+        file("${path.module}/files/openebs.patch.yaml"),
         file("${path.module}/files/mayastor-io-node-ephemeral-config.yaml"),
         templatefile("${path.module}/files/openebs-diskpool-volume.yaml", {
           kms_endpoint = var.kms_endpoint
@@ -118,6 +124,7 @@ locals {
       [for device in node.network_devices : templatefile("${path.module}/files/eth-tailscale-optimizations.yaml.tmpl", {
         device = device
       })],
+      file("${path.module}/files/unprivileged-ports.yaml"),
       file("${path.module}/files/user-namespaces.yaml"),
       contains(node.tags, "media-volume") ? [
         templatefile("${path.module}/files/media-volume.yaml", {
@@ -166,8 +173,11 @@ ephemeral "talos_machine_configuration" "control_plane_nodes" {
         "oidc-cluster-admin" = file("${path.module}/files/oidc-cluster-admin.yaml"),
       }
     }),
+    templatefile("${path.module}/files/cp-k8s-version.yaml", {
+      version = "v1.37.2",
+    }),
     file("${path.module}/files/permissive-admission.yaml"),
-    file("${path.module}/files/cp-scheduling.yaml"),
+    file("${path.module}/files/workloads-on-control.yaml"),
     templatefile("${path.module}/files/cp-network-rules.yaml.tmpl", {
       pod_subnets            = var.pod_subnets,
       control_plane_node_ips = local.tailscale_cidrs,
