@@ -25,6 +25,8 @@ data:
     ChallengeResponseAuthentication no
     AllowUsers user
     LogLevel ERROR
+    UsePAM yes
+    AuthenticationMethods publickey
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
